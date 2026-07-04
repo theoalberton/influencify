@@ -66,14 +66,28 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
                 href={`/i/${influencer.slug}/oferta/${campaign.slug}?ref=${link.referral_code}`}
                 className="flex items-center justify-between gap-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md"
               >
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
-                    {campaign.brands?.company_name}
-                  </p>
-                  <p className="font-semibold text-slate-900">{campaign.title}</p>
-                  <p className="text-sm text-slate-500">{formatDiscount(campaign.discount_type, campaign.discount_value)}</p>
+                <div className="flex items-center gap-3">
+                  {campaign.brands?.logo_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={campaign.brands.logo_url}
+                      alt={campaign.brands.company_name}
+                      className="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-slate-200"
+                    />
+                  ) : (
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-xs font-semibold text-slate-400 ring-1 ring-slate-200">
+                      {campaign.brands?.company_name?.slice(0, 1).toUpperCase()}
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
+                      {campaign.brands?.company_name}
+                    </p>
+                    <p className="font-semibold text-slate-900">{campaign.title}</p>
+                    <p className="text-sm text-slate-500">{formatDiscount(campaign.discount_type, campaign.discount_value)}</p>
+                  </div>
                 </div>
-                <span className="rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white">Ver oferta</span>
+                <span className="shrink-0 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white">Ver oferta</span>
               </a>
             ))
           )}

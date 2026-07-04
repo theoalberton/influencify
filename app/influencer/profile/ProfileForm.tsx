@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { saveInfluencerProfile, type ProfileFormState } from "./actions";
 import { Field, Input, Textarea } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 import type { Influencer } from "@/lib/database.types";
 
 const initialState: ProfileFormState = {};
@@ -13,6 +14,13 @@ export function ProfileForm({ influencer }: { influencer: Influencer | null }) {
 
   return (
     <form action={formAction} className="space-y-5">
+      <ImageUpload
+        bucket="avatars"
+        name="profile_image_url"
+        label="Foto de perfil"
+        defaultUrl={influencer?.profile_image_url}
+      />
+
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Nome de exibição">
           <Input name="display_name" required defaultValue={influencer?.display_name} placeholder="Renato Albani" />
@@ -50,19 +58,15 @@ export function ProfileForm({ influencer }: { influencer: Influencer | null }) {
         </Field>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Seguidores (aprox.)">
-          <Input
-            type="number"
-            name="followers_count"
-            defaultValue={influencer?.followers_count ?? ""}
-            placeholder="10000"
-          />
-        </Field>
-        <Field label="Foto de perfil (URL)">
-          <Input name="profile_image_url" defaultValue={influencer?.profile_image_url ?? ""} placeholder="https://..." />
-        </Field>
-      </div>
+      <Field label="Seguidores (aprox.)">
+        <Input
+          type="number"
+          name="followers_count"
+          defaultValue={influencer?.followers_count ?? ""}
+          placeholder="10000"
+          className="max-w-xs"
+        />
+      </Field>
 
       {state.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}
 

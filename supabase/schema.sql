@@ -384,3 +384,31 @@ create policy "clicks: read scoped or admin" on clicks for select
 
 -- plans ------------------------------------------------------------------
 create policy "plans: public read" on plans for select using (true);
+
+-- ============================================================================
+-- Storage: buckets públicos para foto de perfil do influenciador e logo da
+-- marca. Upload é feito para "{bucket}/{user_id}/{arquivo}" — a policy usa
+-- o primeiro segmento do caminho pra garantir que cada usuário só escreve
+-- na própria pasta. Leitura é pública (necessário pra aparecer no perfil).
+-- ============================================================================
+insert into storage.buckets (id, name, public)
+values ('avatars', 'avatars', true), ('logos', 'logos', true)
+on conflict (id) do nothing;
+
+create policy "avatars: public read" on storage.objects for select
+  using (bucket_id = 'avatars');
+create policy "avatars: owner write" on storage.objects for insert
+  with check (bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]);
+create policy "avatars: owner update" on storage.objects for update
+  using (bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]);
+create policy "avatars: owner delete" on storage.objects for delete
+  using (bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]);
+
+create policy "logos: public read" on storage.objects for select
+  using (bucket_id = 'logos');
+create policy "logos: owner write" on storage.objects for insert
+  with check (bucket_id = 'logos' and auth.uid()::text = (storage.foldername(name))[1]);
+create policy "logos: owner update" on storage.objects for update
+  using (bucket_id = 'logos' and auth.uid()::text = (storage.foldername(name))[1]);
+create policy "logos: owner delete" on storage.objects for delete
+  using (bucket_id = 'logos' and auth.uid()::text = (storage.foldername(name))[1]);

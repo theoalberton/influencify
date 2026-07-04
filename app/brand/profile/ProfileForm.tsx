@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { saveBrandProfile, type BrandFormState } from "./actions";
 import { Field, Input, Textarea } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 import type { Brand } from "@/lib/database.types";
 
 const initialState: BrandFormState = {};
@@ -13,6 +14,8 @@ export function BrandProfileForm({ brand }: { brand: Brand | null }) {
 
   return (
     <form action={formAction} className="space-y-5">
+      <ImageUpload bucket="logos" name="logo_url" label="Logo da marca" defaultUrl={brand?.logo_url} shape="square" />
+
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Nome da empresa">
           <Input name="company_name" required defaultValue={brand?.company_name} placeholder="Insider" />
@@ -31,14 +34,9 @@ export function BrandProfileForm({ brand }: { brand: Brand | null }) {
         </Field>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Instagram">
-          <Input name="instagram" defaultValue={brand?.instagram ?? ""} placeholder="@marca" />
-        </Field>
-        <Field label="Logo (URL)">
-          <Input name="logo_url" defaultValue={brand?.logo_url ?? ""} placeholder="https://..." />
-        </Field>
-      </div>
+      <Field label="Instagram">
+        <Input name="instagram" defaultValue={brand?.instagram ?? ""} placeholder="@marca" className="max-w-sm" />
+      </Field>
 
       <div className="grid gap-5 sm:grid-cols-3">
         <Field label="Responsável">
