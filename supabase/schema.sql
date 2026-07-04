@@ -205,6 +205,31 @@ insert into plans (name, type, price, lead_limit, campaign_limit, ambassador_lim
   ('Premium', 'premium', 499.90, null, null, null, '["Tudo do plano Marca", "Suporte prioritário", "Automação de WhatsApp/e-mail"]');
 
 -- ----------------------------------------------------------------------------
+-- Trigger: cria a linha em profiles assim que o usuário se cadastra no Auth,
+-- mesmo antes de confirmar o e-mail (rodando com privilégio de definer,
+-- então não esbarra no RLS de profiles que exige auth.uid() = user_id).
+-- account_type/name/phone vêm de options.data passado no supabase.auth.signUp().
+-- ----------------------------------------------------------------------------
+create or replace function handle_new_user() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  insert into public.profiles (user_id, account_type, name, email, phone)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data->>'account_type', 'influencer'),
+    coalesce(new.raw_user_meta_data->>'name', split_part(new.email, '@', 1)),
+    new.email,
+    new.raw_user_meta_data->>'phone'
+  );
+  return new;
+end;
+$$;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function handle_new_user();
+
+-- ----------------------------------------------------------------------------
 -- Triggers: mantém referrals.clicks / referrals.leads_count agregados
 -- ----------------------------------------------------------------------------
 create or replace function bump_referral_clicks() returns trigger
@@ -322,8 +347,11 @@ create policy "brand_influencers: brand updates or admin" on brand_influencers f
 -- campaign_influencers -------------------------------------------------------
 create policy "campaign_influencers: public read" on campaign_influencers for select
   using (true);
-create policy "campaign_influencers: brand inserts for own campaign" on campaign_influencers for insert
-  with check (exists (select 1 from campaigns c where c.id = campaign_id and c.brand_id = auth_brand_id()));
+create policy "campaign_influencers: influencer or brand inserts" on campaign_influencers for insert
+  with check (
+    influencer_id = auth_influencer_id()
+    or exists (select 1 from campaigns c where c.id = campaign_id and c.brand_id = auth_brand_id())
+  );
 create policy "campaign_influencers: brand or admin updates" on campaign_influencers for update
   using (
     exists (select 1 from campaigns c where c.id = campaign_id and c.brand_id = auth_brand_id())

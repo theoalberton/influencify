@@ -27,24 +27,16 @@ export async function registerAction(_prev: RegisterState, formData: FormData): 
 
   const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { account_type: accountType, name, phone: phone || null } },
+  });
   if (error) {
     return { error: error.message };
   }
   if (!data.user) {
     return { error: "Não foi possível criar a conta. Tente novamente." };
-  }
-
-  const { error: profileError } = await supabase.from("profiles").insert({
-    user_id: data.user.id,
-    account_type: accountType,
-    name,
-    email,
-    phone: phone || null,
-  });
-
-  if (profileError) {
-    return { error: profileError.message };
   }
 
   if (!data.session) {
