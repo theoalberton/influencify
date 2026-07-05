@@ -14,7 +14,7 @@ export function BrandProfileForm({ brand }: { brand: Brand | null }) {
 
   return (
     <form action={formAction} className="space-y-5">
-      <ImageUpload bucket="logos" name="logo_url" label="Logo da marca" defaultUrl={brand?.logo_url} shape="square" />
+      <ImageUpload bucket="logos" name="logo_url" label="Logo da marca" defaultUrl={brand?.logo_url} />
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Nome da empresa">
