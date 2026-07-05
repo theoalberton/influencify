@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { createCampaign, type CampaignFormState } from "./actions";
 import { Field, Input, Textarea, Select } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { ThumbnailUpload } from "@/components/ui/ThumbnailUpload";
 
 const initialState: CampaignFormState = {};
 
@@ -32,9 +33,7 @@ export function CampaignForm() {
         <Textarea name="description" rows={3} />
       </Field>
 
-      <Field label="Imagem da oferta (URL)">
-        <Input name="image_url" placeholder="https://..." />
-      </Field>
+      <ThumbnailUpload name="image_url" label="Imagem da oferta" hint="Aparece no perfil do embaixador, formato paisagem (16:9)." />
 
       <div className="grid gap-5 sm:grid-cols-3">
         <Field label="Tipo de desconto">

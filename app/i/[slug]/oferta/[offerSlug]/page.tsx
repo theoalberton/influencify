@@ -78,41 +78,45 @@ export default async function OfferPage({
 
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-12">
-      <div className="mx-auto max-w-md rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+      <div className="mx-auto max-w-md overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-200">
         {typedCampaign.image_url && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={typedCampaign.image_url} alt={typedCampaign.title} className="mb-4 h-40 w-full rounded-2xl object-cover" />
+          <div className="aspect-video w-full bg-slate-100">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={typedCampaign.image_url} alt={typedCampaign.title} className="h-full w-full object-cover" />
+          </div>
         )}
 
-        <div className="flex items-center gap-2">
-          {typedCampaign.brands?.logo_url && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={typedCampaign.brands.logo_url}
-              alt={typedCampaign.brands.company_name}
-              className="h-6 w-6 rounded object-cover ring-1 ring-slate-200"
-            />
-          )}
-          <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
-            {typedCampaign.brands?.company_name} · via {influencer.display_name}
+        <div className="p-6">
+          <div className="flex items-center gap-2">
+            {typedCampaign.brands?.logo_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={typedCampaign.brands.logo_url}
+                alt={typedCampaign.brands.company_name}
+                className="h-6 w-6 rounded object-cover ring-1 ring-slate-200"
+              />
+            )}
+            <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
+              {typedCampaign.brands?.company_name} · via {influencer.display_name}
+            </p>
+          </div>
+          <h1 className="mt-1 text-xl font-bold text-slate-900">{typedCampaign.title}</h1>
+          <p className="mt-2 text-sm font-semibold text-indigo-600">
+            {formatDiscount(typedCampaign.discount_type, typedCampaign.discount_value)}
           </p>
-        </div>
-        <h1 className="mt-1 text-xl font-bold text-slate-900">{typedCampaign.title}</h1>
-        <p className="mt-2 text-sm font-semibold text-indigo-600">
-          {formatDiscount(typedCampaign.discount_type, typedCampaign.discount_value)}
-        </p>
-        {typedCampaign.description && <p className="mt-2 text-sm text-slate-500">{typedCampaign.description}</p>}
+          {typedCampaign.description && <p className="mt-2 text-sm text-slate-500">{typedCampaign.description}</p>}
 
-        <div className="mt-6 border-t border-slate-100 pt-6">
-          <LeadForm
-            campaignId={typedCampaign.id}
-            brandId={typedCampaign.brand_id}
-            influencerId={influencer.id}
-            referralCode={campaignInfluencer.referral_code}
-            requiredFields={typedCampaign.required_fields}
-            source="profile"
-            campaignUtm={campaignUtm}
-          />
+          <div className="mt-6 border-t border-slate-100 pt-6">
+            <LeadForm
+              campaignId={typedCampaign.id}
+              brandId={typedCampaign.brand_id}
+              influencerId={influencer.id}
+              referralCode={campaignInfluencer.referral_code}
+              requiredFields={typedCampaign.required_fields}
+              source="profile"
+              campaignUtm={campaignUtm}
+            />
+          </div>
         </div>
       </div>
     </div>
