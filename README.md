@@ -73,13 +73,36 @@ Cadastro de admin não é público por design. Para criar uma:
 - `/r/[referralCode]` é um redirecionador genérico: resolve o código para a URL certa da oferta,
   útil para compartilhar um link curto preservando o rastreio.
 
+## Planos e pagamento (Stripe)
+
+Contas gratuitas captam leads normalmente, mas **não veem o contato** (a lista fica bloqueada
+com CTA de upgrade, e o CSV retorna 403). Para ativar os planos pagos:
+
+1. Crie uma conta em [stripe.com](https://stripe.com) e pegue a chave secreta em
+   **Developers → API keys** (use a chave de teste `sk_test_...` para desenvolver).
+2. Em **Product catalog**, crie dois produtos com preço recorrente mensal:
+   "Influenciador Pro" (ex: R$ 49,90) e "Marca Pro" (ex: R$ 199,90).
+3. Copie o **price ID** de cada um (`price_...`) e preencha no `.env.local`:
+   `STRIPE_SECRET_KEY`, `STRIPE_PRICE_INFLUENCER`, `STRIPE_PRICE_BRAND`.
+4. O fluxo: `/upgrade` → Stripe Checkout → `/upgrade/success` confirma o pagamento na API do
+   Stripe e ativa o plano no perfil. Em modo teste, use o cartão `4242 4242 4242 4242`.
+
+Sem as chaves configuradas, o botão de assinatura mostra um aviso amigável em vez de quebrar.
+
+## Redefinição de senha
+
+`/forgot-password` envia o e-mail de recuperação via Supabase; o link passa por `/auth/confirm`
+(que troca o código por sessão) e cai em `/reset-password`. Para funcionar fora do localhost,
+configure em **Authentication → URL Configuration** no Supabase a Site URL e adicione
+`https://seudominio.com/auth/confirm` nas Redirect URLs.
+
 ## O que é MVP de propósito (não implementado ainda)
 
-- Cobrança real dos planos (`plans` já existe como catálogo, mas não há checkout).
 - Disparo real de eventos de pixel (Meta/TikTok/Google) — os campos `meta_pixel_id`,
   `tiktok_pixel_id` e `google_tag_id` já existem na campanha, prontos para a integração.
 - Envio automático do cupom por e-mail/WhatsApp — hoje o cupom é revelado na tela.
-- Upload de imagem (avatar/logo/oferta): os campos aceitam apenas URL por enquanto.
+- Webhook do Stripe para renovação/cancelamento automático da assinatura — hoje a ativação
+  acontece na página de sucesso do checkout.
 - Fluxo de convite/aceite para embaixadores: hoje a marca vincula o influenciador diretamente pelo
   slug público dele, sem etapa de aprovação.
 

@@ -18,7 +18,7 @@ export function BrandProfileForm({ brand }: { brand: Brand | null }) {
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Nome da empresa">
-          <Input name="company_name" required defaultValue={brand?.company_name} placeholder="Insider" />
+          <Input name="company_name" required defaultValue={brand?.company_name} placeholder="Nome da sua empresa" />
         </Field>
         <Field label="Link público (slug)" hint="usado internamente para identificar sua marca">
           <Input name="slug" defaultValue={brand?.slug} placeholder="insider" />

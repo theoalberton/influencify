@@ -22,7 +22,7 @@ export function CampaignForm() {
     <form action={formAction} className="space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Nome da campanha">
-          <Input name="title" required placeholder="Insider 10% OFF" />
+          <Input name="title" required placeholder="Ex: Cupom de 10% na primeira compra" />
         </Field>
         <Field label="Produto/serviço">
           <Input name="product_name" placeholder="Assinatura anual" />

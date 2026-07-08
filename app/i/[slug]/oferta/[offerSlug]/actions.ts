@@ -1,6 +1,8 @@
 "use server";
 
+import { randomUUID } from "crypto";
 import { createClient } from "@/lib/supabase/server";
+import { translateError } from "@/lib/errors";
 import type { Campaign } from "@/lib/database.types";
 
 export interface LeadFormState {
@@ -42,33 +44,35 @@ export async function submitLead(_prev: LeadFormState, formData: FormData): Prom
     return { error: "Esta oferta não está mais disponível." };
   }
 
-  const { data: lead, error } = await supabase
-    .from("leads")
-    .insert({
-      campaign_id,
-      brand_id,
-      influencer_id: influencer_id || null,
-      referral_code,
-      name,
-      email,
-      phone,
-      city,
-      consent,
-      source,
-      medium,
-      campaign_utm,
-      status: "new",
-      coupon_revealed: true,
-    })
-    .select("id")
-    .single();
+  // Gera o id aqui em vez de usar .select() no insert: o visitante anônimo
+  // pode inserir leads, mas o RLS (corretamente) não deixa ele ler a linha
+  // de volta — um RETURNING dispararia violação de policy.
+  const lead_id = randomUUID();
 
-  if (error) return { error: error.message };
+  const { error } = await supabase.from("leads").insert({
+    id: lead_id,
+    campaign_id,
+    brand_id,
+    influencer_id: influencer_id || null,
+    referral_code,
+    name,
+    email,
+    phone,
+    city,
+    consent,
+    source,
+    medium,
+    campaign_utm,
+    status: "new",
+    coupon_revealed: true,
+  });
+
+  if (error) return { error: translateError(error.message) };
 
   return {
     success: true,
     coupon_code: campaign.coupon_code,
     destination_url: campaign.destination_url,
-    lead_id: lead.id,
+    lead_id,
   };
 }

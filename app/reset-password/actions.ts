@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { translateError } from "@/lib/errors";
 
 export interface ResetPasswordState {
   error?: string;
@@ -27,7 +28,7 @@ export async function resetPasswordAction(
   }
 
   const { error } = await supabase.auth.updateUser({ password });
-  if (error) return { error: error.message };
+  if (error) return { error: translateError(error.message) };
 
   redirect("/login?reset=ok");
 }

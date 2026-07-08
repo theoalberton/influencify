@@ -15,6 +15,7 @@ function LoginForm() {
   const [state, formAction, pending] = useActionState(loginAction, initialState);
   const searchParams = useSearchParams();
   const resetOk = searchParams.get("reset") === "ok";
+  const linkInvalido = searchParams.get("error") === "link-invalido";
 
   return (
     <>
@@ -24,6 +25,11 @@ function LoginForm() {
       {resetOk && (
         <p className="mt-6 rounded-xl bg-[#f0fdf4] px-4 py-3 text-sm text-emerald-700">
           Senha alterada com sucesso. Entre com a nova senha.
+        </p>
+      )}
+      {linkInvalido && (
+        <p className="mt-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+          O link expirou ou já foi usado. Solicite a redefinição de senha novamente.
         </p>
       )}
 

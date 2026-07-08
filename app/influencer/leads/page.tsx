@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Table, Thead, Tbody, Td, EmptyState } from "@/components/ui/Table";
 import { Badge } from "@/components/ui/Badge";
+import { LeadsLocked } from "@/components/ui/LeadsLocked";
+import { hasLeadAccess } from "@/lib/plans";
 import { formatDate } from "@/lib/utils";
 import type { Brand, Campaign, Lead } from "@/lib/database.types";
 
@@ -13,6 +15,18 @@ export default async function InfluencerLeadsPage() {
   if (!influencer) redirect("/influencer/profile");
 
   const supabase = await createClient();
+
+  if (!hasLeadAccess(profile)) {
+    const { count } = await supabase
+      .from("leads")
+      .select("id", { count: "exact", head: true })
+      .eq("influencer_id", influencer.id);
+    return (
+      <DashboardShell role="influencer" name={profile.name} title="Leads gerados">
+        <LeadsLocked leadsCount={count ?? 0} />
+      </DashboardShell>
+    );
+  }
   const { data: leads } = await supabase
     .from("leads")
     .select("*, campaigns(title), brands(company_name)")

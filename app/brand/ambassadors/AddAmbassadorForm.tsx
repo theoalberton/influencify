@@ -14,7 +14,7 @@ export function AddAmbassadorForm() {
     <form action={formAction} className="flex flex-wrap items-end gap-3">
       <div className="flex-1 min-w-[220px]">
         <label className="block text-sm font-medium text-slate-700">Link do influenciador</label>
-        <Input name="slug" placeholder="renato-albani ou influencify.app/i/renato-albani" required />
+        <Input name="slug" placeholder="Cole o link ou o slug do influenciador" required />
       </div>
       <Button type="submit" disabled={pending}>
         {pending ? "Adicionando..." : "Adicionar embaixador"}

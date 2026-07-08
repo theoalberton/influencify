@@ -23,10 +23,10 @@ export function ProfileForm({ influencer }: { influencer: Influencer | null }) {
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Nome de exibição">
-          <Input name="display_name" required defaultValue={influencer?.display_name} placeholder="Renato Albani" />
+          <Input name="display_name" required defaultValue={influencer?.display_name} placeholder="Seu nome público" />
         </Field>
         <Field label="Link público (slug)" hint="influencify.app/i/seu-slug">
-          <Input name="slug" defaultValue={influencer?.slug} placeholder="renato-albani" />
+          <Input name="slug" defaultValue={influencer?.slug} placeholder="seu-nome" />
         </Field>
       </div>
 

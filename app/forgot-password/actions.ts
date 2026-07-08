@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { translateError } from "@/lib/errors";
 
 export interface ForgotPasswordState {
   error?: string;
@@ -21,7 +22,7 @@ export async function forgotPasswordAction(
     redirectTo: `${siteUrl}/auth/confirm?next=/reset-password`,
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: translateError(error.message) };
 
   return {
     success:

@@ -1,9 +1,18 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getMyBrand } from "@/lib/auth";
+import { getMyBrand, getCurrentProfile } from "@/lib/auth";
+import { hasLeadAccess } from "@/lib/plans";
 import { toCsv } from "@/lib/utils";
 
 export async function GET() {
+  const profile = await getCurrentProfile();
+  if (!profile || !hasLeadAccess(profile)) {
+    return NextResponse.json(
+      { error: "Exportação de leads disponível apenas nos planos pagos." },
+      { status: 403 }
+    );
+  }
+
   const brand = await getMyBrand();
   if (!brand) return NextResponse.json({ error: "Marca não encontrada." }, { status: 404 });
 

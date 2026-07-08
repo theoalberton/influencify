@@ -29,7 +29,7 @@ export default async function BrandAmbassadorsPage() {
       <Card className="mb-6">
         <h2 className="text-sm font-semibold text-slate-900">Vincular novo influenciador</h2>
         <p className="mt-1 text-sm text-slate-500">
-          Peça para o influenciador o link do perfil dele (ex: influencify.app/i/renato-albani) e cole abaixo.
+          Peça para o influenciador o link público do perfil dele e cole abaixo.
         </p>
         <div className="mt-4">
           <AddAmbassadorForm />

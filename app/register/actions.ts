@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { translateError } from "@/lib/errors";
 import type { AccountType } from "@/lib/database.types";
 
 export interface RegisterState {
@@ -33,7 +34,7 @@ export async function registerAction(_prev: RegisterState, formData: FormData): 
     options: { data: { account_type: accountType, name, phone: phone || null } },
   });
   if (error) {
-    return { error: error.message };
+    return { error: translateError(error.message) };
   }
   if (!data.user) {
     return { error: "Não foi possível criar a conta. Tente novamente." };
