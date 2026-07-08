@@ -5,15 +5,15 @@ type Variant = "primary" | "secondary" | "danger" | "ghost";
 type Size = "sm" | "md";
 
 const variantClasses: Record<Variant, string> = {
-  primary: "bg-indigo-600 text-white hover:bg-indigo-500",
-  secondary: "bg-white text-slate-700 ring-1 ring-slate-300 hover:bg-slate-50",
+  primary: "bg-[#0071e3] text-white hover:bg-[#0077ed]",
+  secondary: "bg-white text-[#1d1d1f] ring-1 ring-[#d2d2d7] hover:bg-[#f5f5f7]",
   danger: "bg-red-600 text-white hover:bg-red-500",
-  ghost: "text-slate-600 hover:bg-slate-100",
+  ghost: "text-[#6e6e73] hover:bg-black/5",
 };
 
 const sizeClasses: Record<Size, string> = {
-  sm: "px-3 py-1.5 text-xs",
-  md: "px-4 py-2.5 text-sm",
+  sm: "px-3.5 py-1.5 text-xs",
+  md: "px-5 py-2.5 text-sm",
 };
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -25,7 +25,7 @@ export function Button({ variant = "primary", size = "md", className, ...props }
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-lg font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed",
+        "inline-flex items-center justify-center gap-1.5 rounded-full font-medium transition disabled:opacity-60 disabled:cursor-not-allowed",
         variantClasses[variant],
         sizeClasses[size],
         className
@@ -48,7 +48,7 @@ export function LinkButton({ href, variant = "primary", size = "md", className, 
     <Link
       href={href}
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-lg font-semibold transition",
+        "inline-flex items-center justify-center gap-1.5 rounded-full font-medium transition",
         variantClasses[variant],
         sizeClasses[size],
         className

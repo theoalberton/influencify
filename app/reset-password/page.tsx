@@ -1,0 +1,45 @@
+"use client";
+
+import { useActionState } from "react";
+import { resetPasswordAction, type ResetPasswordState } from "./actions";
+import { AuthLayout } from "@/components/layout/AuthLayout";
+
+const initialState: ResetPasswordState = {};
+
+const inputClass =
+  "mt-1.5 w-full rounded-xl border border-[#d2d2d7] bg-white px-4 py-3 text-sm text-[#1d1d1f] transition focus:border-[#0071e3] focus:outline-none focus:ring-4 focus:ring-[#0071e3]/10";
+
+export default function ResetPasswordPage() {
+  const [state, formAction, pending] = useActionState(resetPasswordAction, initialState);
+
+  return (
+    <AuthLayout>
+      <h1 className="text-2xl font-semibold tracking-tight text-[#1d1d1f]">Criar nova senha</h1>
+      <p className="mt-2 text-sm leading-relaxed text-[#6e6e73]">
+        Escolha uma nova senha para a sua conta.
+      </p>
+
+      <form action={formAction} className="mt-8 space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-[#1d1d1f]">Nova senha</label>
+          <input type="password" name="password" required minLength={6} className={inputClass} placeholder="Mínimo 6 caracteres" />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-[#1d1d1f]">Confirmar nova senha</label>
+          <input type="password" name="confirm" required minLength={6} className={inputClass} placeholder="Repita a senha" />
+        </div>
+
+        {state.error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p>}
+
+        <button
+          type="submit"
+          disabled={pending}
+          className="w-full rounded-full bg-[#0071e3] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#0077ed] disabled:opacity-60"
+        >
+          {pending ? "Salvando..." : "Salvar nova senha"}
+        </button>
+      </form>
+    </AuthLayout>
+  );
+}

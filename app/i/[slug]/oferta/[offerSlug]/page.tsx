@@ -77,10 +77,10 @@ export default async function OfferPage({
   const campaignUtm = [query.utm_source, query.utm_medium, query.utm_campaign].filter(Boolean).join("/");
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-12">
-      <div className="mx-auto max-w-md overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-200">
+    <div className="min-h-screen bg-[#f5f5f7] px-4 py-12">
+      <div className="mx-auto max-w-md overflow-hidden rounded-3xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
         {typedCampaign.image_url && (
-          <div className="aspect-video w-full bg-slate-100">
+          <div className="aspect-video w-full bg-[#f5f5f7]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={typedCampaign.image_url} alt={typedCampaign.title} className="h-full w-full object-cover" />
           </div>
@@ -93,20 +93,20 @@ export default async function OfferPage({
               <img
                 src={typedCampaign.brands.logo_url}
                 alt={typedCampaign.brands.company_name}
-                className="h-6 w-6 rounded object-cover ring-1 ring-slate-200"
+                className="h-6 w-6 rounded-full object-cover ring-1 ring-black/5"
               />
             )}
-            <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
+            <p className="text-xs font-medium text-[#86868b]">
               {typedCampaign.brands?.company_name} · via {influencer.display_name}
             </p>
           </div>
-          <h1 className="mt-1 text-xl font-bold text-slate-900">{typedCampaign.title}</h1>
-          <p className="mt-2 text-sm font-semibold text-indigo-600">
+          <h1 className="mt-1 text-xl font-semibold tracking-tight text-[#1d1d1f]">{typedCampaign.title}</h1>
+          <p className="mt-2 text-sm font-semibold text-[#0071e3]">
             {formatDiscount(typedCampaign.discount_type, typedCampaign.discount_value)}
           </p>
-          {typedCampaign.description && <p className="mt-2 text-sm text-slate-500">{typedCampaign.description}</p>}
+          {typedCampaign.description && <p className="mt-2 text-sm text-[#6e6e73]">{typedCampaign.description}</p>}
 
-          <div className="mt-6 border-t border-slate-100 pt-6">
+          <div className="mt-6 border-t border-black/5 pt-6">
             <LeadForm
               campaignId={typedCampaign.id}
               brandId={typedCampaign.brand_id}

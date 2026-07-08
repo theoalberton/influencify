@@ -13,14 +13,11 @@ export function NavLink({ href, label, icon }: { href: string; label: string; ic
       href={href}
       className={cn(
         "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
-        active
-          ? "bg-indigo-50 text-indigo-700"
-          : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+        active ? "bg-[#1d1d1f] text-white" : "text-[#6e6e73] hover:bg-black/5 hover:text-[#1d1d1f]"
       )}
     >
-      <span className={cn("shrink-0", active ? "text-indigo-600" : "text-slate-400")}>{icon}</span>
+      <span className={cn("shrink-0", active ? "text-white" : "text-[#86868b]")}>{icon}</span>
       {label}
-      {active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-indigo-500" />}
     </Link>
   );
 }

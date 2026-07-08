@@ -78,9 +78,9 @@ export function ImageUpload({
         className="group relative h-28 w-28 shrink-0 rounded-full disabled:cursor-wait"
         aria-label={label}
       >
-        <span className="absolute inset-0 rounded-full bg-gradient-to-tr from-indigo-500 via-fuchsia-500 to-amber-400 p-[3px]">
+        <span className="absolute inset-0 rounded-full bg-[#d2d2d7] p-[1.5px]">
           <span className="block h-full w-full rounded-full bg-white p-[3px]">
-            <span className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-slate-100 text-slate-300">
+            <span className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-[#f5f5f7] text-[#d2d2d7]">
               {preview ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={preview} alt="" className="h-full w-full object-cover" />
@@ -119,7 +119,7 @@ export function ImageUpload({
           )}
         </span>
 
-        <span className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 text-white shadow ring-2 ring-white transition group-hover:bg-indigo-500">
+        <span className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#0071e3] text-white shadow ring-2 ring-white transition group-hover:bg-[#0077ed]">
           <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
             <path
               d="M4 8h2.5l1-2h5l1 2H16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2v-8a2 2 0 012-2z"
@@ -132,8 +132,8 @@ export function ImageUpload({
         </span>
       </button>
 
-      <p className="mt-2 text-sm font-medium text-slate-700">{label}</p>
-      <p className="text-xs text-slate-400">{uploading ? "Enviando..." : "Toque para escolher uma imagem"}</p>
+      <p className="mt-2 text-sm font-medium text-[#1d1d1f]">{label}</p>
+      <p className="text-xs text-[#86868b]">{uploading ? "Enviando..." : "Toque para escolher uma imagem"}</p>
       {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
     </div>
   );

@@ -8,7 +8,7 @@ import { AuthLayout } from "@/components/layout/AuthLayout";
 const initialState: RegisterState = {};
 
 const inputClass =
-  "mt-1 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20";
+  "mt-1.5 w-full rounded-xl border border-[#d2d2d7] bg-white px-4 py-3 text-sm text-[#1d1d1f] transition focus:border-[#0071e3] focus:outline-none focus:ring-4 focus:ring-[#0071e3]/10";
 
 export default function RegisterPage() {
   const [state, formAction, pending] = useActionState(registerAction, initialState);
@@ -16,40 +16,33 @@ export default function RegisterPage() {
 
   return (
     <AuthLayout>
-      <p className="mb-2 text-sm font-semibold text-indigo-600 lg:hidden">Influencify</p>
-      <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Criar conta grátis</h1>
-      <p className="mt-2 text-sm text-slate-500">Transforme audiência em leads qualificados.</p>
+      <h1 className="text-2xl font-semibold tracking-tight text-[#1d1d1f]">Criar sua conta</h1>
+      <p className="mt-2 text-sm text-[#6e6e73]">Transforme audiência em leads qualificados.</p>
 
       <div className="mt-8 grid grid-cols-2 gap-3">
         <button
           type="button"
           onClick={() => setAccountType("influencer")}
-          className={`rounded-2xl border-2 px-4 py-4 text-left transition ${
+          className={`rounded-2xl border px-4 py-4 text-left transition ${
             accountType === "influencer"
-              ? "border-indigo-600 bg-indigo-50/60"
-              : "border-slate-200 hover:border-slate-300"
+              ? "border-[#0071e3] bg-[#0071e3]/5 ring-1 ring-[#0071e3]"
+              : "border-[#d2d2d7] hover:border-[#86868b]"
           }`}
         >
-          <span className="text-lg">🎥</span>
-          <p className={`mt-1 text-sm font-bold ${accountType === "influencer" ? "text-indigo-700" : "text-slate-700"}`}>
-            Sou influenciador
-          </p>
-          <p className="mt-0.5 text-xs text-slate-400">Quero monetizar minha audiência</p>
+          <p className="text-sm font-semibold text-[#1d1d1f]">Influenciador</p>
+          <p className="mt-0.5 text-xs text-[#6e6e73]">Monetize sua audiência</p>
         </button>
         <button
           type="button"
           onClick={() => setAccountType("brand")}
-          className={`rounded-2xl border-2 px-4 py-4 text-left transition ${
+          className={`rounded-2xl border px-4 py-4 text-left transition ${
             accountType === "brand"
-              ? "border-indigo-600 bg-indigo-50/60"
-              : "border-slate-200 hover:border-slate-300"
+              ? "border-[#0071e3] bg-[#0071e3]/5 ring-1 ring-[#0071e3]"
+              : "border-[#d2d2d7] hover:border-[#86868b]"
           }`}
         >
-          <span className="text-lg">🏢</span>
-          <p className={`mt-1 text-sm font-bold ${accountType === "brand" ? "text-indigo-700" : "text-slate-700"}`}>
-            Sou marca
-          </p>
-          <p className="mt-0.5 text-xs text-slate-400">Quero leads dos meus embaixadores</p>
+          <p className="text-sm font-semibold text-[#1d1d1f]">Marca</p>
+          <p className="mt-0.5 text-xs text-[#6e6e73]">Capte leads qualificados</p>
         </button>
       </div>
 
@@ -57,7 +50,7 @@ export default function RegisterPage() {
         <input type="hidden" name="account_type" value={accountType} />
 
         <div>
-          <label className="block text-sm font-medium text-slate-700">Nome</label>
+          <label className="block text-sm font-medium text-[#1d1d1f]">Nome</label>
           <input
             name="name"
             required
@@ -68,17 +61,17 @@ export default function RegisterPage() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-slate-700">E-mail</label>
+            <label className="block text-sm font-medium text-[#1d1d1f]">E-mail</label>
             <input type="email" name="email" required className={inputClass} placeholder="voce@email.com" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700">Telefone</label>
+            <label className="block text-sm font-medium text-[#1d1d1f]">Telefone</label>
             <input name="phone" className={inputClass} placeholder="(11) 99999-9999" />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700">Senha</label>
+          <label className="block text-sm font-medium text-[#1d1d1f]">Senha</label>
           <input
             type="password"
             name="password"
@@ -89,22 +82,20 @@ export default function RegisterPage() {
           />
         </div>
 
-        {state.error && (
-          <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p>
-        )}
+        {state.error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p>}
 
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-fuchsia-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:brightness-110 disabled:opacity-60"
+          className="w-full rounded-full bg-[#0071e3] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#0077ed] disabled:opacity-60"
         >
           {pending ? "Criando conta..." : "Criar conta"}
         </button>
       </form>
 
-      <p className="mt-8 text-center text-sm text-slate-500">
+      <p className="mt-8 text-center text-sm text-[#6e6e73]">
         Já tem conta?{" "}
-        <Link href="/login" className="font-semibold text-indigo-600 hover:text-indigo-500">
+        <Link href="/login" className="font-medium text-[#0071e3] hover:underline">
           Entrar
         </Link>
       </p>
