@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { createClient } from "@/lib/supabase/server";
 import { formatDiscount } from "@/lib/utils";
 import { hashRequestIp, requestUserAgent } from "@/lib/track";
@@ -78,6 +79,18 @@ export default async function OfferPage({
 
   return (
     <div className="min-h-screen bg-[#f5f5f7] px-4 py-12">
+      {typedCampaign.meta_pixel_id && (
+        <Script id="meta-pixel" strategy="afterInteractive">
+          {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+          n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+          document,'script','https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '${typedCampaign.meta_pixel_id.replace(/[^0-9]/g, "")}');
+          fbq('track', 'PageView');
+          fbq('track', 'ViewContent', { content_name: ${JSON.stringify(typedCampaign.title)} });`}
+        </Script>
+      )}
       <div className="mx-auto max-w-md overflow-hidden rounded-3xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
         {typedCampaign.image_url && (
           <div className="aspect-video w-full bg-[#f5f5f7]">
@@ -117,6 +130,7 @@ export default async function OfferPage({
               requiredFields={typedCampaign.required_fields}
               source="profile"
               campaignUtm={campaignUtm}
+              metaPixelId={typedCampaign.meta_pixel_id}
             />
           </div>
         </div>

@@ -15,8 +15,13 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
         </div>
       </main>
 
-      <footer className="pb-8 text-center text-xs text-[#86868b]">
-        Marketing de influência com atribuição de verdade.
+      <footer className="flex justify-center gap-4 pb-8 text-center text-xs text-[#86868b]">
+        <Link href="/termos" className="hover:underline">
+          Termos de Uso
+        </Link>
+        <Link href="/privacidade" className="hover:underline">
+          Política de Privacidade
+        </Link>
       </footer>
     </div>
   );

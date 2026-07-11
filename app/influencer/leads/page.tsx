@@ -5,9 +5,14 @@ import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Table, Thead, Tbody, Td, EmptyState } from "@/components/ui/Table";
 import { Badge } from "@/components/ui/Badge";
 import { LeadsLocked } from "@/components/ui/LeadsLocked";
-import { hasLeadAccess } from "@/lib/plans";
+import { hasLeadAccess, FREE_VISIBLE_LEADS } from "@/lib/plans";
 import { formatDate } from "@/lib/utils";
 import type { Brand, Campaign, Lead } from "@/lib/database.types";
+
+type LeadRow = Lead & {
+  campaigns: Pick<Campaign, "title"> | null;
+  brands: Pick<Brand, "company_name"> | null;
+};
 
 export default async function InfluencerLeadsPage() {
   const profile = await requireRole("influencer");
@@ -15,28 +20,28 @@ export default async function InfluencerLeadsPage() {
   if (!influencer) redirect("/influencer/profile");
 
   const supabase = await createClient();
+  const fullAccess = hasLeadAccess(profile);
 
-  if (!hasLeadAccess(profile)) {
-    const { count } = await supabase
-      .from("leads")
-      .select("id", { count: "exact", head: true })
-      .eq("influencer_id", influencer.id);
-    return (
-      <DashboardShell role="influencer" name={profile.name} title="Leads gerados">
-        <LeadsLocked leadsCount={count ?? 0} />
-      </DashboardShell>
-    );
-  }
-  const { data: leads } = await supabase
+  const query = supabase
     .from("leads")
-    .select("*, campaigns(title), brands(company_name)")
-    .eq("influencer_id", influencer.id)
-    .order("created_at", { ascending: false });
+    .select("*, campaigns(title), brands(company_name)", { count: "exact" })
+    .eq("influencer_id", influencer.id);
 
-  const rows = (leads ?? []) as (Lead & { campaigns: Pick<Campaign, "title"> | null; brands: Pick<Brand, "company_name"> | null })[];
+  const { data: leads, count } = fullAccess
+    ? await query.order("created_at", { ascending: false })
+    : await query.order("created_at", { ascending: true }).limit(FREE_VISIBLE_LEADS);
+
+  const rows = (leads ?? []) as LeadRow[];
+  const lockedCount = fullAccess ? 0 : Math.max(0, (count ?? 0) - rows.length);
 
   return (
     <DashboardShell role="influencer" name={profile.name} title="Leads gerados">
+      {!fullAccess && rows.length > 0 && (
+        <p className="mb-4 rounded-2xl bg-white px-5 py-3.5 text-sm text-[#6e6e73] shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
+          Plano gratuito: você vê o contato completo dos seus <strong>{FREE_VISIBLE_LEADS} primeiros leads</strong>.
+        </p>
+      )}
+
       {rows.length === 0 ? (
         <EmptyState title="Nenhum lead ainda" description="Compartilhe seus links de campanha para começar a captar leads." />
       ) : (
@@ -58,6 +63,12 @@ export default async function InfluencerLeadsPage() {
             ))}
           </Tbody>
         </Table>
+      )}
+
+      {lockedCount > 0 && (
+        <div className="mt-6">
+          <LeadsLocked leadsCount={lockedCount} />
+        </div>
       )}
     </DashboardShell>
   );

@@ -21,15 +21,21 @@ export default async function UpgradeSuccessPage({
   let activated = false;
 
   const session = await stripe.checkout.sessions.retrieve(session_id);
+  // "no_payment_required" cobre o período de teste grátis (trial de 7 dias).
+  const paidOrTrial = session.payment_status === "paid" || session.payment_status === "no_payment_required";
   if (
-    session.payment_status === "paid" &&
+    paidOrTrial &&
     session.metadata?.user_id === profile.user_id &&
     (session.metadata?.plan_type === "influencer" || session.metadata?.plan_type === "brand")
   ) {
     const supabase = await createClient();
     const { error } = await supabase
       .from("profiles")
-      .update({ plan_type: session.metadata.plan_type, plan_status: "active" })
+      .update({
+        plan_type: session.metadata.plan_type,
+        plan_status: session.payment_status === "paid" ? "active" : "trialing",
+        stripe_customer_id: typeof session.customer === "string" ? session.customer : null,
+      })
       .eq("user_id", profile.user_id);
     activated = !error;
   }

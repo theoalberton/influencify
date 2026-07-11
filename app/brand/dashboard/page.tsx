@@ -4,6 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { StatCard } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+import { PerformanceChart } from "@/components/ui/PerformanceChart";
+import { FunnelRow } from "@/components/ui/FunnelRow";
+import { buildDailySeries } from "@/lib/timeseries";
 
 export default async function BrandDashboardPage() {
   const profile = await requireRole("brand");
@@ -39,6 +42,26 @@ export default async function BrandDashboardPage() {
   const clicks = clicksCount ?? 0;
   const conversion = clicks > 0 ? ((leads / clicks) * 100).toFixed(1) : "0.0";
 
+  // Série dos últimos 30 dias + funil
+  const since = new Date();
+  since.setDate(since.getDate() - 29);
+  const sinceIso = since.toISOString().slice(0, 10);
+
+  const [{ data: clickRows }, { data: leadRows }] = await Promise.all([
+    campaignIds.length
+      ? supabase.from("clicks").select("created_at").in("campaign_id", campaignIds).gte("created_at", sinceIso)
+      : Promise.resolve({ data: [] as { created_at: string }[] }),
+    supabase.from("leads").select("created_at, status").eq("brand_id", brand.id).gte("created_at", sinceIso),
+  ]);
+
+  const series = buildDailySeries(
+    (clickRows ?? []).map((r) => r.created_at),
+    (leadRows ?? []).map((r) => r.created_at)
+  );
+  const clicks30 = (clickRows ?? []).length;
+  const leads30 = (leadRows ?? []).length;
+  const converted30 = (leadRows ?? []).filter((r) => r.status === "converted").length;
+
   return (
     <DashboardShell
       role="brand"
@@ -55,6 +78,11 @@ export default async function BrandDashboardPage() {
         <StatCard label="Embaixadores ativos" value={ambassadorsCount ?? 0} />
         <StatCard label="Leads captados" value={leads} />
         <StatCard label="Taxa de conversão" value={`${conversion}%`} hint="cliques → leads" />
+      </div>
+
+      <div className="mt-4 space-y-4">
+        <PerformanceChart data={series} />
+        <FunnelRow clicks={clicks30} leads={leads30} converted={converted30} />
       </div>
     </DashboardShell>
   );

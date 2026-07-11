@@ -18,6 +18,7 @@ create table profiles (
   avatar_url text,
   plan_type text not null default 'free' check (plan_type in ('free', 'influencer', 'brand', 'premium')),
   plan_status text not null default 'active' check (plan_status in ('active', 'trialing', 'past_due', 'canceled')),
+  stripe_customer_id text,
   created_at timestamptz not null default now()
 );
 

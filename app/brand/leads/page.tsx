@@ -6,9 +6,14 @@ import { Table, Thead, Tbody, Td, EmptyState } from "@/components/ui/Table";
 import { Badge } from "@/components/ui/Badge";
 import { LinkButton } from "@/components/ui/Button";
 import { LeadsLocked } from "@/components/ui/LeadsLocked";
-import { hasLeadAccess } from "@/lib/plans";
+import { hasLeadAccess, FREE_VISIBLE_LEADS } from "@/lib/plans";
 import { formatDate } from "@/lib/utils";
 import type { Campaign, Influencer, Lead } from "@/lib/database.types";
+
+type LeadRow = Lead & {
+  campaigns: Pick<Campaign, "title"> | null;
+  influencers: Pick<Influencer, "display_name"> | null;
+};
 
 export default async function BrandLeadsPage() {
   const profile = await requireRole("brand");
@@ -16,28 +21,21 @@ export default async function BrandLeadsPage() {
   if (!brand) redirect("/brand/profile");
 
   const supabase = await createClient();
+  const fullAccess = hasLeadAccess(profile);
 
-  if (!hasLeadAccess(profile)) {
-    const { count } = await supabase
-      .from("leads")
-      .select("id", { count: "exact", head: true })
-      .eq("brand_id", brand.id);
-    return (
-      <DashboardShell role="brand" name={profile.name} title="Leads">
-        <LeadsLocked leadsCount={count ?? 0} />
-      </DashboardShell>
-    );
-  }
-  const { data: leads } = await supabase
+  // Plano gratuito: contato completo dos primeiros 10 leads; o restante fica
+  // bloqueado com contagem visível (upsell).
+  const query = supabase
     .from("leads")
-    .select("*, campaigns(title), influencers(display_name)")
-    .eq("brand_id", brand.id)
-    .order("created_at", { ascending: false });
+    .select("*, campaigns(title), influencers(display_name)", { count: "exact" })
+    .eq("brand_id", brand.id);
 
-  const rows = (leads ?? []) as (Lead & {
-    campaigns: Pick<Campaign, "title"> | null;
-    influencers: Pick<Influencer, "display_name"> | null;
-  })[];
+  const { data: leads, count } = fullAccess
+    ? await query.order("created_at", { ascending: false })
+    : await query.order("created_at", { ascending: true }).limit(FREE_VISIBLE_LEADS);
+
+  const rows = (leads ?? []) as LeadRow[];
+  const lockedCount = fullAccess ? 0 : Math.max(0, (count ?? 0) - rows.length);
 
   return (
     <DashboardShell
@@ -45,11 +43,19 @@ export default async function BrandLeadsPage() {
       name={profile.name}
       title="Leads"
       actions={
-        <LinkButton href="/brand/leads/export" variant="secondary">
-          Exportar CSV
-        </LinkButton>
+        fullAccess ? (
+          <LinkButton href="/brand/leads/export" variant="secondary">
+            Exportar CSV
+          </LinkButton>
+        ) : undefined
       }
     >
+      {!fullAccess && rows.length > 0 && (
+        <p className="mb-4 rounded-2xl bg-white px-5 py-3.5 text-sm text-[#6e6e73] shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
+          Plano gratuito: você vê o contato completo dos seus <strong>{FREE_VISIBLE_LEADS} primeiros leads</strong>.
+        </p>
+      )}
+
       {rows.length === 0 ? (
         <EmptyState title="Nenhum lead captado ainda" description="Vincule embaixadores e crie campanhas para começar." />
       ) : (
@@ -72,6 +78,12 @@ export default async function BrandLeadsPage() {
             ))}
           </Tbody>
         </Table>
+      )}
+
+      {lockedCount > 0 && (
+        <div className="mt-6">
+          <LeadsLocked leadsCount={lockedCount} />
+        </div>
       )}
     </DashboardShell>
   );

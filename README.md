@@ -89,6 +89,28 @@ com CTA de upgrade, e o CSV retorna 403). Para ativar os planos pagos:
 
 Sem as chaves configuradas, o botão de assinatura mostra um aviso amigável em vez de quebrar.
 
+O plano Pro inclui **7 dias de teste grátis** e o assinante gerencia (troca de cartão,
+cancelamento) pelo portal do Stripe, no botão "Gerenciar assinatura" em `/upgrade`. Para manter o
+plano sincronizado em renovações/cancelamentos, cadastre um webhook em **Developers → Webhooks**
+apontando para `https://seudominio.com/api/stripe/webhook` (eventos `checkout.session.completed`,
+`customer.subscription.updated` e `customer.subscription.deleted`) e preencha
+`STRIPE_WEBHOOK_SECRET` e `SUPABASE_SERVICE_ROLE_KEY` no ambiente.
+
+## E-mails transacionais (Resend)
+
+Com `RESEND_API_KEY` configurada, ao captar um lead o sistema envia automaticamente:
+o **cupom por e-mail para o visitante** (valida o contato) e um **aviso de novo lead** para a
+marca/influenciador dono da campanha (sem expor o contato do lead, respeitando o plano). Crie a
+conta gratuita em [resend.com](https://resend.com); para produção, verifique seu domínio e ajuste
+`EMAIL_FROM`. O aviso ao dono requer também `SUPABASE_SERVICE_ROLE_KEY` (para localizar o e-mail
+do dono com segurança).
+
+## Meta Pixel
+
+Se a campanha tiver `Meta Pixel ID` preenchido, a página pública da oferta injeta o pixel e
+dispara `PageView`, `ViewContent` e — no envio do formulário — o evento `Lead`, pronto para
+públicos de remarketing.
+
 ## Redefinição de senha
 
 `/forgot-password` envia o e-mail de recuperação via Supabase; o link passa por `/auth/confirm`

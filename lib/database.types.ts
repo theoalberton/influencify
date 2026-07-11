@@ -16,6 +16,7 @@ export interface Profile {
   avatar_url: string | null;
   plan_type: PlanType;
   plan_status: PlanStatus;
+  stripe_customer_id: string | null;
   created_at: string;
 }
 

@@ -182,9 +182,16 @@ export default function LandingPage() {
       </section>
 
       <footer className="border-t border-black/5 bg-[#f5f5f7]">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-2 px-6 py-8 text-xs text-[#86868b] sm:flex-row">
-          <span>Influencify</span>
-          <span>Marketing de influência com atribuição de verdade.</span>
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-3 px-6 py-8 text-xs text-[#86868b] sm:flex-row">
+          <span>Influencify — Marketing de influência com atribuição de verdade.</span>
+          <span className="flex gap-4">
+            <Link href="/termos" className="hover:underline">
+              Termos de Uso
+            </Link>
+            <Link href="/privacidade" className="hover:underline">
+              Privacidade
+            </Link>
+          </span>
         </div>
       </footer>
     </div>

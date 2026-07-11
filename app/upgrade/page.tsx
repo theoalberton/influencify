@@ -3,17 +3,18 @@ import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/lib/auth";
 import { hasLeadAccess, PLAN_PRICING } from "@/lib/plans";
 import { UpgradeButton } from "./UpgradeButton";
+import { PortalButton } from "./PortalButton";
 
 const FREE_FEATURES: Record<"influencer" | "brand", string[]> = {
   influencer: [
     "Perfil público e links rastreáveis",
     "1 campanha própria (seu produto ou serviço)",
-    "Contagem de cliques e leads no dashboard",
+    "Contato completo dos 10 primeiros leads",
   ],
   brand: [
     "Campanhas, cupons e embaixadores",
     "Links rastreáveis por influenciador",
-    "Contagem de cliques e leads no dashboard",
+    "Contato completo dos 10 primeiros leads",
   ],
 };
 
@@ -89,7 +90,7 @@ export default async function UpgradePage() {
                   <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth={1.8} />
                   <path d="M8 10V7a4 4 0 118 0v3" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" />
                 </svg>
-                Contato dos leads bloqueado
+                Do 11º lead em diante, contato bloqueado
               </li>
             </ul>
 
@@ -105,7 +106,7 @@ export default async function UpgradePage() {
             </span>
             <h2 className="text-lg font-semibold">{pro.label}</h2>
             <p className="mt-1 text-3xl font-semibold tracking-tight">{pro.price}</p>
-            <p className="mt-1 text-xs text-white/50">cancele quando quiser</p>
+            <p className="mt-1 text-xs text-white/50">7 dias grátis · cancele quando quiser</p>
 
             <ul className="mt-6 space-y-3">
               <li className="flex items-start gap-2.5 text-sm text-white/80">
@@ -120,15 +121,7 @@ export default async function UpgradePage() {
               ))}
             </ul>
 
-            <div className="mt-8">
-              {alreadyPro ? (
-                <p className="rounded-full border border-white/20 px-6 py-3 text-center text-sm font-medium text-white/70">
-                  Plano ativo
-                </p>
-              ) : (
-                <UpgradeButton />
-              )}
-            </div>
+            <div className="mt-8">{alreadyPro ? <PortalButton /> : <UpgradeButton />}</div>
           </div>
         </div>
 

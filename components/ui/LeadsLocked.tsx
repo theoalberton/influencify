@@ -26,11 +26,12 @@ export function LeadsLocked({ leadsCount }: { leadsCount: number }) {
         </div>
         <h2 className="mt-4 text-xl font-semibold tracking-tight text-[#1d1d1f]">
           {leadsCount > 0
-            ? `Você tem ${leadsCount} lead${leadsCount === 1 ? "" : "s"} esperando`
-            : "Seus leads aparecem aqui"}
+            ? `Mais ${leadsCount} lead${leadsCount === 1 ? "" : "s"} esperando por você`
+            : "Seus próximos leads aparecem aqui"}
         </h2>
         <p className="mt-2 max-w-sm text-sm text-[#6e6e73]">
-          O plano gratuito registra os leads, mas nome e contato completos são exclusivos dos planos pagos.
+          O plano gratuito mostra o contato completo dos primeiros 10 leads. Os demais ficam guardados e são
+          liberados na hora com o plano Pro — teste 7 dias grátis.
         </p>
         <Link
           href="/upgrade"
