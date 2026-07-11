@@ -25,7 +25,7 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
   const offers = (links ?? [])
     .map((l) => ({
       link: l as CampaignInfluencer,
-      campaign: (l as unknown as { campaigns: Campaign & { brands: Brand } }).campaigns,
+      campaign: (l as unknown as { campaigns: Campaign & { brands: Brand | null } }).campaigns,
     }))
     .filter((o) => o.campaign && o.campaign.status === "active");
 
@@ -60,50 +60,58 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
           {offers.length === 0 ? (
             <p className="col-span-full text-center text-sm text-[#86868b]">Nenhuma oferta disponível no momento.</p>
           ) : (
-            offers.map(({ link, campaign }) => (
-              <a
-                key={link.id}
-                href={`/i/${influencer.slug}/oferta/${campaign.slug}?ref=${link.referral_code}`}
-                className="group overflow-hidden rounded-2xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.06)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)]"
-              >
-                <div className="relative aspect-video w-full overflow-hidden bg-[#f5f5f7]">
-                  {campaign.image_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={campaign.image_url}
-                      alt={campaign.title}
-                      className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-[#e8e8ed] text-3xl font-semibold text-[#b0b0b8]">
-                      {campaign.brands?.company_name?.slice(0, 1).toUpperCase()}
-                    </div>
-                  )}
-                  <span className="absolute right-2 top-2 rounded-full bg-black/70 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
-                    {formatDiscount(campaign.discount_type, campaign.discount_value)}
-                  </span>
-                </div>
+            offers.map(({ link, campaign }) => {
+              // Campanha de marca mostra a marca; campanha própria mostra o
+              // produto/nome do influenciador.
+              const ownerName =
+                campaign.brands?.company_name ?? campaign.product_name ?? influencer.display_name;
+              const ownerImage = campaign.brands?.logo_url ?? (campaign.brands ? null : influencer.profile_image_url);
 
-                <div className="flex items-center gap-3 p-3.5">
-                  {campaign.brands?.logo_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={campaign.brands.logo_url}
-                      alt={campaign.brands.company_name}
-                      className="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-black/5"
-                    />
-                  ) : (
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f5f5f7] text-xs font-semibold text-[#86868b] ring-1 ring-black/5">
-                      {campaign.brands?.company_name?.slice(0, 1).toUpperCase()}
-                    </div>
-                  )}
-                  <div className="min-w-0">
-                    <p className="truncate font-semibold text-[#1d1d1f]">{campaign.title}</p>
-                    <p className="truncate text-xs text-[#86868b]">{campaign.brands?.company_name}</p>
+              return (
+                <a
+                  key={link.id}
+                  href={`/i/${influencer.slug}/oferta/${campaign.slug}?ref=${link.referral_code}`}
+                  className="group overflow-hidden rounded-2xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.06)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)]"
+                >
+                  <div className="relative aspect-video w-full overflow-hidden bg-[#f5f5f7]">
+                    {campaign.image_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={campaign.image_url}
+                        alt={campaign.title}
+                        className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-[#e8e8ed] text-3xl font-semibold text-[#b0b0b8]">
+                        {ownerName?.slice(0, 1).toUpperCase()}
+                      </div>
+                    )}
+                    <span className="absolute right-2 top-2 rounded-full bg-black/70 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
+                      {formatDiscount(campaign.discount_type, campaign.discount_value)}
+                    </span>
                   </div>
-                </div>
-              </a>
-            ))
+
+                  <div className="flex items-center gap-3 p-3.5">
+                    {ownerImage ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={ownerImage}
+                        alt={ownerName ?? ""}
+                        className="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-black/5"
+                      />
+                    ) : (
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f5f5f7] text-xs font-semibold text-[#86868b] ring-1 ring-black/5">
+                        {ownerName?.slice(0, 1).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-[#1d1d1f]">{campaign.title}</p>
+                      <p className="truncate text-xs text-[#86868b]">{ownerName}</p>
+                    </div>
+                  </div>
+                </a>
+              );
+            })
           )}
         </div>
 

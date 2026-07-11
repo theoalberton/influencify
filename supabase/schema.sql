@@ -65,11 +65,13 @@ create table brands (
 );
 
 -- ----------------------------------------------------------------------------
--- campaigns: ofertas/cupons cadastrados por uma marca
+-- campaigns: ofertas/cupons de uma marca OU de um influenciador (campanha
+-- própria — produto/serviço do próprio criador). Exatamente um dono.
 -- ----------------------------------------------------------------------------
 create table campaigns (
   id uuid primary key default gen_random_uuid(),
-  brand_id uuid not null references brands (id) on delete cascade,
+  brand_id uuid references brands (id) on delete cascade,
+  influencer_id uuid references influencers (id) on delete cascade,
   title text not null,
   slug text not null,
   product_name text,
@@ -88,11 +90,18 @@ create table campaigns (
   google_tag_id text,
   internal_notes text,
   created_at timestamptz not null default now(),
-  unique (brand_id, slug)
+  unique (brand_id, slug),
+  constraint campaigns_owner_check check (
+    (brand_id is not null and influencer_id is null)
+    or (brand_id is null and influencer_id is not null)
+  )
 );
 
 create index campaigns_brand_idx on campaigns (brand_id);
+create index campaigns_owner_influencer_idx on campaigns (influencer_id);
 create index campaigns_status_idx on campaigns (status);
+create unique index campaigns_influencer_slug_key
+  on campaigns (influencer_id, slug) where influencer_id is not null;
 
 -- ----------------------------------------------------------------------------
 -- brand_influencers: vínculo de embaixador (marca <-> influenciador)
@@ -328,13 +337,24 @@ create policy "brands: update own or admin" on brands for update
 
 -- campaigns --------------------------------------------------------------
 create policy "campaigns: public read active" on campaigns for select
-  using (status = 'active' or brand_id = auth_brand_id() or auth_account_type() = 'admin');
+  using (
+    status = 'active'
+    or brand_id = auth_brand_id()
+    or influencer_id = auth_influencer_id()
+    or auth_account_type() = 'admin'
+  );
 create policy "campaigns: brand manages own" on campaigns for insert
   with check (brand_id = auth_brand_id());
 create policy "campaigns: brand updates own or admin" on campaigns for update
   using (brand_id = auth_brand_id() or auth_account_type() = 'admin');
 create policy "campaigns: brand deletes own or admin" on campaigns for delete
   using (brand_id = auth_brand_id() or auth_account_type() = 'admin');
+create policy "campaigns: influencer inserts own" on campaigns for insert
+  with check (influencer_id = auth_influencer_id());
+create policy "campaigns: influencer updates own" on campaigns for update
+  using (influencer_id = auth_influencer_id());
+create policy "campaigns: influencer deletes own" on campaigns for delete
+  using (influencer_id = auth_influencer_id());
 
 -- brand_influencers --------------------------------------------------------
 create policy "brand_influencers: read own side or admin" on brand_influencers for select

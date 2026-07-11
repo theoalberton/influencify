@@ -4,14 +4,22 @@ import { getCurrentProfile } from "@/lib/auth";
 import { hasLeadAccess, PLAN_PRICING } from "@/lib/plans";
 import { UpgradeButton } from "./UpgradeButton";
 
-const FREE_FEATURES = [
-  "Perfil público e links rastreáveis",
-  "Campanhas e cupons ilimitados para testar",
-  "Contagem de cliques e leads no dashboard",
-];
+const FREE_FEATURES: Record<"influencer" | "brand", string[]> = {
+  influencer: [
+    "Perfil público e links rastreáveis",
+    "1 campanha própria (seu produto ou serviço)",
+    "Contagem de cliques e leads no dashboard",
+  ],
+  brand: [
+    "Campanhas, cupons e embaixadores",
+    "Links rastreáveis por influenciador",
+    "Contagem de cliques e leads no dashboard",
+  ],
+};
 
 const PRO_FEATURES: Record<"influencer" | "brand", string[]> = {
   influencer: [
+    "Campanhas próprias ilimitadas",
     "Nome e contato completo de cada lead",
     "Desempenho detalhado por campanha",
     "Prova de conversão para negociar com marcas",
@@ -70,7 +78,7 @@ export default async function UpgradePage() {
             <p className="mt-1 text-xs text-[#86868b]">para sempre</p>
 
             <ul className="mt-6 space-y-3">
-              {FREE_FEATURES.map((feature) => (
+              {FREE_FEATURES[role].map((feature) => (
                 <li key={feature} className="flex items-start gap-2.5 text-sm text-[#6e6e73]">
                   <Check />
                   {feature}

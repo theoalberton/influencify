@@ -56,7 +56,8 @@ export interface Brand {
 
 export interface Campaign {
   id: string;
-  brand_id: string;
+  brand_id: string | null;
+  influencer_id: string | null;
   title: string;
   slug: string;
   product_name: string | null;

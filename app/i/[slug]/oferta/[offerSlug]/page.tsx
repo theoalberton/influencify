@@ -63,7 +63,7 @@ export default async function OfferPage({
 
   if (!campaign) notFound();
 
-  const typedCampaign = campaign as Campaign & { brands: Brand };
+  const typedCampaign = campaign as Campaign & { brands: Brand | null };
 
   await supabase.from("clicks").insert({
     campaign_id: typedCampaign.id,
@@ -97,7 +97,9 @@ export default async function OfferPage({
               />
             )}
             <p className="text-xs font-medium text-[#86868b]">
-              {typedCampaign.brands?.company_name} · via {influencer.display_name}
+              {typedCampaign.brands
+                ? `${typedCampaign.brands.company_name} · via ${influencer.display_name}`
+                : `Oferta de ${influencer.display_name}${typedCampaign.product_name ? ` · ${typedCampaign.product_name}` : ""}`}
             </p>
           </div>
           <h1 className="mt-1 text-xl font-semibold tracking-tight text-[#1d1d1f]">{typedCampaign.title}</h1>
@@ -109,7 +111,7 @@ export default async function OfferPage({
           <div className="mt-6 border-t border-black/5 pt-6">
             <LeadForm
               campaignId={typedCampaign.id}
-              brandId={typedCampaign.brand_id}
+              brandId={typedCampaign.brand_id ?? ""}
               influencerId={influencer.id}
               referralCode={campaignInfluencer.referral_code}
               requiredFields={typedCampaign.required_fields}

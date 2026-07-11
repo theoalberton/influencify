@@ -15,7 +15,8 @@ export interface LeadFormState {
 
 export async function submitLead(_prev: LeadFormState, formData: FormData): Promise<LeadFormState> {
   const campaign_id = String(formData.get("campaign_id") ?? "");
-  const brand_id = String(formData.get("brand_id") ?? "");
+  // Vazio em campanhas próprias do influenciador (sem marca envolvida).
+  const brand_id = String(formData.get("brand_id") ?? "") || null;
   const influencer_id = String(formData.get("influencer_id") ?? "");
   const referral_code = String(formData.get("referral_code") ?? "") || null;
   const source = String(formData.get("source") ?? "profile");
@@ -30,7 +31,7 @@ export async function submitLead(_prev: LeadFormState, formData: FormData): Prom
 
   if (!name) return { error: "Informe seu nome." };
   if (!consent) return { error: "Você precisa aceitar os termos para receber o cupom." };
-  if (!campaign_id || !brand_id) return { error: "Oferta inválida." };
+  if (!campaign_id) return { error: "Oferta inválida." };
 
   const supabase = await createClient();
 
