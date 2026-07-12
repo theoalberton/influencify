@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getMyBrand } from "@/lib/auth";
+import { inviteInfluencerToCampaign } from "@/lib/invites";
+import { translateError } from "@/lib/errors";
 import { slugify } from "@/lib/utils";
 import type { DiscountType } from "@/lib/database.types";
 
@@ -33,32 +35,56 @@ export async function createCampaign(_prev: CampaignFormState, formData: FormDat
   if (!title) return { error: "Informe o nome da campanha." };
   if (!discount_type) return { error: "Escolha o tipo de desconto." };
 
+  const invitedIds = formData.getAll("invited_influencers").map(String);
+
   const slug = slugify(title);
   const supabase = await createClient();
 
-  const { error } = await supabase.from("campaigns").insert({
-    brand_id: brand.id,
-    title,
-    slug,
-    product_name,
-    description,
-    image_url,
-    discount_type,
-    discount_value,
-    coupon_code,
-    destination_url,
-    start_date,
-    end_date,
-    required_fields: required_fields.length ? required_fields : ["name", "email"],
-    meta_pixel_id,
-    tiktok_pixel_id,
-    google_tag_id,
-    internal_notes,
-  });
+  const { data: campaign, error } = await supabase
+    .from("campaigns")
+    .insert({
+      brand_id: brand.id,
+      title,
+      slug,
+      product_name,
+      description,
+      image_url,
+      discount_type,
+      discount_value,
+      coupon_code,
+      destination_url,
+      start_date,
+      end_date,
+      required_fields: required_fields.length ? required_fields : ["name", "email"],
+      meta_pixel_id,
+      tiktok_pixel_id,
+      google_tag_id,
+      internal_notes,
+    })
+    .select("id, slug")
+    .single();
 
   if (error) {
     if (error.code === "23505") return { error: "Já existe uma campanha com esse nome. Escolha outro título." };
-    return { error: error.message };
+    return { error: translateError(error.message) };
+  }
+
+  // Convida somente os embaixadores selecionados — a campanha não aparece
+  // automaticamente para os demais.
+  if (invitedIds.length) {
+    const { data: influencers } = await supabase
+      .from("influencers")
+      .select("id, slug")
+      .in("id", invitedIds);
+
+    for (const influencer of influencers ?? []) {
+      await inviteInfluencerToCampaign(supabase, {
+        campaignId: campaign.id,
+        campaignSlug: campaign.slug,
+        influencerId: influencer.id,
+        influencerSlug: influencer.slug,
+      });
+    }
   }
 
   redirect("/brand/campaigns");

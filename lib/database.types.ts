@@ -95,7 +95,7 @@ export interface CampaignInfluencer {
   influencer_id: string;
   referral_code: string;
   public_url: string | null;
-  status: "active" | "paused" | "removed";
+  status: "invited" | "active" | "paused" | "removed";
   created_at: string;
 }
 

@@ -15,7 +15,13 @@ const REQUIRED_FIELD_OPTIONS = [
   { value: "city", label: "Cidade" },
 ];
 
-export function CampaignForm() {
+export interface AmbassadorOption {
+  id: string;
+  display_name: string;
+  niche: string | null;
+}
+
+export function CampaignForm({ ambassadors }: { ambassadors: AmbassadorOption[] }) {
   const [state, formAction, pending] = useActionState(createCampaign, initialState);
 
   return (
@@ -96,6 +102,39 @@ export function CampaignForm() {
 
       <Field label="Observações internas">
         <Textarea name="internal_notes" rows={2} />
+      </Field>
+
+      <Field
+        label="Convidar embaixadores"
+        hint="Só os influenciadores convidados podem divulgar esta campanha — escolha os que combinam com o produto. Você também pode convidar depois."
+      >
+        {ambassadors.length === 0 ? (
+          <p className="mt-2 rounded-xl bg-[#f0ede4] px-4 py-3 text-sm text-[#5f6b64]">
+            Você ainda não tem embaixadores ativos. Vincule influenciadores em{" "}
+            <a href="/brand/ambassadors" className="font-medium text-[#004741] hover:underline">
+              Embaixadores
+            </a>
+            .
+          </p>
+        ) : (
+          <div className="mt-2 space-y-2">
+            {ambassadors.map((amb) => (
+              <label
+                key={amb.id}
+                className="flex items-center gap-3 rounded-xl border border-[#d8d2c3] px-4 py-3 text-sm text-[#113b34] transition has-[:checked]:border-[#004741] has-[:checked]:bg-[#004741]/5"
+              >
+                <input
+                  type="checkbox"
+                  name="invited_influencers"
+                  value={amb.id}
+                  className="rounded border-[#d8d2c3] text-[#004741] focus:ring-[#004741]"
+                />
+                <span className="font-medium">{amb.display_name}</span>
+                {amb.niche && <span className="text-xs text-[#85918a]">{amb.niche}</span>}
+              </label>
+            ))}
+          </div>
+        )}
       </Field>
 
       {state.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}

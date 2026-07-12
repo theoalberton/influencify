@@ -120,7 +120,8 @@ create table brand_influencers (
 
 -- ----------------------------------------------------------------------------
 -- campaign_influencers: liga um influenciador a uma campanha específica,
--- gerando o referral_code / link público único daquela dupla.
+-- gerando o referral_code / link público único daquela dupla. Também carrega
+-- o fluxo de convite: 'invited' até o influenciador aceitar ('active').
 -- ----------------------------------------------------------------------------
 create table campaign_influencers (
   id uuid primary key default gen_random_uuid(),
@@ -128,7 +129,7 @@ create table campaign_influencers (
   influencer_id uuid not null references influencers (id) on delete cascade,
   referral_code text not null unique,
   public_url text,
-  status text not null default 'active' check (status in ('active', 'paused', 'removed')),
+  status text not null default 'active' check (status in ('invited', 'active', 'paused', 'removed')),
   created_at timestamptz not null default now(),
   unique (campaign_id, influencer_id)
 );
@@ -366,18 +367,29 @@ create policy "brand_influencers: brand updates or admin" on brand_influencers f
   using (brand_id = auth_brand_id() or auth_account_type() = 'admin');
 
 -- campaign_influencers -------------------------------------------------------
+-- Também é o mecanismo de CONVITE: a marca cria a linha (status 'invited')
+-- escolhendo quais embaixadores podem divulgar cada campanha; o influenciador
+-- aceita ('active') ou recusa ('removed'). Campanha própria: o influenciador
+-- cria a própria linha já ativa.
 create policy "campaign_influencers: public read" on campaign_influencers for select
   using (true);
-create policy "campaign_influencers: influencer or brand inserts" on campaign_influencers for insert
+create policy "campaign_influencers: owner inserts" on campaign_influencers for insert
   with check (
-    influencer_id = auth_influencer_id()
+    (
+      influencer_id = auth_influencer_id()
+      and exists (select 1 from campaigns c where c.id = campaign_id and c.influencer_id = auth_influencer_id())
+    )
     or exists (select 1 from campaigns c where c.id = campaign_id and c.brand_id = auth_brand_id())
   );
+create policy "campaign_influencers: influencer updates own" on campaign_influencers for update
+  using (influencer_id = auth_influencer_id());
 create policy "campaign_influencers: brand or admin updates" on campaign_influencers for update
   using (
     exists (select 1 from campaigns c where c.id = campaign_id and c.brand_id = auth_brand_id())
     or auth_account_type() = 'admin'
   );
+create policy "campaign_influencers: brand deletes own" on campaign_influencers for delete
+  using (exists (select 1 from campaigns c where c.id = campaign_id and c.brand_id = auth_brand_id()));
 
 -- referrals ------------------------------------------------------------------
 create policy "referrals: public read" on referrals for select using (true);

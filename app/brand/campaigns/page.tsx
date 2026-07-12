@@ -68,7 +68,10 @@ export default async function BrandCampaignsPage() {
                   {formatDate(campaign.start_date)} — {formatDate(campaign.end_date)}
                 </p>
 
-                <div className="mt-4 flex gap-2">
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <LinkButton href={`/brand/campaigns/${campaign.id}`} size="sm" variant="primary">
+                    Embaixadores
+                  </LinkButton>
                   {(["active", "paused", "ended"] as CampaignStatus[])
                     .filter((s) => s !== campaign.status)
                     .map((status) => (

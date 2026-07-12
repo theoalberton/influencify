@@ -29,12 +29,14 @@ export default async function OfferPage({
 
   let campaignInfluencer: CampaignInfluencer | null = null;
 
+  // Só links ATIVOS são públicos — convite pendente ou recusado não abre a oferta.
   if (query.ref) {
     const { data } = await supabase
       .from("campaign_influencers")
       .select("*")
       .eq("referral_code", query.ref)
       .eq("influencer_id", influencer.id)
+      .eq("status", "active")
       .single();
     campaignInfluencer = data;
   }
@@ -47,6 +49,7 @@ export default async function OfferPage({
         .select("*")
         .eq("campaign_id", campaignBySlug.id)
         .eq("influencer_id", influencer.id)
+        .eq("status", "active")
         .single();
       campaignInfluencer = data;
     }
