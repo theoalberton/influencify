@@ -11,7 +11,7 @@ export default async function BrandProfilePage() {
     <DashboardShell role="brand" name={profile.name} title="Perfil da marca">
       <Card className="max-w-3xl">
         {!brand && (
-          <p className="mb-5 rounded-lg bg-indigo-50 px-3 py-2 text-sm text-indigo-700">
+          <p className="mb-5 rounded-lg bg-[#eef3ec] px-3 py-2 text-sm text-[#004741]">
             Complete o perfil da sua marca para começar a criar campanhas e cupons.
           </p>
         )}

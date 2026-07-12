@@ -24,7 +24,7 @@ export function SettingsForm({ profile }: { profile: Profile }) {
       </Field>
       <Field label="Plano atual">
         <Input defaultValue={`${profile.plan_type} · ${profile.plan_status}`} disabled className="capitalize" />
-        <a href="/upgrade" className="mt-1.5 inline-block text-sm font-medium text-[#0071e3] hover:underline">
+        <a href="/upgrade" className="mt-1.5 inline-block text-sm font-medium text-[#004741] hover:underline">
           Gerenciar plano ›
         </a>
       </Field>

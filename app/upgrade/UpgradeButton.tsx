@@ -13,7 +13,7 @@ export function UpgradeButton() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-full bg-[#0071e3] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#0077ed] disabled:opacity-60"
+        className="w-full rounded-full bg-[#004741] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#00614f] disabled:opacity-60"
       >
         {pending ? "Abrindo pagamento..." : "Começar 7 dias grátis"}
       </button>

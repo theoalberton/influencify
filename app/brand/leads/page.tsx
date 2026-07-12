@@ -51,7 +51,7 @@ export default async function BrandLeadsPage() {
       }
     >
       {!fullAccess && rows.length > 0 && (
-        <p className="mb-4 rounded-2xl bg-white px-5 py-3.5 text-sm text-[#6e6e73] shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
+        <p className="mb-4 rounded-2xl bg-white px-5 py-3.5 text-sm text-[#5f6b64] shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
           Plano gratuito: você vê o contato completo dos seus <strong>{FREE_VISIBLE_LEADS} primeiros leads</strong>.
         </p>
       )}

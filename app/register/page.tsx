@@ -8,7 +8,7 @@ import { AuthLayout } from "@/components/layout/AuthLayout";
 const initialState: RegisterState = {};
 
 const inputClass =
-  "mt-1.5 w-full rounded-xl border border-[#d2d2d7] bg-white px-4 py-3 text-sm text-[#1d1d1f] transition focus:border-[#0071e3] focus:outline-none focus:ring-4 focus:ring-[#0071e3]/10";
+  "mt-1.5 w-full rounded-xl border border-[#d8d2c3] bg-white px-4 py-3 text-sm text-[#113b34] transition focus:border-[#004741] focus:outline-none focus:ring-4 focus:ring-[#004741]/10";
 
 export default function RegisterPage() {
   const [state, formAction, pending] = useActionState(registerAction, initialState);
@@ -16,8 +16,8 @@ export default function RegisterPage() {
 
   return (
     <AuthLayout>
-      <h1 className="text-2xl font-semibold tracking-tight text-[#1d1d1f]">Criar sua conta</h1>
-      <p className="mt-2 text-sm text-[#6e6e73]">Transforme audiência em leads qualificados.</p>
+      <h1 className="text-2xl font-semibold tracking-tight text-[#113b34]">Criar sua conta</h1>
+      <p className="mt-2 text-sm text-[#5f6b64]">Transforme audiência em leads qualificados.</p>
 
       <div className="mt-8 grid grid-cols-2 gap-3">
         <button
@@ -25,24 +25,24 @@ export default function RegisterPage() {
           onClick={() => setAccountType("influencer")}
           className={`rounded-2xl border px-4 py-4 text-left transition ${
             accountType === "influencer"
-              ? "border-[#0071e3] bg-[#0071e3]/5 ring-1 ring-[#0071e3]"
-              : "border-[#d2d2d7] hover:border-[#86868b]"
+              ? "border-[#004741] bg-[#004741]/5 ring-1 ring-[#004741]"
+              : "border-[#d8d2c3] hover:border-[#85918a]"
           }`}
         >
-          <p className="text-sm font-semibold text-[#1d1d1f]">Influenciador</p>
-          <p className="mt-0.5 text-xs text-[#6e6e73]">Monetize sua audiência</p>
+          <p className="text-sm font-semibold text-[#113b34]">Influenciador</p>
+          <p className="mt-0.5 text-xs text-[#5f6b64]">Monetize sua audiência</p>
         </button>
         <button
           type="button"
           onClick={() => setAccountType("brand")}
           className={`rounded-2xl border px-4 py-4 text-left transition ${
             accountType === "brand"
-              ? "border-[#0071e3] bg-[#0071e3]/5 ring-1 ring-[#0071e3]"
-              : "border-[#d2d2d7] hover:border-[#86868b]"
+              ? "border-[#004741] bg-[#004741]/5 ring-1 ring-[#004741]"
+              : "border-[#d8d2c3] hover:border-[#85918a]"
           }`}
         >
-          <p className="text-sm font-semibold text-[#1d1d1f]">Marca</p>
-          <p className="mt-0.5 text-xs text-[#6e6e73]">Capte leads qualificados</p>
+          <p className="text-sm font-semibold text-[#113b34]">Marca</p>
+          <p className="mt-0.5 text-xs text-[#5f6b64]">Capte leads qualificados</p>
         </button>
       </div>
 
@@ -50,7 +50,7 @@ export default function RegisterPage() {
         <input type="hidden" name="account_type" value={accountType} />
 
         <div>
-          <label className="block text-sm font-medium text-[#1d1d1f]">Nome</label>
+          <label className="block text-sm font-medium text-[#113b34]">Nome</label>
           <input
             name="name"
             required
@@ -61,17 +61,17 @@ export default function RegisterPage() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-[#1d1d1f]">E-mail</label>
+            <label className="block text-sm font-medium text-[#113b34]">E-mail</label>
             <input type="email" name="email" required className={inputClass} placeholder="voce@email.com" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1d1d1f]">Telefone</label>
+            <label className="block text-sm font-medium text-[#113b34]">Telefone</label>
             <input name="phone" className={inputClass} placeholder="(11) 99999-9999" />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#1d1d1f]">Senha</label>
+          <label className="block text-sm font-medium text-[#113b34]">Senha</label>
           <input
             type="password"
             name="password"
@@ -87,27 +87,27 @@ export default function RegisterPage() {
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-full bg-[#0071e3] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#0077ed] disabled:opacity-60"
+          className="w-full rounded-full bg-[#004741] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#00614f] disabled:opacity-60"
         >
           {pending ? "Criando conta..." : "Criar conta"}
         </button>
 
-        <p className="text-center text-xs text-[#86868b]">
+        <p className="text-center text-xs text-[#85918a]">
           Ao criar a conta você concorda com os{" "}
-          <Link href="/termos" target="_blank" className="text-[#0071e3] hover:underline">
+          <Link href="/termos" target="_blank" className="text-[#004741] hover:underline">
             Termos de Uso
           </Link>{" "}
           e a{" "}
-          <Link href="/privacidade" target="_blank" className="text-[#0071e3] hover:underline">
+          <Link href="/privacidade" target="_blank" className="text-[#004741] hover:underline">
             Política de Privacidade
           </Link>
           .
         </p>
       </form>
 
-      <p className="mt-8 text-center text-sm text-[#6e6e73]">
+      <p className="mt-8 text-center text-sm text-[#5f6b64]">
         Já tem conta?{" "}
-        <Link href="/login" className="font-medium text-[#0071e3] hover:underline">
+        <Link href="/login" className="font-medium text-[#004741] hover:underline">
           Entrar
         </Link>
       </p>

@@ -2,9 +2,9 @@ import Link from "next/link";
 
 export function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col bg-[#f5f5f7]">
+    <div className="flex min-h-screen flex-col bg-[#f0ede4]">
       <header className="flex justify-center py-8">
-        <Link href="/" className="text-lg font-semibold tracking-tight text-[#1d1d1f]">
+        <Link href="/" className="text-lg font-semibold tracking-tight text-[#113b34]">
           Influencify
         </Link>
       </header>
@@ -15,7 +15,7 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
         </div>
       </main>
 
-      <footer className="flex justify-center gap-4 pb-8 text-center text-xs text-[#86868b]">
+      <footer className="flex justify-center gap-4 pb-8 text-center text-xs text-[#85918a]">
         <Link href="/termos" className="hover:underline">
           Termos de Uso
         </Link>

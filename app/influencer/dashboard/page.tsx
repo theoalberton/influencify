@@ -70,17 +70,17 @@ export default async function InfluencerDashboardPage() {
       </div>
 
       <div className="mt-4 rounded-2xl bg-white p-6 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
-        <h2 className="text-sm font-semibold text-[#1d1d1f]">Seu link principal</h2>
-        <p className="mt-2 break-all rounded-lg bg-[#f5f5f7] px-3 py-2 font-mono text-sm text-[#6e6e73]">
+        <h2 className="text-sm font-semibold text-[#113b34]">Seu link principal</h2>
+        <p className="mt-2 break-all rounded-lg bg-[#f0ede4] px-3 py-2 font-mono text-sm text-[#5f6b64]">
           {siteUrl}/i/{influencer.slug}
         </p>
-        <p className="mt-3 text-sm text-[#6e6e73]">
+        <p className="mt-3 text-sm text-[#5f6b64]">
           Divulgue um produto seu em{" "}
-          <a href="/influencer/my-campaigns" className="font-medium text-[#0071e3] hover:underline">
+          <a href="/influencer/my-campaigns" className="font-medium text-[#004741] hover:underline">
             Minhas campanhas
           </a>{" "}
           ou veja as ofertas das marcas em{" "}
-          <a href="/influencer/campaigns" className="font-medium text-[#0071e3] hover:underline">
+          <a href="/influencer/campaigns" className="font-medium text-[#004741] hover:underline">
             Campanhas de marcas
           </a>
           .

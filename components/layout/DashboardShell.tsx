@@ -53,10 +53,10 @@ export function DashboardShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#f5f5f7]">
+    <div className="min-h-screen bg-[#f0ede4]">
       <div className="flex">
         <aside className="fixed hidden h-screen w-64 flex-col border-r border-black/5 bg-white px-4 py-6 lg:flex">
-          <Link href="/" className="mb-8 px-2 text-lg font-semibold tracking-tight text-[#1d1d1f]">
+          <Link href="/" className="mb-8 px-2 text-lg font-semibold tracking-tight text-[#113b34]">
             Influencify
           </Link>
 
@@ -68,16 +68,16 @@ export function DashboardShell({
 
           <div className="border-t border-black/5 pt-4">
             <div className="flex items-center gap-3 px-2">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1d1d1f] text-sm font-semibold text-white">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#113b34] text-sm font-semibold text-white">
                 {name.slice(0, 1).toUpperCase()}
               </div>
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-[#1d1d1f]">{name}</p>
-                <p className="text-xs text-[#86868b]">{ROLE_LABEL[role]}</p>
+                <p className="truncate text-sm font-semibold text-[#113b34]">{name}</p>
+                <p className="text-xs text-[#85918a]">{ROLE_LABEL[role]}</p>
               </div>
             </div>
             <form action={logoutAction}>
-              <button className="mt-3 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-medium text-[#6e6e73] transition hover:bg-black/5 hover:text-[#1d1d1f]">
+              <button className="mt-3 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-medium text-[#5f6b64] transition hover:bg-black/5 hover:text-[#113b34]">
                 <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
                   <path d="M9 5H6a2 2 0 00-2 2v10a2 2 0 002 2h3m5-4l4-4-4-4m4 4H9" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -89,7 +89,7 @@ export function DashboardShell({
 
         <div className="flex-1 lg:pl-64">
           <header className="sticky top-0 z-10 flex items-center justify-between border-b border-black/5 bg-white/80 px-6 py-4 backdrop-blur-xl">
-            <h1 className="text-xl font-semibold tracking-tight text-[#1d1d1f]">{title}</h1>
+            <h1 className="text-xl font-semibold tracking-tight text-[#113b34]">{title}</h1>
             {actions}
           </header>
           <main className="p-6">{children}</main>

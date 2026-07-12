@@ -46,7 +46,7 @@ export default async function BrandCampaignsPage() {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={campaign.image_url} alt={campaign.title} className="h-full w-full object-cover" />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-indigo-100 to-fuchsia-100 text-2xl font-bold text-indigo-300">
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#e5dfd2] to-[#d8e5df] text-2xl font-bold text-[#a8b1a9]">
                     {campaign.title.slice(0, 1).toUpperCase()}
                   </div>
                 )}

@@ -74,7 +74,7 @@ export function CampaignForm() {
                 name="required_fields"
                 value={opt.value}
                 defaultChecked={opt.value === "name" || opt.value === "email"}
-                className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                className="rounded border-[#d8d2c3] text-[#004741] focus:ring-[#004741]"
               />
               {opt.label}
             </label>

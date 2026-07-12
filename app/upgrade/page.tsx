@@ -35,7 +35,7 @@ const PRO_FEATURES: Record<"influencer" | "brand", string[]> = {
 
 function Check() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 shrink-0 text-[#0071e3]">
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 shrink-0 text-[#004741]">
       <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -52,21 +52,21 @@ export default async function UpgradePage() {
   const dashboardHref = `/${role}/dashboard`;
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] px-4 py-12">
+    <div className="min-h-screen bg-[#f0ede4] px-4 py-12">
       <div className="mx-auto max-w-3xl">
-        <Link href={dashboardHref} className="text-sm font-medium text-[#0071e3] hover:underline">
+        <Link href={dashboardHref} className="text-sm font-medium text-[#004741] hover:underline">
           ‹ Voltar ao dashboard
         </Link>
 
-        <h1 className="mt-6 text-center text-4xl font-semibold tracking-tight text-[#1d1d1f]">
+        <h1 className="mt-6 text-center text-4xl font-semibold tracking-tight text-[#113b34]">
           Escolha o seu plano.
         </h1>
-        <p className="mt-3 text-center text-[#6e6e73]">
+        <p className="mt-3 text-center text-[#5f6b64]">
           Capte leads gratuitamente. Desbloqueie o contato deles quando estiver pronto.
         </p>
 
         {alreadyPro && (
-          <p className="mx-auto mt-6 max-w-md rounded-2xl bg-[#f0fdf4] px-5 py-4 text-center text-sm text-emerald-700">
+          <p className="mx-auto mt-6 max-w-md rounded-2xl bg-[#eaf3ec] px-5 py-4 text-center text-sm text-emerald-700">
             Seu plano <strong>{pro.label}</strong> está ativo. Obrigado por assinar!
           </p>
         )}
@@ -74,18 +74,18 @@ export default async function UpgradePage() {
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {/* Free */}
           <div className="rounded-3xl bg-white p-8 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
-            <h2 className="text-lg font-semibold text-[#1d1d1f]">Gratuito</h2>
-            <p className="mt-1 text-3xl font-semibold tracking-tight text-[#1d1d1f]">R$ 0</p>
-            <p className="mt-1 text-xs text-[#86868b]">para sempre</p>
+            <h2 className="text-lg font-semibold text-[#113b34]">Gratuito</h2>
+            <p className="mt-1 text-3xl font-semibold tracking-tight text-[#113b34]">R$ 0</p>
+            <p className="mt-1 text-xs text-[#85918a]">para sempre</p>
 
             <ul className="mt-6 space-y-3">
               {FREE_FEATURES[role].map((feature) => (
-                <li key={feature} className="flex items-start gap-2.5 text-sm text-[#6e6e73]">
+                <li key={feature} className="flex items-start gap-2.5 text-sm text-[#5f6b64]">
                   <Check />
                   {feature}
                 </li>
               ))}
-              <li className="flex items-start gap-2.5 text-sm text-[#b0b0b8]">
+              <li className="flex items-start gap-2.5 text-sm text-[#a8b1a9]">
                 <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 shrink-0">
                   <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth={1.8} />
                   <path d="M8 10V7a4 4 0 118 0v3" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" />
@@ -94,14 +94,14 @@ export default async function UpgradePage() {
               </li>
             </ul>
 
-            <p className="mt-8 rounded-full border border-[#d2d2d7] px-6 py-3 text-center text-sm font-medium text-[#6e6e73]">
+            <p className="mt-8 rounded-full border border-[#d8d2c3] px-6 py-3 text-center text-sm font-medium text-[#5f6b64]">
               {profile.plan_type === "free" ? "Seu plano atual" : "Plano básico"}
             </p>
           </div>
 
           {/* Pro */}
-          <div className="relative rounded-3xl bg-[#1d1d1f] p-8 text-white shadow-[0_8px_40px_rgba(0,0,0,0.25)]">
-            <span className="absolute -top-3 right-8 rounded-full bg-[#0071e3] px-3 py-1 text-xs font-semibold text-white">
+          <div className="relative rounded-3xl bg-[#113b34] p-8 text-white shadow-[0_8px_40px_rgba(0,0,0,0.25)]">
+            <span className="absolute -top-3 right-8 rounded-full bg-[#004741] px-3 py-1 text-xs font-semibold text-white">
               Recomendado
             </span>
             <h2 className="text-lg font-semibold">{pro.label}</h2>
@@ -125,7 +125,7 @@ export default async function UpgradePage() {
           </div>
         </div>
 
-        <p className="mt-10 text-center text-xs text-[#86868b]">
+        <p className="mt-10 text-center text-xs text-[#85918a]">
           Pagamento processado com segurança pelo Stripe. Os leads captados no plano gratuito ficam guardados e são
           liberados assim que a assinatura é ativada.
         </p>

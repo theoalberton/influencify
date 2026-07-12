@@ -51,9 +51,9 @@ export default async function MyCampaignsPage() {
       }
     >
       {isFree && (
-        <p className="mb-5 rounded-2xl bg-white px-5 py-4 text-sm text-[#6e6e73] shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
+        <p className="mb-5 rounded-2xl bg-white px-5 py-4 text-sm text-[#5f6b64] shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
           Seu plano gratuito inclui <strong>1 campanha própria</strong>.{" "}
-          <Link href="/upgrade" className="font-medium text-[#0071e3] hover:underline">
+          <Link href="/upgrade" className="font-medium text-[#004741] hover:underline">
             Faça upgrade
           </Link>{" "}
           para criar quantas quiser e liberar o contato dos seus leads.
@@ -69,12 +69,12 @@ export default async function MyCampaignsPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {campaigns.map((campaign) => (
             <div key={campaign.id} className="overflow-hidden rounded-2xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
-              <div className="relative aspect-video w-full bg-[#f5f5f7]">
+              <div className="relative aspect-video w-full bg-[#f0ede4]">
                 {campaign.image_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={campaign.image_url} alt={campaign.title} className="h-full w-full object-cover" />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-[#e8e8ed] text-2xl font-semibold text-[#b0b0b8]">
+                  <div className="flex h-full w-full items-center justify-center bg-[#e5dfd2] text-2xl font-semibold text-[#a8b1a9]">
                     {campaign.title.slice(0, 1).toUpperCase()}
                   </div>
                 )}
@@ -86,15 +86,15 @@ export default async function MyCampaignsPage() {
               <div className="p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 className="truncate font-semibold text-[#1d1d1f]">{campaign.title}</h3>
-                    <p className="truncate text-sm text-[#86868b]">{campaign.product_name}</p>
+                    <h3 className="truncate font-semibold text-[#113b34]">{campaign.title}</h3>
+                    <p className="truncate text-sm text-[#85918a]">{campaign.product_name}</p>
                   </div>
                   <Badge tone={campaign.status}>{campaign.status}</Badge>
                 </div>
 
                 {linkByCampaign.get(campaign.id) && (
                   <div className="mt-3 space-y-2">
-                    <p className="break-all rounded-lg bg-[#f5f5f7] px-3 py-2 font-mono text-xs text-[#6e6e73]">
+                    <p className="break-all rounded-lg bg-[#f0ede4] px-3 py-2 font-mono text-xs text-[#5f6b64]">
                       {linkByCampaign.get(campaign.id)}
                     </p>
                     <CopyButton value={linkByCampaign.get(campaign.id) ?? ""} />

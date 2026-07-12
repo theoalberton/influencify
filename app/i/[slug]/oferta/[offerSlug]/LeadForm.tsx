@@ -106,10 +106,10 @@ export function LeadForm({
       )}
 
       <label className="flex items-start gap-2 text-xs text-slate-500">
-        <input type="checkbox" name="consent" required className="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+        <input type="checkbox" name="consent" required className="mt-0.5 rounded border-[#d8d2c3] text-[#004741] focus:ring-[#004741]" />
         <span>
           Concordo em compartilhar meus dados com esta marca para receber o cupom, conforme a{" "}
-          <Link href="/privacidade" target="_blank" className="text-[#0071e3] hover:underline">
+          <Link href="/privacidade" target="_blank" className="text-[#004741] hover:underline">
             Política de Privacidade
           </Link>
           .

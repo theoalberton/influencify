@@ -29,7 +29,7 @@ export async function sendEmail({ to, subject, html }: SendEmailArgs): Promise<b
   }
 }
 
-const baseStyles = `margin:0;padding:0;background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;`;
+const baseStyles = `margin:0;padding:0;background:#f0ede4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;`;
 const cardStyles = `max-width:480px;margin:32px auto;background:#ffffff;border-radius:20px;padding:40px;`;
 
 export function couponEmailHtml({
@@ -48,27 +48,27 @@ export function couponEmailHtml({
   return `
   <body style="${baseStyles}">
     <div style="${cardStyles}">
-      <p style="font-size:14px;color:#86868b;margin:0 0 4px;">Influencify</p>
-      <h1 style="font-size:22px;color:#1d1d1f;margin:0 0 16px;">Aqui está o seu cupom, ${visitorName}!</h1>
-      <p style="font-size:15px;color:#6e6e73;line-height:1.5;margin:0 0 24px;">
+      <p style="font-size:14px;color:#85918a;margin:0 0 4px;">Influencify</p>
+      <h1 style="font-size:22px;color:#113b34;margin:0 0 16px;">Aqui está o seu cupom, ${visitorName}!</h1>
+      <p style="font-size:15px;color:#5f6b64;line-height:1.5;margin:0 0 24px;">
         Você resgatou a oferta <strong>${campaignTitle}</strong> de ${ownerName}.
       </p>
       ${
         couponCode
-          ? `<div style="background:#f5f5f7;border-radius:12px;padding:20px;text-align:center;margin-bottom:24px;">
-               <p style="font-size:12px;color:#86868b;margin:0 0 6px;">SEU CUPOM</p>
-               <p style="font-size:26px;font-weight:700;letter-spacing:3px;color:#1d1d1f;margin:0;font-family:monospace;">${couponCode}</p>
+          ? `<div style="background:#f0ede4;border-radius:12px;padding:20px;text-align:center;margin-bottom:24px;">
+               <p style="font-size:12px;color:#85918a;margin:0 0 6px;">SEU CUPOM</p>
+               <p style="font-size:26px;font-weight:700;letter-spacing:3px;color:#113b34;margin:0;font-family:monospace;">${couponCode}</p>
              </div>`
           : ""
       }
       ${
         destinationUrl
           ? `<div style="text-align:center;">
-               <a href="${destinationUrl}" style="display:inline-block;background:#0071e3;color:#ffffff;text-decoration:none;font-size:15px;font-weight:500;padding:13px 32px;border-radius:999px;">Usar meu cupom</a>
+               <a href="${destinationUrl}" style="display:inline-block;background:#004741;color:#ffffff;text-decoration:none;font-size:15px;font-weight:500;padding:13px 32px;border-radius:999px;">Usar meu cupom</a>
              </div>`
           : ""
       }
-      <p style="font-size:12px;color:#b0b0b8;margin:32px 0 0;text-align:center;">
+      <p style="font-size:12px;color:#a8b1a9;margin:32px 0 0;text-align:center;">
         Você recebeu este e-mail porque resgatou um cupom no Influencify e consentiu com o contato.
       </p>
     </div>
@@ -91,16 +91,16 @@ export function newLeadEmailHtml({
   return `
   <body style="${baseStyles}">
     <div style="${cardStyles}">
-      <p style="font-size:14px;color:#86868b;margin:0 0 4px;">Influencify</p>
-      <h1 style="font-size:22px;color:#1d1d1f;margin:0 0 16px;">🎉 Novo lead, ${ownerName}!</h1>
-      <p style="font-size:15px;color:#6e6e73;line-height:1.6;margin:0 0 24px;">
+      <p style="font-size:14px;color:#85918a;margin:0 0 4px;">Influencify</p>
+      <h1 style="font-size:22px;color:#113b34;margin:0 0 16px;">🎉 Novo lead, ${ownerName}!</h1>
+      <p style="font-size:15px;color:#5f6b64;line-height:1.6;margin:0 0 24px;">
         <strong>${leadName}</strong> acabou de resgatar o cupom da campanha
         <strong>${campaignTitle}</strong>${influencerName ? ` via <strong>${influencerName}</strong>` : ""}.
       </p>
       <div style="text-align:center;">
-        <a href="${dashboardUrl}" style="display:inline-block;background:#0071e3;color:#ffffff;text-decoration:none;font-size:15px;font-weight:500;padding:13px 32px;border-radius:999px;">Ver no dashboard</a>
+        <a href="${dashboardUrl}" style="display:inline-block;background:#004741;color:#ffffff;text-decoration:none;font-size:15px;font-weight:500;padding:13px 32px;border-radius:999px;">Ver no dashboard</a>
       </div>
-      <p style="font-size:12px;color:#b0b0b8;margin:32px 0 0;text-align:center;">
+      <p style="font-size:12px;color:#a8b1a9;margin:32px 0 0;text-align:center;">
         Notificação automática de novo lead do Influencify.
       </p>
     </div>

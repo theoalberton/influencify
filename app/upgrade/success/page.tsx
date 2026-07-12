@@ -43,7 +43,7 @@ export default async function UpgradeSuccessPage({
   const dashboardHref = `/${profile.account_type}/dashboard`;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f5f5f7] px-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#f0ede4] px-4">
       <div className="w-full max-w-md rounded-3xl bg-white p-10 text-center shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
         {activated ? (
           <>
@@ -52,15 +52,15 @@ export default async function UpgradeSuccessPage({
                 <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <h1 className="mt-5 text-2xl font-semibold tracking-tight text-[#1d1d1f]">Assinatura ativa!</h1>
-            <p className="mt-2 text-sm text-[#6e6e73]">
+            <h1 className="mt-5 text-2xl font-semibold tracking-tight text-[#113b34]">Assinatura ativa!</h1>
+            <p className="mt-2 text-sm text-[#5f6b64]">
               Seus leads já estão desbloqueados, incluindo os que foram captados no plano gratuito.
             </p>
           </>
         ) : (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight text-[#1d1d1f]">Pagamento em processamento</h1>
-            <p className="mt-2 text-sm text-[#6e6e73]">
+            <h1 className="text-2xl font-semibold tracking-tight text-[#113b34]">Pagamento em processamento</h1>
+            <p className="mt-2 text-sm text-[#5f6b64]">
               Não conseguimos confirmar o pagamento ainda. Se você concluiu o checkout, aguarde alguns instantes e
               recarregue esta página.
             </p>
@@ -69,7 +69,7 @@ export default async function UpgradeSuccessPage({
 
         <Link
           href={activated ? `/${profile.account_type}/leads` : dashboardHref}
-          className="mt-8 inline-block rounded-full bg-[#0071e3] px-7 py-3 text-sm font-medium text-white transition hover:bg-[#0077ed]"
+          className="mt-8 inline-block rounded-full bg-[#004741] px-7 py-3 text-sm font-medium text-white transition hover:bg-[#00614f]"
         >
           {activated ? "Ver meus leads" : "Voltar ao dashboard"}
         </Link>
