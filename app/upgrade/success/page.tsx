@@ -7,12 +7,39 @@ import { getStripe } from "@/lib/stripe";
 export default async function UpgradeSuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ session_id?: string }>;
+  searchParams: Promise<{ session_id?: string; provider?: string }>;
 }) {
   const profile = await getCurrentProfile();
   if (!profile) redirect("/login");
 
-  const { session_id } = await searchParams;
+  const { session_id, provider } = await searchParams;
+
+  // Página de obrigado da Kiwify: a ativação chega pelo webhook em instantes.
+  if (provider === "kiwify") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f0ede4] px-4">
+        <div className="w-full max-w-md rounded-3xl bg-white p-10 text-center shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white">
+            <svg viewBox="0 0 24 24" fill="none" className="h-7 w-7">
+              <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <h1 className="mt-5 text-2xl font-semibold tracking-tight text-[#113b34]">Pagamento confirmado!</h1>
+          <p className="mt-2 text-sm text-[#5f6b64]">
+            Seu plano Pro será ativado automaticamente em até 1 minuto. Se demorar mais que isso, recarregue a página
+            de leads ou fale com o suporte.
+          </p>
+          <Link
+            href={`/${profile.account_type}/leads`}
+            className="mt-8 inline-block rounded-full bg-[#004741] px-7 py-3 text-sm font-medium text-white transition hover:bg-[#00614f]"
+          >
+            Ver meus leads
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   if (!session_id) redirect("/upgrade");
 
   const stripe = getStripe();

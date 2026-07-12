@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/lib/auth";
 import { hasLeadAccess, PLAN_PRICING } from "@/lib/plans";
+import { kiwifyCheckoutUrl } from "@/lib/kiwify";
 import { UpgradeButton } from "./UpgradeButton";
 import { PortalButton } from "./PortalButton";
 
@@ -50,6 +51,8 @@ export default async function UpgradePage() {
   const pro = PLAN_PRICING[role];
   const alreadyPro = hasLeadAccess(profile);
   const dashboardHref = `/${role}/dashboard`;
+  // Kiwify tem prioridade quando configurada; Stripe fica como alternativa.
+  const kiwifyUrl = kiwifyCheckoutUrl(role, profile.email);
 
   return (
     <div className="min-h-screen bg-[#f0ede4] px-4 py-12">
@@ -121,13 +124,32 @@ export default async function UpgradePage() {
               ))}
             </ul>
 
-            <div className="mt-8">{alreadyPro ? <PortalButton /> : <UpgradeButton />}</div>
+            <div className="mt-8">
+              {alreadyPro ? (
+                kiwifyUrl ? (
+                  <p className="rounded-full border border-white/25 px-6 py-3 text-center text-sm font-medium text-white/80">
+                    Plano ativo — gerencie pela sua conta Kiwify
+                  </p>
+                ) : (
+                  <PortalButton />
+                )
+              ) : kiwifyUrl ? (
+                <a
+                  href={kiwifyUrl}
+                  className="block w-full rounded-full bg-[#1baf7a] px-6 py-3 text-center text-sm font-semibold text-white transition hover:brightness-110"
+                >
+                  Assinar agora — 7 dias grátis
+                </a>
+              ) : (
+                <UpgradeButton />
+              )}
+            </div>
           </div>
         </div>
 
         <p className="mt-10 text-center text-xs text-[#85918a]">
-          Pagamento processado com segurança pelo Stripe. Os leads captados no plano gratuito ficam guardados e são
-          liberados assim que a assinatura é ativada.
+          Pagamento processado com segurança pela {kiwifyUrl ? "Kiwify (Pix, boleto ou cartão)" : "Stripe"}. Os leads
+          captados no plano gratuito ficam guardados e são liberados assim que a assinatura é ativada.
         </p>
       </div>
     </div>

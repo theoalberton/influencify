@@ -39,7 +39,8 @@ export default function TermosPage() {
       <LegalSection title="4. Planos e pagamento">
         <p>
           O plano gratuito tem limites de recursos descritos na página de planos. Assinaturas pagas são cobradas de
-          forma recorrente via Stripe, com período de teste quando indicado, e podem ser canceladas a qualquer momento
+          forma recorrente por processadores de pagamento (Kiwify ou Stripe), com período de teste quando indicado, e
+          podem ser canceladas a qualquer momento
           pelo portal de assinatura — o acesso permanece até o fim do período já pago. Podemos alterar preços com
           aviso prévio razoável.
         </p>

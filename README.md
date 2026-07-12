@@ -73,7 +73,26 @@ Cadastro de admin não é público por design. Para criar uma:
 - `/r/[referralCode]` é um redirecionador genérico: resolve o código para a URL certa da oferta,
   útil para compartilhar um link curto preservando o rastreio.
 
-## Planos e pagamento (Stripe)
+## Planos e pagamento (Kiwify — preferido)
+
+A cobrança principal usa a **Kiwify** (Pix, boleto e cartão, checkout brasileiro):
+
+1. Crie 2 produtos de assinatura mensal no painel da Kiwify: "Influenciador PRO" (R$ 49,90)
+   e "Marca PRO" (R$ 199,90), com teste grátis de 7 dias se desejar.
+2. Cole os links de checkout em `KIWIFY_CHECKOUT_INFLUENCER` e `KIWIFY_CHECKOUT_BRAND`.
+3. Em cada produto, configure a **página de obrigado** para
+   `https://seudominio.com/upgrade/success?provider=kiwify`.
+4. No painel da Kiwify, crie um **webhook** apontando para
+   `https://seudominio.com/api/kiwify/webhook` com os eventos: compra aprovada, assinatura
+   renovada, assinatura atrasada, assinatura cancelada, reembolso e chargeback. Cole o token
+   gerado em `KIWIFY_WEBHOOK_TOKEN` e garanta que `SUPABASE_SERVICE_ROLE_KEY` esteja preenchida
+   (o webhook usa a service role para ativar/desativar planos pelo e-mail do comprador).
+
+O e-mail usado na compra precisa ser o mesmo da conta no Influencify — o checkout já vai
+pré-preenchido com o e-mail do usuário logado. Quando as variáveis da Kiwify estão presentes,
+ela tem prioridade; sem elas, o app usa o Stripe abaixo.
+
+## Planos e pagamento (Stripe — alternativa)
 
 Contas gratuitas captam leads normalmente, mas **não veem o contato** (a lista fica bloqueada
 com CTA de upgrade, e o CSV retorna 403). Para ativar os planos pagos:
