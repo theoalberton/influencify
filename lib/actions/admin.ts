@@ -17,3 +17,10 @@ export async function toggleInfluencerActive(influencerId: string, isActive: boo
   await supabase.from("influencers").update({ is_active: isActive }).eq("id", influencerId);
   revalidatePath("/admin/influencers");
 }
+
+export async function markRewardPaid(rewardId: string): Promise<void> {
+  await requireRole("admin");
+  const supabase = await createClient();
+  await supabase.from("invite_rewards").update({ status: "paid" }).eq("id", rewardId);
+  revalidatePath("/admin/dashboard");
+}

@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { Suspense, useActionState, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { registerAction, type RegisterState } from "./actions";
 import { AuthLayout } from "@/components/layout/AuthLayout";
 
@@ -10,14 +11,22 @@ const initialState: RegisterState = {};
 const inputClass =
   "mt-1.5 w-full rounded-xl border border-[#d8d2c3] bg-white px-4 py-3 text-sm text-[#113b34] transition focus:border-[#004741] focus:outline-none focus:ring-4 focus:ring-[#004741]/10";
 
-export default function RegisterPage() {
+function RegisterForm() {
   const [state, formAction, pending] = useActionState(registerAction, initialState);
   const [accountType, setAccountType] = useState<"influencer" | "brand">("influencer");
+  const searchParams = useSearchParams();
+  const inviteCode = searchParams.get("invite") ?? "";
 
   return (
-    <AuthLayout>
+    <>
       <h1 className="text-2xl font-semibold tracking-tight text-[#113b34]">Criar sua conta</h1>
       <p className="mt-2 text-sm text-[#5f6b64]">Transforme audiência em leads qualificados.</p>
+
+      {inviteCode && (
+        <p className="mt-4 rounded-xl bg-[#eef3ec] px-4 py-3 text-sm text-[#004741]">
+          🎁 Você foi convidado por um influenciador do Influencify. Crie sua conta para começar.
+        </p>
+      )}
 
       <div className="mt-8 grid grid-cols-2 gap-3">
         <button
@@ -48,6 +57,7 @@ export default function RegisterPage() {
 
       <form action={formAction} className="mt-6 space-y-4">
         <input type="hidden" name="account_type" value={accountType} />
+        <input type="hidden" name="invite" value={inviteCode} />
 
         <div>
           <label className="block text-sm font-medium text-[#113b34]">Nome</label>
@@ -111,6 +121,16 @@ export default function RegisterPage() {
           Entrar
         </Link>
       </p>
+    </>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <AuthLayout>
+      <Suspense>
+        <RegisterForm />
+      </Suspense>
     </AuthLayout>
   );
 }

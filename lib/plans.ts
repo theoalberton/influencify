@@ -12,6 +12,10 @@ export function hasLeadAccess(profile: Profile): boolean {
 /** Quantos leads o plano gratuito enxerga com contato completo. */
 export const FREE_VISIBLE_LEADS = 10;
 
+/** Programa indique e ganhe: R$ por ciclo e indicados efetivados por ciclo. */
+export const REWARD_PER_CYCLE = 50;
+export const REFERRALS_PER_CYCLE = 3;
+
 export const PLAN_PRICING = {
   influencer: { label: "Influenciador Pro", price: "R$ 49,90/mês" },
   brand: { label: "Marca Pro", price: "R$ 199,90/mês" },

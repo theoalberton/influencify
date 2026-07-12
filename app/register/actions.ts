@@ -28,10 +28,13 @@ export async function registerAction(_prev: RegisterState, formData: FormData): 
 
   const supabase = await createClient();
 
+  // Código do programa indique e ganhe (vem do link /convite/[code])
+  const referredBy = String(formData.get("invite") ?? "").trim() || null;
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { account_type: accountType, name, phone: phone || null } },
+    options: { data: { account_type: accountType, name, phone: phone || null, referred_by: referredBy } },
   });
   if (error) {
     return { error: translateError(error.message) };

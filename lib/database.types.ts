@@ -17,6 +17,7 @@ export interface Profile {
   plan_type: PlanType;
   plan_status: PlanStatus;
   stripe_customer_id: string | null;
+  referred_by_code: string | null;
   created_at: string;
 }
 
@@ -34,6 +35,7 @@ export interface Influencer {
   city: string | null;
   country: string | null;
   profile_image_url: string | null;
+  invite_code: string | null;
   is_active: boolean;
   created_at: string;
 }
@@ -138,6 +140,14 @@ export interface Click {
   ip_hash: string | null;
   user_agent: string | null;
   source: string | null;
+  created_at: string;
+}
+
+export interface InviteReward {
+  id: string;
+  influencer_id: string;
+  amount: number;
+  status: "pending" | "paid";
   created_at: string;
 }
 

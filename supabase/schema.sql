@@ -19,6 +19,8 @@ create table profiles (
   plan_type text not null default 'free' check (plan_type in ('free', 'influencer', 'brand', 'premium')),
   plan_status text not null default 'active' check (plan_status in ('active', 'trialing', 'past_due', 'canceled')),
   stripe_customer_id text,
+  -- código de convite usado no cadastro (programa indique e ganhe)
+  referred_by_code text,
   created_at timestamptz not null default now()
 );
 
@@ -39,6 +41,8 @@ create table influencers (
   city text,
   country text,
   profile_image_url text,
+  -- código pessoal do programa indique e ganhe
+  invite_code text unique default substr(md5(random()::text || clock_timestamp()::text), 1, 8),
   is_active boolean not null default true,
   created_at timestamptz not null default now()
 );
@@ -224,13 +228,14 @@ insert into plans (name, type, price, lead_limit, campaign_limit, ambassador_lim
 create or replace function handle_new_user() returns trigger
 language plpgsql security definer set search_path = public as $$
 begin
-  insert into public.profiles (user_id, account_type, name, email, phone)
+  insert into public.profiles (user_id, account_type, name, email, phone, referred_by_code)
   values (
     new.id,
     coalesce(new.raw_user_meta_data->>'account_type', 'influencer'),
     coalesce(new.raw_user_meta_data->>'name', split_part(new.email, '@', 1)),
     new.email,
-    new.raw_user_meta_data->>'phone'
+    new.raw_user_meta_data->>'phone',
+    nullif(new.raw_user_meta_data->>'referred_by', '')
   );
   return new;
 end;
@@ -239,6 +244,43 @@ $$;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function handle_new_user();
+
+-- ----------------------------------------------------------------------------
+-- invite_rewards: programa indique e ganhe — 1 linha = 1 ciclo de 3 indicados
+-- com plano Pro ativo (efetivados) = R$ 50 a pagar ao influenciador.
+-- ----------------------------------------------------------------------------
+create table invite_rewards (
+  id uuid primary key default gen_random_uuid(),
+  influencer_id uuid not null references influencers (id) on delete cascade,
+  amount numeric not null default 50,
+  status text not null default 'pending' check (status in ('pending', 'paid')),
+  created_at timestamptz not null default now()
+);
+
+alter table invite_rewards enable row level security;
+
+create policy "invite_rewards: read own or admin" on invite_rewards for select
+  using (influencer_id = auth_influencer_id() or auth_account_type() = 'admin');
+create policy "invite_rewards: influencer inserts own" on invite_rewards for insert
+  with check (influencer_id = auth_influencer_id());
+create policy "invite_rewards: admin updates" on invite_rewards for update
+  using (auth_account_type() = 'admin');
+
+-- Lista segura dos indicados do influenciador logado (profiles é restrito por
+-- RLS, então a leitura agregada sai por função security definer).
+create or replace function my_invite_referrals()
+returns table(name text, is_pro boolean, created_at timestamptz)
+language sql stable security definer set search_path = public as $$
+  select
+    p.name,
+    (p.account_type = 'influencer' and p.plan_type = 'influencer' and p.plan_status = 'active') as is_pro,
+    p.created_at
+  from profiles p
+  where p.referred_by_code = (select i.invite_code from influencers i where i.user_id = auth.uid())
+  order by p.created_at desc;
+$$;
+
+grant execute on function my_invite_referrals() to authenticated;
 
 -- ----------------------------------------------------------------------------
 -- Triggers: mantém referrals.clicks / referrals.leads_count agregados

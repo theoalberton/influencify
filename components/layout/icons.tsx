@@ -71,6 +71,13 @@ export const icons = {
       <path d="M5.5 19.5c.7-3 3.3-4.8 6.5-4.8s5.8 1.8 6.5 4.8" {...stroke} />
     </svg>
   ),
+  gift: (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+      <rect x="4" y="8" width="16" height="4" rx="1" {...stroke} />
+      <path d="M5.5 12v7a1.5 1.5 0 001.5 1.5h10a1.5 1.5 0 001.5-1.5v-7M12 8v12.5" {...stroke} />
+      <path d="M12 8c-1.5 0-4-.5-4-2.5A1.9 1.9 0 0110 3.5c2 0 2 3 2 4.5zm0 0c1.5 0 4-.5 4-2.5a1.9 1.9 0 00-2-2c-2 0-2 3-2 4.5z" {...stroke} />
+    </svg>
+  ),
 };
 
 export type IconName = keyof typeof icons;
