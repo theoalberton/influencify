@@ -7,26 +7,26 @@ import { AuthLayout } from "@/components/layout/AuthLayout";
 const initialState: ResetPasswordState = {};
 
 const inputClass =
-  "mt-1.5 w-full rounded-xl border border-[#d8d2c3] bg-white px-4 py-3 text-sm text-[#113b34] transition focus:border-[#004741] focus:outline-none focus:ring-4 focus:ring-[#004741]/10";
+  "mt-1.5 w-full rounded-xl border border-[#dde0cb] bg-white px-4 py-3 text-sm text-[#0a3625] transition focus:border-[#0a3625] focus:outline-none focus:ring-4 focus:ring-[#0a3625]/10";
 
 export default function ResetPasswordPage() {
   const [state, formAction, pending] = useActionState(resetPasswordAction, initialState);
 
   return (
     <AuthLayout>
-      <h1 className="text-2xl font-semibold tracking-tight text-[#113b34]">Criar nova senha</h1>
-      <p className="mt-2 text-sm leading-relaxed text-[#5f6b64]">
+      <h1 className="text-2xl font-semibold tracking-tight text-[#0a3625]">Criar nova senha</h1>
+      <p className="mt-2 text-sm leading-relaxed text-[#4d584d]">
         Escolha uma nova senha para a sua conta.
       </p>
 
       <form action={formAction} className="mt-8 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[#113b34]">Nova senha</label>
+          <label className="block text-sm font-medium text-[#0a3625]">Nova senha</label>
           <input type="password" name="password" required minLength={6} className={inputClass} placeholder="Mínimo 6 caracteres" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#113b34]">Confirmar nova senha</label>
+          <label className="block text-sm font-medium text-[#0a3625]">Confirmar nova senha</label>
           <input type="password" name="confirm" required minLength={6} className={inputClass} placeholder="Repita a senha" />
         </div>
 
@@ -35,7 +35,7 @@ export default function ResetPasswordPage() {
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-full bg-[#004741] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#00614f] disabled:opacity-60"
+          className="w-full rounded-full bg-[#ccda47] px-4 py-3 text-sm font-bold text-[#0a3625] transition hover:brightness-105 disabled:opacity-60"
         >
           {pending ? "Salvando..." : "Salvar nova senha"}
         </button>

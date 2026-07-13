@@ -81,7 +81,7 @@ export default async function OfferPage({
   const campaignUtm = [query.utm_source, query.utm_medium, query.utm_campaign].filter(Boolean).join("/");
 
   return (
-    <div className="min-h-screen bg-[#f0ede4] px-4 py-12">
+    <div className="min-h-screen bg-[#f4f6e8] px-4 py-12">
       {typedCampaign.meta_pixel_id && (
         <Script id="meta-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -96,7 +96,7 @@ export default async function OfferPage({
       )}
       <div className="mx-auto max-w-md overflow-hidden rounded-3xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
         {typedCampaign.image_url && (
-          <div className="aspect-video w-full bg-[#f0ede4]">
+          <div className="aspect-video w-full bg-[#f4f6e8]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={typedCampaign.image_url} alt={typedCampaign.title} className="h-full w-full object-cover" />
           </div>
@@ -112,17 +112,17 @@ export default async function OfferPage({
                 className="h-6 w-6 rounded-full object-cover ring-1 ring-black/5"
               />
             )}
-            <p className="text-xs font-medium text-[#85918a]">
+            <p className="text-xs font-medium text-[#7a8578]">
               {typedCampaign.brands
                 ? `${typedCampaign.brands.company_name} · via ${influencer.display_name}`
                 : `Oferta de ${influencer.display_name}${typedCampaign.product_name ? ` · ${typedCampaign.product_name}` : ""}`}
             </p>
           </div>
-          <h1 className="mt-1 text-xl font-semibold tracking-tight text-[#113b34]">{typedCampaign.title}</h1>
-          <p className="mt-2 text-sm font-semibold text-[#004741]">
+          <h1 className="mt-1 text-xl font-semibold tracking-tight text-[#0a3625]">{typedCampaign.title}</h1>
+          <p className="mt-2 text-sm font-semibold text-[#0a3625]">
             {formatDiscount(typedCampaign.discount_type, typedCampaign.discount_value)}
           </p>
-          {typedCampaign.description && <p className="mt-2 text-sm text-[#5f6b64]">{typedCampaign.description}</p>}
+          {typedCampaign.description && <p className="mt-2 text-sm text-[#4d584d]">{typedCampaign.description}</p>}
 
           <div className="mt-6 border-t border-black/5 pt-6">
             <LeadForm

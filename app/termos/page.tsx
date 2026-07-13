@@ -31,7 +31,7 @@ export default function TermosPage() {
         <p>
           Os dados de visitantes captados em uma campanha pertencem ao visitante e são disponibilizados à marca e/ou
           influenciador responsáveis, que assumem o papel de controladores desses dados e devem tratá-los conforme a
-          LGPD e a nossa <a href="/privacidade" className="text-[#004741] hover:underline">Política de Privacidade</a>.
+          LGPD e a nossa <a href="/privacidade" className="text-[#0a3625] hover:underline">Política de Privacidade</a>.
           O uso dos leads para fins diferentes dos consentidos é de responsabilidade exclusiva de quem os utiliza.
         </p>
       </LegalSection>

@@ -80,7 +80,7 @@ export function CampaignForm({ ambassadors }: { ambassadors: AmbassadorOption[] 
                 name="required_fields"
                 value={opt.value}
                 defaultChecked={opt.value === "name" || opt.value === "email"}
-                className="rounded border-[#d8d2c3] text-[#004741] focus:ring-[#004741]"
+                className="rounded border-[#dde0cb] text-[#0a3625] focus:ring-[#0a3625]"
               />
               {opt.label}
             </label>
@@ -109,9 +109,9 @@ export function CampaignForm({ ambassadors }: { ambassadors: AmbassadorOption[] 
         hint="Só os influenciadores convidados podem divulgar esta campanha — escolha os que combinam com o produto. Você também pode convidar depois."
       >
         {ambassadors.length === 0 ? (
-          <p className="mt-2 rounded-xl bg-[#f0ede4] px-4 py-3 text-sm text-[#5f6b64]">
+          <p className="mt-2 rounded-xl bg-[#f4f6e8] px-4 py-3 text-sm text-[#4d584d]">
             Você ainda não tem embaixadores ativos. Vincule influenciadores em{" "}
-            <a href="/brand/ambassadors" className="font-medium text-[#004741] hover:underline">
+            <a href="/brand/ambassadors" className="font-medium text-[#0a3625] hover:underline">
               Embaixadores
             </a>
             .
@@ -121,16 +121,16 @@ export function CampaignForm({ ambassadors }: { ambassadors: AmbassadorOption[] 
             {ambassadors.map((amb) => (
               <label
                 key={amb.id}
-                className="flex items-center gap-3 rounded-xl border border-[#d8d2c3] px-4 py-3 text-sm text-[#113b34] transition has-[:checked]:border-[#004741] has-[:checked]:bg-[#004741]/5"
+                className="flex items-center gap-3 rounded-xl border border-[#dde0cb] px-4 py-3 text-sm text-[#0a3625] transition has-[:checked]:border-[#0a3625] has-[:checked]:bg-[#0a3625]/5"
               >
                 <input
                   type="checkbox"
                   name="invited_influencers"
                   value={amb.id}
-                  className="rounded border-[#d8d2c3] text-[#004741] focus:ring-[#004741]"
+                  className="rounded border-[#dde0cb] text-[#0a3625] focus:ring-[#0a3625]"
                 />
                 <span className="font-medium">{amb.display_name}</span>
-                {amb.niche && <span className="text-xs text-[#85918a]">{amb.niche}</span>}
+                {amb.niche && <span className="text-xs text-[#7a8578]">{amb.niche}</span>}
               </label>
             ))}
           </div>

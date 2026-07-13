@@ -52,21 +52,21 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="mt-6 rounded-2xl bg-white p-6 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
-        <h2 className="text-sm font-semibold text-[#113b34]">
+        <h2 className="text-sm font-semibold text-[#0a3625]">
           Recompensas de indicação{" "}
           {pending.length > 0 && <Badge tone="sent">{pending.length} a pagar</Badge>}
         </h2>
         {rewards.length === 0 ? (
-          <p className="mt-3 text-sm text-[#85918a]">Nenhuma recompensa resgatada ainda.</p>
+          <p className="mt-3 text-sm text-[#7a8578]">Nenhuma recompensa resgatada ainda.</p>
         ) : (
           <div className="mt-3 divide-y divide-black/5">
             {rewards.map((reward) => (
               <div key={reward.id} className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
                 <div className="min-w-0">
-                  <p className="font-medium text-[#113b34]">{reward.influencers?.display_name ?? "—"}</p>
-                  <p className="text-xs text-[#85918a]">{formatDate(reward.created_at)}</p>
+                  <p className="font-medium text-[#0a3625]">{reward.influencers?.display_name ?? "—"}</p>
+                  <p className="text-xs text-[#7a8578]">{formatDate(reward.created_at)}</p>
                 </div>
-                <span className="font-semibold text-[#113b34]">
+                <span className="font-semibold text-[#0a3625]">
                   R$ {Number(reward.amount).toFixed(2).replace(".", ",")}
                 </span>
                 {reward.status === "paid" ? (

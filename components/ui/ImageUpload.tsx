@@ -78,9 +78,9 @@ export function ImageUpload({
         className="group relative h-28 w-28 shrink-0 rounded-full disabled:cursor-wait"
         aria-label={label}
       >
-        <span className="absolute inset-0 rounded-full bg-[#d8d2c3] p-[1.5px]">
+        <span className="absolute inset-0 rounded-full bg-[#dde0cb] p-[1.5px]">
           <span className="block h-full w-full rounded-full bg-white p-[3px]">
-            <span className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-[#f0ede4] text-[#d8d2c3]">
+            <span className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-[#f4f6e8] text-[#dde0cb]">
               {preview ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={preview} alt="" className="h-full w-full object-cover" />
@@ -119,7 +119,7 @@ export function ImageUpload({
           )}
         </span>
 
-        <span className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#004741] text-white shadow ring-2 ring-white transition group-hover:bg-[#00614f]">
+        <span className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#0a3625] text-white shadow ring-2 ring-white transition group-hover:bg-[#145238]">
           <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
             <path
               d="M4 8h2.5l1-2h5l1 2H16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2v-8a2 2 0 012-2z"
@@ -132,8 +132,8 @@ export function ImageUpload({
         </span>
       </button>
 
-      <p className="mt-2 text-sm font-medium text-[#113b34]">{label}</p>
-      <p className="text-xs text-[#85918a]">{uploading ? "Enviando..." : "Toque para escolher uma imagem"}</p>
+      <p className="mt-2 text-sm font-medium text-[#0a3625]">{label}</p>
+      <p className="text-xs text-[#7a8578]">{uploading ? "Enviando..." : "Toque para escolher uma imagem"}</p>
       {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
     </div>
   );

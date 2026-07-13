@@ -47,21 +47,21 @@ export default async function InfluencerCampaignsPage() {
         <div className="space-y-8">
           {pending.length > 0 && (
             <section>
-              <h2 className="mb-3 text-sm font-semibold text-[#113b34]">
+              <h2 className="mb-3 text-sm font-semibold text-[#0a3625]">
                 Convites pendentes <Badge tone="invited">{pending.length}</Badge>
               </h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {pending.map((invite) => {
                   const campaign = invite.campaigns!;
                   return (
-                    <div key={invite.id} className="overflow-hidden rounded-2xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.06)] ring-2 ring-[#004741]/20">
+                    <div key={invite.id} className="overflow-hidden rounded-2xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.06)] ring-2 ring-[#0a3625]/20">
                       <CampaignThumb campaign={campaign} />
                       <div className="p-4">
-                        <p className="text-xs font-medium uppercase tracking-wide text-[#85918a]">
+                        <p className="text-xs font-medium uppercase tracking-wide text-[#7a8578]">
                           {campaign.brands?.company_name}
                         </p>
-                        <h3 className="mt-1 truncate font-semibold text-[#113b34]">{campaign.title}</h3>
-                        <p className="mt-1 line-clamp-2 text-sm text-[#5f6b64]">{campaign.description}</p>
+                        <h3 className="mt-1 truncate font-semibold text-[#0a3625]">{campaign.title}</h3>
+                        <p className="mt-1 line-clamp-2 text-sm text-[#4d584d]">{campaign.description}</p>
 
                         <div className="mt-4 flex gap-2">
                           <form action={acceptInvite.bind(null, invite.id)} className="flex-1">
@@ -85,7 +85,7 @@ export default async function InfluencerCampaignsPage() {
 
           {active.length > 0 && (
             <section>
-              <h2 className="mb-3 text-sm font-semibold text-[#113b34]">Divulgando</h2>
+              <h2 className="mb-3 text-sm font-semibold text-[#0a3625]">Divulgando</h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {active.map((invite) => {
                   const campaign = invite.campaigns!;
@@ -93,13 +93,13 @@ export default async function InfluencerCampaignsPage() {
                     <div key={invite.id} className="overflow-hidden rounded-2xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
                       <CampaignThumb campaign={campaign} />
                       <div className="p-4">
-                        <p className="text-xs font-medium uppercase tracking-wide text-[#85918a]">
+                        <p className="text-xs font-medium uppercase tracking-wide text-[#7a8578]">
                           {campaign.brands?.company_name}
                         </p>
-                        <h3 className="mt-1 truncate font-semibold text-[#113b34]">{campaign.title}</h3>
+                        <h3 className="mt-1 truncate font-semibold text-[#0a3625]">{campaign.title}</h3>
 
                         <div className="mt-3 space-y-2">
-                          <p className="break-all rounded-lg bg-[#f0ede4] px-3 py-2 font-mono text-xs text-[#5f6b64]">
+                          <p className="break-all rounded-lg bg-[#f4f6e8] px-3 py-2 font-mono text-xs text-[#4d584d]">
                             {invite.public_url}
                           </p>
                           <CopyButton value={invite.public_url ?? ""} />
@@ -119,12 +119,12 @@ export default async function InfluencerCampaignsPage() {
 
 function CampaignThumb({ campaign }: { campaign: Campaign & { brands: Brand | null } }) {
   return (
-    <div className="relative aspect-video w-full bg-[#f0ede4]">
+    <div className="relative aspect-video w-full bg-[#f4f6e8]">
       {campaign.image_url ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={campaign.image_url} alt={campaign.title} className="h-full w-full object-cover" />
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#e5dfd2] to-[#d8e5df] text-2xl font-bold text-[#a8b1a9]">
+        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#e9ecd8] to-[#dfe8c9] text-2xl font-bold text-[#a3ac9c]">
           {campaign.brands?.company_name?.slice(0, 1).toUpperCase()}
         </div>
       )}

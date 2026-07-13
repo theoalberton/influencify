@@ -5,7 +5,7 @@ function pct(part: number, whole: number): string {
 
 function Arrow() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="hidden h-5 w-5 shrink-0 text-[#d8d2c3] sm:block" aria-hidden>
+    <svg viewBox="0 0 24 24" fill="none" className="hidden h-5 w-5 shrink-0 text-[#dde0cb] sm:block" aria-hidden>
       <path d="M5 12h14m-6-6l6 6-6 6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -21,15 +21,15 @@ export function FunnelRow({ clicks, leads, converted }: { clicks: number; leads:
 
   return (
     <div className="rounded-2xl bg-white p-5 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
-      <h2 className="text-sm font-semibold text-[#113b34]">Funil de conversão</h2>
+      <h2 className="text-sm font-semibold text-[#0a3625]">Funil de conversão</h2>
       <div className="mt-4 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
         {stages.map((stage, i) => (
           <div key={stage.label} className="flex flex-1 items-center gap-4">
             {i > 0 && <Arrow />}
-            <div className="flex-1 rounded-xl bg-[#f0ede4] px-4 py-3">
-              <p className="text-xs font-medium text-[#85918a]">{stage.label}</p>
-              <p className="mt-0.5 text-2xl font-semibold tracking-tight text-[#113b34]">{stage.value}</p>
-              <p className="text-xs text-[#85918a]">{stage.sub}</p>
+            <div className="flex-1 rounded-xl bg-[#f4f6e8] px-4 py-3">
+              <p className="text-xs font-medium text-[#7a8578]">{stage.label}</p>
+              <p className="mt-0.5 text-2xl font-semibold tracking-tight text-[#0a3625]">{stage.value}</p>
+              <p className="text-xs text-[#7a8578]">{stage.sub}</p>
             </div>
           </div>
         ))}

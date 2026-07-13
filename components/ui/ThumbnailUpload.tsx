@@ -76,7 +76,7 @@ export function ThumbnailUpload({
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
-        className="group relative mt-1 block aspect-video w-full max-w-sm overflow-hidden rounded-xl border border-dashed border-[#d8d2c3] bg-[#f0ede4] transition hover:border-[#004741] disabled:cursor-wait"
+        className="group relative mt-1 block aspect-video w-full max-w-sm overflow-hidden rounded-xl border border-dashed border-[#dde0cb] bg-[#f4f6e8] transition hover:border-[#0a3625] disabled:cursor-wait"
       >
         {preview ? (
           // eslint-disable-next-line @next/next/no-img-element

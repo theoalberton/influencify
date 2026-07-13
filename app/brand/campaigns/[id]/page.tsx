@@ -56,20 +56,20 @@ export default async function CampaignAmbassadorsPage({ params }: { params: Prom
 
   return (
     <DashboardShell role="brand" name={profile.name} title={`Embaixadores · ${campaign.title}`}>
-      <Link href="/brand/campaigns" className="text-sm font-medium text-[#004741] hover:underline">
+      <Link href="/brand/campaigns" className="text-sm font-medium text-[#0a3625] hover:underline">
         ‹ Voltar às campanhas
       </Link>
 
       <Card className="mt-4 max-w-3xl">
-        <p className="text-sm text-[#5f6b64]">
+        <p className="text-sm text-[#4d584d]">
           Escolha quais dos seus embaixadores podem divulgar <strong>esta</strong> campanha. Cada influenciador
           recebe o convite no painel dele e a oferta só entra no perfil público depois que ele aceitar.
         </p>
 
         {ambassadors.length === 0 ? (
-          <p className="mt-5 rounded-xl bg-[#f0ede4] px-4 py-3 text-sm text-[#5f6b64]">
+          <p className="mt-5 rounded-xl bg-[#f4f6e8] px-4 py-3 text-sm text-[#4d584d]">
             Você ainda não tem embaixadores ativos. Vincule influenciadores em{" "}
-            <Link href="/brand/ambassadors" className="font-medium text-[#004741] hover:underline">
+            <Link href="/brand/ambassadors" className="font-medium text-[#0a3625] hover:underline">
               Embaixadores
             </Link>
             .
@@ -81,8 +81,8 @@ export default async function CampaignAmbassadorsPage({ params }: { params: Prom
               return (
                 <div key={amb.id} className="flex items-center justify-between gap-4 py-4">
                   <div className="min-w-0">
-                    <p className="font-medium text-[#113b34]">{amb.display_name}</p>
-                    <p className="text-xs text-[#85918a]">
+                    <p className="font-medium text-[#0a3625]">{amb.display_name}</p>
+                    <p className="text-xs text-[#7a8578]">
                       {[amb.niche, amb.followers_count ? `${amb.followers_count} seguidores` : null]
                         .filter(Boolean)
                         .join(" · ") || "—"}

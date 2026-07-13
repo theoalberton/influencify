@@ -30,7 +30,7 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
     .filter((o) => o.campaign && o.campaign.status === "active");
 
   return (
-    <div className="min-h-screen bg-[#f0ede4] px-4 py-12">
+    <div className="min-h-screen bg-[#f4f6e8] px-4 py-12">
       <div className="mx-auto max-w-lg">
         <div className="flex flex-col items-center text-center">
           {influencer.profile_image_url ? (
@@ -43,14 +43,14 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
               className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow-[0_2px_16px_rgba(0,0,0,0.08)]"
             />
           ) : (
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#113b34] text-2xl font-semibold text-white ring-4 ring-white shadow-[0_2px_16px_rgba(0,0,0,0.08)]">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#0a3625] text-2xl font-semibold text-white ring-4 ring-white shadow-[0_2px_16px_rgba(0,0,0,0.08)]">
               {influencer.display_name.slice(0, 1).toUpperCase()}
             </div>
           )}
-          <h1 className="mt-4 text-2xl font-semibold tracking-tight text-[#113b34]">{influencer.display_name}</h1>
-          {influencer.bio && <p className="mt-1 max-w-sm text-sm text-[#5f6b64]">{influencer.bio}</p>}
+          <h1 className="mt-4 text-2xl font-semibold tracking-tight text-[#0a3625]">{influencer.display_name}</h1>
+          {influencer.bio && <p className="mt-1 max-w-sm text-sm text-[#4d584d]">{influencer.bio}</p>}
 
-          <div className="mt-3 flex gap-3 text-sm text-[#85918a]">
+          <div className="mt-3 flex gap-3 text-sm text-[#7a8578]">
             {influencer.instagram && <span>{influencer.instagram}</span>}
             {influencer.tiktok && <span>{influencer.tiktok}</span>}
           </div>
@@ -58,7 +58,7 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2">
           {offers.length === 0 ? (
-            <p className="col-span-full text-center text-sm text-[#85918a]">Nenhuma oferta disponível no momento.</p>
+            <p className="col-span-full text-center text-sm text-[#7a8578]">Nenhuma oferta disponível no momento.</p>
           ) : (
             offers.map(({ link, campaign }) => {
               // Campanha de marca mostra a marca; campanha própria mostra o
@@ -73,7 +73,7 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
                   href={`/i/${influencer.slug}/oferta/${campaign.slug}?ref=${link.referral_code}`}
                   className="group overflow-hidden rounded-2xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.06)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)]"
                 >
-                  <div className="relative aspect-video w-full overflow-hidden bg-[#f0ede4]">
+                  <div className="relative aspect-video w-full overflow-hidden bg-[#f4f6e8]">
                     {campaign.image_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -82,7 +82,7 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
                         className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-[#e5dfd2] text-3xl font-semibold text-[#a8b1a9]">
+                      <div className="flex h-full w-full items-center justify-center bg-[#e9ecd8] text-3xl font-semibold text-[#a3ac9c]">
                         {ownerName?.slice(0, 1).toUpperCase()}
                       </div>
                     )}
@@ -100,13 +100,13 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
                         className="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-black/5"
                       />
                     ) : (
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0ede4] text-xs font-semibold text-[#85918a] ring-1 ring-black/5">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f4f6e8] text-xs font-semibold text-[#7a8578] ring-1 ring-black/5">
                         {ownerName?.slice(0, 1).toUpperCase()}
                       </div>
                     )}
                     <div className="min-w-0">
-                      <p className="truncate font-semibold text-[#113b34]">{campaign.title}</p>
-                      <p className="truncate text-xs text-[#85918a]">{ownerName}</p>
+                      <p className="truncate font-semibold text-[#0a3625]">{campaign.title}</p>
+                      <p className="truncate text-xs text-[#7a8578]">{ownerName}</p>
                     </div>
                   </div>
                 </a>
@@ -115,7 +115,7 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
           )}
         </div>
 
-        <p className="mt-12 text-center text-xs text-[#a8b1a9]">Feito com Influencify</p>
+        <p className="mt-12 text-center text-xs text-[#a3ac9c]">Feito com Influencify</p>
       </div>
     </div>
   );

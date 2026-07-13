@@ -73,13 +73,13 @@ export function OwnCampaignForm() {
       <Field label="Dados exigidos para liberar o cupom">
         <div className="mt-2 flex flex-wrap gap-4">
           {REQUIRED_FIELD_OPTIONS.map((opt) => (
-            <label key={opt.value} className="flex items-center gap-2 text-sm text-[#113b34]">
+            <label key={opt.value} className="flex items-center gap-2 text-sm text-[#0a3625]">
               <input
                 type="checkbox"
                 name="required_fields"
                 value={opt.value}
                 defaultChecked={opt.value === "name" || opt.value === "email"}
-                className="rounded border-[#d8d2c3] text-[#004741] focus:ring-[#004741]"
+                className="rounded border-[#dde0cb] text-[#0a3625] focus:ring-[#0a3625]"
               />
               {opt.label}
             </label>
@@ -91,7 +91,7 @@ export function OwnCampaignForm() {
         <div className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
           {state.error}
           {state.limitReached && (
-            <Link href="/upgrade" className="ml-2 font-semibold text-[#004741] hover:underline">
+            <Link href="/upgrade" className="ml-2 font-semibold text-[#0a3625] hover:underline">
               Ver planos ›
             </Link>
           )}

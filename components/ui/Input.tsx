@@ -23,7 +23,7 @@ export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
     <input
       {...props}
       className={cn(
-        "mt-1 w-full rounded-lg border border-[#d8d2c3] px-3 py-2 text-sm focus:border-[#004741] focus:outline-none focus:ring-1 focus:ring-[#004741]",
+        "mt-1 w-full rounded-lg border border-[#dde0cb] px-3 py-2 text-sm focus:border-[#0a3625] focus:outline-none focus:ring-1 focus:ring-[#0a3625]",
         props.className
       )}
     />
@@ -35,7 +35,7 @@ export function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement
     <textarea
       {...props}
       className={cn(
-        "mt-1 w-full rounded-lg border border-[#d8d2c3] px-3 py-2 text-sm focus:border-[#004741] focus:outline-none focus:ring-1 focus:ring-[#004741]",
+        "mt-1 w-full rounded-lg border border-[#dde0cb] px-3 py-2 text-sm focus:border-[#0a3625] focus:outline-none focus:ring-1 focus:ring-[#0a3625]",
         props.className
       )}
     />
@@ -47,7 +47,7 @@ export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
     <select
       {...props}
       className={cn(
-        "mt-1 w-full rounded-lg border border-[#d8d2c3] bg-white px-3 py-2 text-sm focus:border-[#004741] focus:outline-none focus:ring-1 focus:ring-[#004741]",
+        "mt-1 w-full rounded-lg border border-[#dde0cb] bg-white px-3 py-2 text-sm focus:border-[#0a3625] focus:outline-none focus:ring-1 focus:ring-[#0a3625]",
         props.className
       )}
     />

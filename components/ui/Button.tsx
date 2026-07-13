@@ -5,10 +5,11 @@ type Variant = "primary" | "secondary" | "danger" | "ghost";
 type Size = "sm" | "md";
 
 const variantClasses: Record<Variant, string> = {
-  primary: "bg-[#004741] text-white hover:bg-[#00614f]",
-  secondary: "bg-white text-[#113b34] ring-1 ring-[#d8d2c3] hover:bg-[#f0ede4]",
+  // Wattle: o CTA de energia da marca — lime com tinta bottle green.
+  primary: "bg-[#ccda47] text-[#0a3625] font-bold hover:brightness-105 hover:-translate-y-px",
+  secondary: "bg-white text-[#0a3625] ring-1 ring-[#dde0cb] hover:bg-[#f4f6e8]",
   danger: "bg-red-600 text-white hover:bg-red-500",
-  ghost: "text-[#5f6b64] hover:bg-black/5",
+  ghost: "text-[#4d584d] hover:bg-black/5",
 };
 
 const sizeClasses: Record<Size, string> = {

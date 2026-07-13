@@ -49,8 +49,8 @@ export function PerformanceChart({ data }: { data: DayPoint[] }) {
   return (
     <div className="rounded-2xl bg-white p-5 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-sm font-semibold text-[#113b34]">Últimos 30 dias</h2>
-        <div className="flex gap-4 text-xs text-[#5f6b64]">
+        <h2 className="text-sm font-semibold text-[#0a3625]">Últimos 30 dias</h2>
+        <div className="flex gap-4 text-xs text-[#4d584d]">
           {(Object.keys(SERIES) as ("clicks" | "leads")[]).map((key) => (
             <span key={key} className="flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full" style={{ background: SERIES[key].color }} />
@@ -79,14 +79,14 @@ export function PerformanceChart({ data }: { data: DayPoint[] }) {
                 y={y(v) + 3.5}
                 textAnchor="end"
                 fontSize={10}
-                fill="#85918a"
+                fill="#7a8578"
                 style={{ fontVariantNumeric: "tabular-nums" }}
               >
                 {v}
               </text>
             </g>
           ))}
-          <line x1={PAD.left} x2={W - PAD.right} y1={y(0)} y2={y(0)} stroke="#d8d2c3" strokeWidth={1} />
+          <line x1={PAD.left} x2={W - PAD.right} y1={y(0)} y2={y(0)} stroke="#dde0cb" strokeWidth={1} />
 
           {/* eixo x: ~5 marcações */}
           {data.map((d, i) =>
@@ -97,7 +97,7 @@ export function PerformanceChart({ data }: { data: DayPoint[] }) {
                 y={H - 8}
                 textAnchor="middle"
                 fontSize={10}
-                fill="#85918a"
+                fill="#7a8578"
                 style={{ fontVariantNumeric: "tabular-nums" }}
               >
                 {d.label}
@@ -115,7 +115,7 @@ export function PerformanceChart({ data }: { data: DayPoint[] }) {
             y={y(data[data.length - 1].clicks) + 3.5}
             fontSize={11}
             fontWeight={600}
-            fill="#113b34"
+            fill="#0a3625"
           >
             {SERIES.clicks.name}
           </text>
@@ -124,7 +124,7 @@ export function PerformanceChart({ data }: { data: DayPoint[] }) {
             y={y(data[data.length - 1].leads) + (Math.abs(y(data[data.length - 1].leads) - y(data[data.length - 1].clicks)) < 14 ? 17.5 : 3.5)}
             fontSize={11}
             fontWeight={600}
-            fill="#113b34"
+            fill="#0a3625"
           >
             {SERIES.leads.name}
           </text>
@@ -141,7 +141,7 @@ export function PerformanceChart({ data }: { data: DayPoint[] }) {
 
         {h && hover !== null && (
           <div
-            className="pointer-events-none absolute top-1 z-10 rounded-xl bg-[#113b34] px-3 py-2 text-xs text-white shadow-lg"
+            className="pointer-events-none absolute top-1 z-10 rounded-xl bg-[#0a3625] px-3 py-2 text-xs text-white shadow-lg"
             style={{
               left: `${(x(hover) / W) * 100}%`,
               transform: `translateX(${hover > data.length / 2 ? "calc(-100% - 10px)" : "10px"})`,

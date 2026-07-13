@@ -7,8 +7,8 @@ export function LeadsLocked({ leadsCount }: { leadsCount: number }) {
       <div className="pointer-events-none select-none blur-[6px]" aria-hidden>
         <div className="divide-y divide-black/5">
           {["Maria S.", "João P.", "Ana C.", "Carlos M.", "Fernanda L."].map((fake) => (
-            <div key={fake} className="flex items-center gap-6 px-6 py-4 text-sm text-[#5f6b64]">
-              <span className="w-28 font-medium text-[#113b34]">{fake}</span>
+            <div key={fake} className="flex items-center gap-6 px-6 py-4 text-sm text-[#4d584d]">
+              <span className="w-28 font-medium text-[#0a3625]">{fake}</span>
               <span>•••••@•••••.com</span>
               <span>(••) •••••-••••</span>
               <span className="ml-auto">há 2 dias</span>
@@ -18,24 +18,24 @@ export function LeadsLocked({ leadsCount }: { leadsCount: number }) {
       </div>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 px-6 text-center backdrop-blur-[2px]">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#113b34] text-white">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0a3625] text-white">
           <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
             <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth={1.8} />
             <path d="M8 10V7a4 4 0 118 0v3" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" />
           </svg>
         </div>
-        <h2 className="mt-4 text-xl font-semibold tracking-tight text-[#113b34]">
+        <h2 className="mt-4 text-xl font-semibold tracking-tight text-[#0a3625]">
           {leadsCount > 0
             ? `Mais ${leadsCount} lead${leadsCount === 1 ? "" : "s"} esperando por você`
             : "Seus próximos leads aparecem aqui"}
         </h2>
-        <p className="mt-2 max-w-sm text-sm text-[#5f6b64]">
+        <p className="mt-2 max-w-sm text-sm text-[#4d584d]">
           O plano gratuito mostra o contato completo dos primeiros 10 leads. Os demais ficam guardados e são
           liberados na hora com o plano Pro — teste 7 dias grátis.
         </p>
         <Link
           href="/upgrade"
-          className="mt-6 rounded-full bg-[#004741] px-6 py-2.5 text-sm font-medium text-white transition hover:bg-[#00614f]"
+          className="mt-6 rounded-full bg-[#ccda47] px-6 py-2.5 text-sm font-bold text-[#0a3625] transition hover:brightness-105"
         >
           Fazer upgrade
         </Link>

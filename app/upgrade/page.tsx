@@ -34,9 +34,9 @@ const PRO_FEATURES: Record<"influencer" | "brand", string[]> = {
   ],
 };
 
-function Check() {
+function Check({ className = "text-[#0a3625]" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 shrink-0 text-[#004741]">
+    <svg viewBox="0 0 24 24" fill="none" className={`h-4 w-4 shrink-0 ${className}`}>
       <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -55,21 +55,21 @@ export default async function UpgradePage() {
   const kiwifyUrl = kiwifyCheckoutUrl(role, profile.email);
 
   return (
-    <div className="min-h-screen bg-[#f0ede4] px-4 py-12">
+    <div className="min-h-screen bg-[#f4f6e8] px-4 py-12">
       <div className="mx-auto max-w-3xl">
-        <Link href={dashboardHref} className="text-sm font-medium text-[#004741] hover:underline">
+        <Link href={dashboardHref} className="text-sm font-medium text-[#0a3625] hover:underline">
           ‹ Voltar ao dashboard
         </Link>
 
-        <h1 className="mt-6 text-center text-4xl font-semibold tracking-tight text-[#113b34]">
+        <h1 className="mt-6 text-center text-4xl font-semibold tracking-tight text-[#0a3625]">
           Escolha o seu plano.
         </h1>
-        <p className="mt-3 text-center text-[#5f6b64]">
+        <p className="mt-3 text-center text-[#4d584d]">
           Capte leads gratuitamente. Desbloqueie o contato deles quando estiver pronto.
         </p>
 
         {alreadyPro && (
-          <p className="mx-auto mt-6 max-w-md rounded-2xl bg-[#eaf3ec] px-5 py-4 text-center text-sm text-emerald-700">
+          <p className="mx-auto mt-6 max-w-md rounded-2xl bg-[#eef3d6] px-5 py-4 text-center text-sm text-emerald-700">
             Seu plano <strong>{pro.label}</strong> está ativo. Obrigado por assinar!
           </p>
         )}
@@ -77,18 +77,18 @@ export default async function UpgradePage() {
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {/* Free */}
           <div className="rounded-3xl bg-white p-8 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
-            <h2 className="text-lg font-semibold text-[#113b34]">Gratuito</h2>
-            <p className="mt-1 text-3xl font-semibold tracking-tight text-[#113b34]">R$ 0</p>
-            <p className="mt-1 text-xs text-[#85918a]">para sempre</p>
+            <h2 className="text-lg font-semibold text-[#0a3625]">Gratuito</h2>
+            <p className="mt-1 text-3xl font-semibold tracking-tight text-[#0a3625]">R$ 0</p>
+            <p className="mt-1 text-xs text-[#7a8578]">para sempre</p>
 
             <ul className="mt-6 space-y-3">
               {FREE_FEATURES[role].map((feature) => (
-                <li key={feature} className="flex items-start gap-2.5 text-sm text-[#5f6b64]">
+                <li key={feature} className="flex items-start gap-2.5 text-sm text-[#4d584d]">
                   <Check />
                   {feature}
                 </li>
               ))}
-              <li className="flex items-start gap-2.5 text-sm text-[#a8b1a9]">
+              <li className="flex items-start gap-2.5 text-sm text-[#a3ac9c]">
                 <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 shrink-0">
                   <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth={1.8} />
                   <path d="M8 10V7a4 4 0 118 0v3" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" />
@@ -97,14 +97,14 @@ export default async function UpgradePage() {
               </li>
             </ul>
 
-            <p className="mt-8 rounded-full border border-[#d8d2c3] px-6 py-3 text-center text-sm font-medium text-[#5f6b64]">
+            <p className="mt-8 rounded-full border border-[#dde0cb] px-6 py-3 text-center text-sm font-medium text-[#4d584d]">
               {profile.plan_type === "free" ? "Seu plano atual" : "Plano básico"}
             </p>
           </div>
 
           {/* Pro */}
-          <div className="relative rounded-3xl bg-[#113b34] p-8 text-white shadow-[0_8px_40px_rgba(0,0,0,0.25)]">
-            <span className="absolute -top-3 right-8 rounded-full bg-[#004741] px-3 py-1 text-xs font-semibold text-white">
+          <div className="relative rounded-3xl bg-[#0a3625] p-8 text-white shadow-[0_8px_40px_rgba(0,0,0,0.25)]">
+            <span className="absolute -top-3 right-8 rounded-full bg-[#ccda47] px-3 py-1 text-xs font-bold text-[#0a3625]">
               Recomendado
             </span>
             <h2 className="text-lg font-semibold">{pro.label}</h2>
@@ -113,12 +113,12 @@ export default async function UpgradePage() {
 
             <ul className="mt-6 space-y-3">
               <li className="flex items-start gap-2.5 text-sm text-white/80">
-                <Check />
+                <Check className="text-[#ccda47]" />
                 Tudo do plano gratuito
               </li>
               {PRO_FEATURES[role].map((feature) => (
                 <li key={feature} className="flex items-start gap-2.5 text-sm text-white/80">
-                  <Check />
+                  <Check className="text-[#ccda47]" />
                   {feature}
                 </li>
               ))}
@@ -136,7 +136,7 @@ export default async function UpgradePage() {
               ) : kiwifyUrl ? (
                 <a
                   href={kiwifyUrl}
-                  className="block w-full rounded-full bg-[#1baf7a] px-6 py-3 text-center text-sm font-semibold text-white transition hover:brightness-110"
+                  className="block w-full rounded-full bg-[#ccda47] px-6 py-3 text-center text-sm font-bold text-[#0a3625] transition hover:brightness-105"
                 >
                   Assinar agora — 7 dias grátis
                 </a>
@@ -147,7 +147,7 @@ export default async function UpgradePage() {
           </div>
         </div>
 
-        <p className="mt-10 text-center text-xs text-[#85918a]">
+        <p className="mt-10 text-center text-xs text-[#7a8578]">
           Pagamento processado com segurança pela {kiwifyUrl ? "Kiwify (Pix, boleto ou cartão)" : "Stripe"}. Os leads
           captados no plano gratuito ficam guardados e são liberados assim que a assinatura é ativada.
         </p>

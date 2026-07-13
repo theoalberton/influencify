@@ -3,7 +3,6 @@ import { requireRole, getMyInfluencer } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { formatDate } from "@/lib/utils";
 import { REWARD_PER_CYCLE, REFERRALS_PER_CYCLE } from "@/lib/plans";
@@ -17,21 +16,9 @@ interface ReferralRow {
 }
 
 const STEPS = [
-  {
-    number: "1",
-    title: "Compartilhe seu link",
-    description: "Envie seu link exclusivo para influenciadores que ainda não estão no Influencify.",
-  },
-  {
-    number: "2",
-    title: "Eles assinam o Pro",
-    description: "Seu indicado cria a conta pelo seu link e ativa o plano Influenciador Pro.",
-  },
-  {
-    number: "3",
-    title: `Você ganha R$ ${REWARD_PER_CYCLE}`,
-    description: `A cada ${REFERRALS_PER_CYCLE} indicados efetivados no Pro, você resgata R$ ${REWARD_PER_CYCLE}, pagos via Pix.`,
-  },
+  { emoji: "🔗", title: "Compartilhe seu link", description: "Envie para influenciadores que ainda não estão aqui." },
+  { emoji: "⚡", title: "Eles assinam o Pro", description: "Seu indicado cria a conta pelo seu link e ativa o plano." },
+  { emoji: "💸", title: `Você ganha R$ ${REWARD_PER_CYCLE}`, description: "Pago via Pix a cada 3 efetivados. Sem limite." },
 ];
 
 export default async function ConvitesPage() {
@@ -63,115 +50,146 @@ export default async function ConvitesPage() {
 
   return (
     <DashboardShell role="influencer" name={profile.name} title="Indique e ganhe">
-      {/* Hero estilo Wise */}
-      <div className="overflow-hidden rounded-3xl bg-[#004741] p-8 text-center sm:p-12">
-        <h2 className="mx-auto max-w-md text-3xl font-extrabold uppercase leading-tight tracking-tight text-[#8ee6b8] sm:text-4xl">
-          Convide {REFERRALS_PER_CYCLE} influenciadores e ganhe R$ {REWARD_PER_CYCLE}
-        </h2>
-        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/80">
-          Você recebe R$ {REWARD_PER_CYCLE} para cada {REFERRALS_PER_CYCLE} influenciadores que se cadastrarem com o
-          seu link exclusivo e ativarem o plano Pro. Sem limite de indicações.
-        </p>
+      {/* Hero: bottle green + wattle, tipografia display gigante */}
+      <div className="relative overflow-hidden rounded-3xl bg-[#0a3625] px-6 py-14 sm:px-12">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#ccda47]/15 blur-2xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-20 -left-10 h-48 w-48 rounded-full bg-[#ccda47]/10 blur-2xl"
+        />
 
-        <div className="mx-auto mt-8 max-w-md rounded-2xl border border-white/20 bg-white/5 p-4 text-left">
-          <p className="text-xs font-medium text-white/60">Compartilhe o seu link</p>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <p className="min-w-0 flex-1 break-all font-mono text-sm text-[#8ee6b8]">{inviteLink}</p>
+        <div className="relative mx-auto max-w-2xl text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#ccda47]/80">Programa de indicação</p>
+          <h2 className="mt-3 text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-[#ccda47] sm:text-6xl">
+            Indique {REFERRALS_PER_CYCLE},<br />
+            ganhe <span className="text-white">R$ {REWARD_PER_CYCLE}</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed text-white/70">
+            A cada {REFERRALS_PER_CYCLE} influenciadores que assinarem o Pro pelo seu link, R$ {REWARD_PER_CYCLE} caem
+            na sua conta via Pix. Indique quantos quiser.
+          </p>
+
+          <div className="mx-auto mt-8 flex max-w-lg flex-col items-stretch gap-2 sm:flex-row sm:items-center">
+            <p className="min-w-0 flex-1 truncate rounded-full border border-[#ccda47]/40 bg-black/20 px-5 py-3 text-left font-mono text-sm text-[#ccda47]">
+              {inviteLink}
+            </p>
             <CopyButton value={inviteLink} />
           </div>
         </div>
       </div>
 
       {/* Como funciona */}
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
-        {STEPS.map((step) => (
-          <div key={step.number} className="rounded-2xl bg-white p-6 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#004741] text-sm font-bold text-white">
-              {step.number}
+      <div className="mt-5 grid gap-4 sm:grid-cols-3">
+        {STEPS.map((step, i) => (
+          <div key={step.title} className="rounded-2xl bg-white p-6 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#ccda47] text-lg">
+                {step.emoji}
+              </span>
+              <span className="text-xs font-bold uppercase tracking-widest text-[#a3ac9c]">Passo {i + 1}</span>
             </div>
-            <h3 className="mt-4 font-semibold text-[#113b34]">{step.title}</h3>
-            <p className="mt-1.5 text-sm leading-relaxed text-[#5f6b64]">{step.description}</p>
+            <h3 className="mt-4 text-lg font-bold text-[#0a3625]">{step.title}</h3>
+            <p className="mt-1 text-sm leading-relaxed text-[#4d584d]">{step.description}</p>
           </div>
         ))}
       </div>
 
-      {/* Progresso + recompensas */}
-      <div className="mt-6 grid gap-4 lg:grid-cols-2">
+      {/* Progresso + indicados */}
+      <div className="mt-5 grid gap-4 lg:grid-cols-2">
         <div className="rounded-2xl bg-white p-6 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
-          <h3 className="text-sm font-semibold text-[#113b34]">Progresso do ciclo atual</h3>
-          <div className="mt-4 flex items-center gap-3">
+          <h3 className="text-lg font-bold text-[#0a3625]">Seu progresso</h3>
+
+          <div className="mt-5 flex items-center gap-3">
             {Array.from({ length: REFERRALS_PER_CYCLE }, (_, i) => (
               <div
                 key={i}
-                className={`flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold ${
-                  i < progressInCycle ? "bg-[#1baf7a] text-white" : "bg-[#f0ede4] text-[#a8b1a9]"
+                className={`flex h-14 w-14 items-center justify-center rounded-full text-xl font-extrabold transition ${
+                  i < progressInCycle
+                    ? "bg-[#ccda47] text-[#0a3625]"
+                    : "border-2 border-dashed border-[#dde0cb] text-[#a3ac9c]"
                 }`}
               >
                 {i < progressInCycle ? "✓" : i + 1}
               </div>
             ))}
-            <p className="ml-2 text-sm text-[#5f6b64]">
-              <strong className="text-[#113b34]">{progressInCycle}</strong> de {REFERRALS_PER_CYCLE} indicados
-              efetivados neste ciclo
+            <p className="ml-1 text-sm leading-snug text-[#4d584d]">
+              <strong className="text-[#0a3625]">{progressInCycle}</strong> de {REFERRALS_PER_CYCLE} efetivados
+              <br />
+              neste ciclo
             </p>
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-[#f0ede4] px-4 py-3">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#0a3625] px-5 py-4">
             <div>
-              <p className="text-xs text-[#85918a]">Total ganho até agora</p>
-              <p className="text-2xl font-semibold tracking-tight text-[#113b34]">
+              <p className="text-xs text-white/60">Total ganho</p>
+              <p className="text-3xl font-extrabold tracking-tight text-[#ccda47]">
                 R$ {totalEarned.toFixed(2).replace(".", ",")}
               </p>
             </div>
             {availableCycles > 0 ? (
               <form action={claimRewards}>
-                <Button type="submit">
+                <button
+                  type="submit"
+                  className="rounded-full bg-[#ccda47] px-6 py-2.5 text-sm font-bold text-[#0a3625] transition hover:brightness-105"
+                >
                   Resgatar R$ {(availableCycles * REWARD_PER_CYCLE).toFixed(2).replace(".", ",")}
-                </Button>
+                </button>
               </form>
             ) : (
-              <p className="text-xs text-[#85918a]">
-                {qualified === 0 ? "Nenhum indicado efetivado ainda" : "Nada a resgatar no momento"}
+              <p className="text-xs text-white/50">
+                {qualified === 0 ? "Nenhum efetivado ainda" : "Nada a resgatar agora"}
               </p>
             )}
           </div>
 
           {rewards.length > 0 && (
             <div className="mt-5">
-              <p className="text-xs font-medium text-[#85918a]">Histórico de recompensas</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-[#a3ac9c]">Histórico</p>
               <div className="mt-2 divide-y divide-black/5">
                 {rewards.map((reward) => (
                   <div key={reward.id} className="flex items-center justify-between py-2.5 text-sm">
-                    <span className="text-[#113b34]">R$ {Number(reward.amount).toFixed(2).replace(".", ",")}</span>
-                    <span className="text-xs text-[#85918a]">{formatDate(reward.created_at)}</span>
+                    <span className="font-semibold text-[#0a3625]">
+                      R$ {Number(reward.amount).toFixed(2).replace(".", ",")}
+                    </span>
+                    <span className="text-xs text-[#7a8578]">{formatDate(reward.created_at)}</span>
                     <Badge tone={reward.status === "paid" ? "converted" : "sent"}>
-                      {reward.status === "paid" ? "pago" : "aguardando pagamento"}
+                      {reward.status === "paid" ? "pago" : "aguardando"}
                     </Badge>
                   </div>
                 ))}
               </div>
-              <p className="mt-3 text-xs text-[#a8b1a9]">
-                Recompensas resgatadas são pagas via Pix em até 7 dias úteis.
-              </p>
+              <p className="mt-3 text-xs text-[#a3ac9c]">Pagamento via Pix em até 7 dias úteis após o resgate.</p>
             </div>
           )}
         </div>
 
         <div className="rounded-2xl bg-white p-6 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
-          <h3 className="text-sm font-semibold text-[#113b34]">
-            Seus indicados <span className="text-[#85918a]">({referrals.length})</span>
+          <h3 className="text-lg font-bold text-[#0a3625]">
+            Seus indicados <span className="text-base font-semibold text-[#a3ac9c]">({referrals.length})</span>
           </h3>
           {referrals.length === 0 ? (
-            <p className="mt-4 rounded-xl bg-[#f0ede4] px-4 py-4 text-sm text-[#5f6b64]">
-              Ninguém se cadastrou com o seu link ainda. Compartilhe com influenciadores que você conhece!
-            </p>
+            <div className="mt-4 rounded-2xl border-2 border-dashed border-[#dde0cb] px-5 py-8 text-center">
+              <p className="text-3xl">📣</p>
+              <p className="mt-2 text-sm font-semibold text-[#0a3625]">Ninguém pelo seu link ainda</p>
+              <p className="mt-1 text-sm text-[#4d584d]">
+                Manda pros criadores que você conhece — cada 3 que assinarem viram R$ {REWARD_PER_CYCLE} pra você.
+              </p>
+            </div>
           ) : (
             <div className="mt-3 divide-y divide-black/5">
               {referrals.map((referral, i) => (
                 <div key={i} className="flex items-center justify-between gap-3 py-3">
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-[#113b34]">{referral.name}</p>
-                    <p className="text-xs text-[#85918a]">{formatDate(referral.created_at)}</p>
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f4f6e8] text-sm font-bold text-[#0a3625]">
+                      {referral.name.slice(0, 1).toUpperCase()}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-[#0a3625]">{referral.name}</p>
+                      <p className="text-xs text-[#7a8578]">{formatDate(referral.created_at)}</p>
+                    </div>
                   </div>
                   <Badge tone={referral.is_pro ? "converted" : "new"}>
                     {referral.is_pro ? "Pro efetivado ✓" : "cadastrado"}
@@ -183,9 +201,9 @@ export default async function ConvitesPage() {
         </div>
       </div>
 
-      <p className="mt-6 text-center text-xs text-[#a8b1a9]">
-        Indicado efetivado = influenciador que se cadastrou pelo seu link e está com o plano Pro ativo (após o período
-        de teste). Indicações fraudulentas ou contas duplicadas são desqualificadas.
+      <p className="mt-6 text-center text-xs text-[#a3ac9c]">
+        Efetivado = influenciador que assinou pelo seu link e está com o Pro ativo (após o teste grátis). Indicações
+        fraudulentas são desqualificadas.
       </p>
     </DashboardShell>
   );
