@@ -27,6 +27,8 @@ export async function saveInfluencerProfile(
   const city = String(formData.get("city") ?? "").trim() || null;
   const country = String(formData.get("country") ?? "").trim() || null;
   const profile_image_url = String(formData.get("profile_image_url") ?? "").trim() || null;
+  const whatsapp = String(formData.get("whatsapp") ?? "").trim() || null;
+  const contact_email = String(formData.get("contact_email") ?? "").trim() || null;
   const followersRaw = String(formData.get("followers_count") ?? "").trim();
   const followers_count = followersRaw ? Number(followersRaw) : null;
 
@@ -59,6 +61,8 @@ export async function saveInfluencerProfile(
     city,
     country,
     profile_image_url,
+    whatsapp,
+    contact_email,
     followers_count,
   };
 

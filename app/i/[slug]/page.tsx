@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { formatDiscount, formatFollowers } from "@/lib/utils";
+import { formatDiscount, formatFollowers, INFLUENCER_PUBLIC_COLUMNS } from "@/lib/utils";
 import type { Brand, Campaign, CampaignInfluencer } from "@/lib/database.types";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -55,7 +55,7 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
 
   const { data: influencer } = await supabase
     .from("influencers")
-    .select("*")
+    .select(INFLUENCER_PUBLIC_COLUMNS)
     .eq("slug", slug)
     .eq("is_active", true)
     .single();

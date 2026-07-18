@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { formatFollowers } from "@/lib/utils";
+import { formatFollowers, INFLUENCER_PUBLIC_COLUMNS } from "@/lib/utils";
 
 interface PublicStats {
   total_clicks: number;
@@ -34,7 +34,7 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
 
   const { data: influencer } = await supabase
     .from("influencers")
-    .select("*")
+    .select(INFLUENCER_PUBLIC_COLUMNS)
     .eq("slug", slug)
     .eq("is_active", true)
     .single();

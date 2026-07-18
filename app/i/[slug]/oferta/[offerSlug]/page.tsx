@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Script from "next/script";
 import { createClient } from "@/lib/supabase/server";
-import { formatDiscount } from "@/lib/utils";
+import { formatDiscount, INFLUENCER_PUBLIC_COLUMNS } from "@/lib/utils";
 import { hashRequestIp, requestUserAgent } from "@/lib/track";
 import { LeadForm } from "./LeadForm";
 import type { Brand, Campaign, CampaignInfluencer } from "@/lib/database.types";
@@ -58,7 +58,7 @@ export default async function OfferPage({
 
   const { data: influencer } = await supabase
     .from("influencers")
-    .select("*")
+    .select(INFLUENCER_PUBLIC_COLUMNS)
     .eq("slug", slug)
     .eq("is_active", true)
     .single();

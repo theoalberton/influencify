@@ -6,6 +6,7 @@ import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/Table";
+import { ContactInfluencer } from "@/components/ui/ContactInfluencer";
 import { formatFollowers } from "@/lib/utils";
 import { linkInfluencer } from "./actions";
 import type { Influencer } from "@/lib/database.types";
@@ -127,6 +128,15 @@ export default async function DiscoverPage({
                   >
                     Ver mídia kit ›
                   </Link>
+                </div>
+
+                <div className="mt-3 border-t border-black/5 pt-3">
+                  <ContactInfluencer
+                    name={inf.display_name}
+                    whatsapp={inf.whatsapp}
+                    contactEmail={inf.contact_email}
+                    brandName={brand.company_name}
+                  />
                 </div>
               </div>
             );

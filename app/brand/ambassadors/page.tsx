@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { Table, Thead, Tbody, Td, EmptyState } from "@/components/ui/Table";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { ContactInfluencer } from "@/components/ui/ContactInfluencer";
 import { AddAmbassadorForm } from "./AddAmbassadorForm";
 import { updateAmbassadorStatus } from "./actions";
 import type { BrandInfluencer, BrandInfluencerStatus, Influencer } from "@/lib/database.types";
@@ -40,7 +41,7 @@ export default async function BrandAmbassadorsPage() {
         <EmptyState title="Nenhum embaixador vinculado ainda" />
       ) : (
         <Table>
-          <Thead columns={["Influenciador", "Nicho", "Seguidores", "Status", "Ações"]} />
+          <Thead columns={["Influenciador", "Nicho", "Seguidores", "Status", "Contato", "Ações"]} />
           <Tbody>
             {rows.map((row) => {
               const inf = row.influencers;
@@ -51,6 +52,18 @@ export default async function BrandAmbassadorsPage() {
                   <Td>{inf?.followers_count ?? "—"}</Td>
                   <Td>
                     <Badge tone={row.status}>{row.status}</Badge>
+                  </Td>
+                  <Td>
+                    {inf ? (
+                      <ContactInfluencer
+                        name={inf.display_name}
+                        whatsapp={inf.whatsapp}
+                        contactEmail={inf.contact_email}
+                        brandName={brand.company_name}
+                      />
+                    ) : (
+                      "—"
+                    )}
                   </Td>
                   <Td>
                     <div className="flex gap-2">

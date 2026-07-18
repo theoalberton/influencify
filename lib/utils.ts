@@ -43,6 +43,14 @@ export function formatDiscount(type: string, value: string | null) {
   }
 }
 
+/**
+ * Colunas de influencers visíveis a visitantes anônimos. O contato comercial
+ * (whatsapp, contact_email) fica de fora: só marcas/usuários logados enxergam
+ * — reforçado por grants de coluna no Postgres.
+ */
+export const INFLUENCER_PUBLIC_COLUMNS =
+  "id, slug, display_name, bio, instagram, tiktok, youtube, followers_count, niche, city, country, profile_image_url, invite_code, is_active, created_at";
+
 /** 1234 → "1,2 mil"; 2500000 → "2,5 mi" — como as redes exibem seguidores. */
 export function formatFollowers(count: number): string {
   if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1).replace(".", ",").replace(",0", "")} mi`;

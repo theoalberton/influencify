@@ -35,6 +35,8 @@ export interface Influencer {
   city: string | null;
   country: string | null;
   profile_image_url: string | null;
+  whatsapp: string | null;
+  contact_email: string | null;
   invite_code: string | null;
   is_active: boolean;
   created_at: string;

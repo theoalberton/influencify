@@ -41,6 +41,9 @@ create table influencers (
   city text,
   country text,
   profile_image_url text,
+  -- contato comercial: visível só para marcas logadas, nunca no perfil público
+  whatsapp text,
+  contact_email text,
   -- código pessoal do programa indique e ganhe
   invite_code text unique default substr(md5(random()::text || clock_timestamp()::text), 1, 8),
   is_active boolean not null default true,
@@ -48,6 +51,11 @@ create table influencers (
 );
 
 create index influencers_slug_idx on influencers (slug);
+
+-- Visitante anônimo não enxerga o contato comercial (whatsapp/contact_email):
+-- só marcas e usuários logados. RLS continua valendo por cima dos grants.
+revoke select on table influencers from anon;
+grant select (id, slug, display_name, bio, instagram, tiktok, youtube, followers_count, niche, city, country, profile_image_url, invite_code, is_active, created_at) on influencers to anon;
 
 -- ----------------------------------------------------------------------------
 -- brands

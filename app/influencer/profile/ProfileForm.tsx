@@ -68,6 +68,27 @@ export function ProfileForm({ influencer }: { influencer: Influencer | null }) {
         />
       </Field>
 
+      <div className="rounded-2xl bg-[#f4f6e8] p-5">
+        <p className="text-sm font-semibold text-[#0a3625]">Contato comercial</p>
+        <p className="mt-1 text-xs text-[#7a8578]">
+          Visível apenas para marcas logadas na Influencify — nunca aparece no seu perfil público. É por aqui
+          que as marcas negociam parcerias e cachê com você.
+        </p>
+        <div className="mt-4 grid gap-5 sm:grid-cols-2">
+          <Field label="WhatsApp comercial">
+            <Input name="whatsapp" defaultValue={influencer?.whatsapp ?? ""} placeholder="(11) 99999-9999" />
+          </Field>
+          <Field label="E-mail comercial">
+            <Input
+              type="email"
+              name="contact_email"
+              defaultValue={influencer?.contact_email ?? ""}
+              placeholder="parcerias@seudominio.com"
+            />
+          </Field>
+        </div>
+      </div>
+
       {state.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}
 
       <Button type="submit" disabled={pending}>
