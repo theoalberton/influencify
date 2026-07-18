@@ -1,7 +1,34 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { formatDiscount } from "@/lib/utils";
 import type { Brand, Campaign, CampaignInfluencer } from "@/lib/database.types";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data: influencer } = await supabase
+    .from("influencers")
+    .select("display_name, bio, profile_image_url")
+    .eq("slug", slug)
+    .eq("is_active", true)
+    .single();
+
+  if (!influencer) return { title: "Perfil não encontrado" };
+
+  const description =
+    influencer.bio ?? `Cupons e ofertas exclusivas de ${influencer.display_name}. Resgate o seu desconto.`;
+
+  return {
+    title: `Cupons de ${influencer.display_name}`,
+    description,
+    openGraph: {
+      title: `Cupons de ${influencer.display_name}`,
+      description,
+      ...(influencer.profile_image_url ? { images: [influencer.profile_image_url] } : {}),
+    },
+  };
+}
 
 export default async function InfluencerPublicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

@@ -13,10 +13,27 @@ const sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://influencify-eight.vercel.app";
+
 export const metadata: Metadata = {
-  title: "Influencify — Transforme audiência em leads",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Influencify — Marketing de influência com atribuição de verdade",
+    template: "%s · Influencify",
+  },
   description:
-    "Influenciadores divulgam cupons de marcas, o público resgata deixando seus dados, e tudo fica rastreado do clique ao lead.",
+    "Transforme cada post dos seus influenciadores em leads com nome e contato — e saiba exatamente quem vendeu o quê. Grátis para começar.",
+  openGraph: {
+    type: "website",
+    siteName: "Influencify",
+    locale: "pt_BR",
+    title: "Influencify — Marketing de influência com atribuição de verdade",
+    description:
+      "Transforme cada post dos seus influenciadores em leads com nome e contato — e saiba exatamente quem vendeu o quê.",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({

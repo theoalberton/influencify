@@ -1,10 +1,48 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Script from "next/script";
 import { createClient } from "@/lib/supabase/server";
 import { formatDiscount } from "@/lib/utils";
 import { hashRequestIp, requestUserAgent } from "@/lib/track";
 import { LeadForm } from "./LeadForm";
 import type { Brand, Campaign, CampaignInfluencer } from "@/lib/database.types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; offerSlug: string }>;
+}): Promise<Metadata> {
+  const { slug, offerSlug } = await params;
+  const supabase = await createClient();
+
+  const [{ data: influencer }, { data: campaign }] = await Promise.all([
+    supabase.from("influencers").select("display_name").eq("slug", slug).eq("is_active", true).single(),
+    supabase
+      .from("campaigns")
+      .select("title, product_name, discount_type, discount_value, image_url, brands(company_name)")
+      .eq("slug", offerSlug)
+      .eq("status", "active")
+      .single(),
+  ]);
+
+  if (!influencer || !campaign) return { title: "Oferta não encontrada" };
+
+  const typed = campaign as unknown as Campaign & { brands: Pick<Brand, "company_name"> | null };
+  const discount = formatDiscount(typed.discount_type, typed.discount_value);
+  const origin = typed.brands?.company_name ?? influencer.display_name;
+  const title = `${discount} em ${typed.product_name ?? typed.title}`;
+  const description = `Cupom exclusivo de ${influencer.display_name} para ${origin}. Resgate o seu desconto em segundos.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      ...(typed.image_url ? { images: [typed.image_url] } : {}),
+    },
+  };
+}
 
 export default async function OfferPage({
   params,
