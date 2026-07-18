@@ -57,8 +57,8 @@ export default async function BrandAmbassadorsPage() {
                     {inf ? (
                       <ContactInfluencer
                         name={inf.display_name}
-                        whatsapp={inf.whatsapp}
-                        contactEmail={inf.contact_email}
+                        whatsapp={inf.share_whatsapp ? inf.whatsapp : null}
+                        contactEmail={inf.share_email ? inf.contact_email : null}
                         brandName={brand.company_name}
                       />
                     ) : (

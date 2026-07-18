@@ -29,11 +29,21 @@ export async function saveInfluencerProfile(
   const profile_image_url = String(formData.get("profile_image_url") ?? "").trim() || null;
   const whatsapp = String(formData.get("whatsapp") ?? "").trim() || null;
   const contact_email = String(formData.get("contact_email") ?? "").trim() || null;
+  const share_whatsapp = formData.get("share_whatsapp") === "on";
+  const share_email = formData.get("share_email") === "on";
   const followersRaw = String(formData.get("followers_count") ?? "").trim();
   const followers_count = followersRaw ? Number(followersRaw) : null;
 
   if (!display_name) {
     return { error: "Informe seu nome de exibição." };
+  }
+
+  // Consentimento sem o dado correspondente não faz sentido — pede o dado.
+  if (share_whatsapp && !whatsapp) {
+    return { error: "Você autorizou contato por WhatsApp — informe o seu número de WhatsApp comercial." };
+  }
+  if (share_email && !contact_email) {
+    return { error: "Você autorizou contato por e-mail — informe o seu e-mail comercial." };
   }
 
   const slug = slugify(requestedSlug || display_name);
@@ -63,6 +73,8 @@ export async function saveInfluencerProfile(
     profile_image_url,
     whatsapp,
     contact_email,
+    share_whatsapp,
+    share_email,
     followers_count,
   };
 

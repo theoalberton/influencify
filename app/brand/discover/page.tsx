@@ -131,10 +131,11 @@ export default async function DiscoverPage({
                 </div>
 
                 <div className="mt-3 border-t border-black/5 pt-3">
+                  {/* A marca só vê o canal que o influenciador autorizou. */}
                   <ContactInfluencer
                     name={inf.display_name}
-                    whatsapp={inf.whatsapp}
-                    contactEmail={inf.contact_email}
+                    whatsapp={inf.share_whatsapp ? inf.whatsapp : null}
+                    contactEmail={inf.share_email ? inf.contact_email : null}
                     brandName={brand.company_name}
                   />
                 </div>

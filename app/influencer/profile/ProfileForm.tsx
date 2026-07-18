@@ -69,11 +69,13 @@ export function ProfileForm({ influencer }: { influencer: Influencer | null }) {
       </Field>
 
       <div className="rounded-2xl bg-[#f4f6e8] p-5">
-        <p className="text-sm font-semibold text-[#0a3625]">Contato comercial</p>
-        <p className="mt-1 text-xs text-[#7a8578]">
-          Visível apenas para marcas logadas na Influencify — nunca aparece no seu perfil público. É por aqui
-          que as marcas negociam parcerias e cachê com você.
+        <p className="text-sm font-semibold text-[#0a3625]">Contato para parcerias com marcas</p>
+        <p className="mt-1 text-xs leading-relaxed text-[#7a8578]">
+          <strong className="text-[#4d584d]">Marcas cadastradas na Influencify vão usar estes dados para falar
+          com você</strong> — negociar contratos, cachê e convites de campanha. Informe um telefone e um e-mail
+          válidos que você realmente responde. Nada disso aparece no seu perfil público.
         </p>
+
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
           <Field label="WhatsApp comercial">
             <Input name="whatsapp" defaultValue={influencer?.whatsapp ?? ""} placeholder="(11) 99999-9999" />
@@ -86,6 +88,38 @@ export function ProfileForm({ influencer }: { influencer: Influencer | null }) {
               placeholder="parcerias@seudominio.com"
             />
           </Field>
+        </div>
+
+        <div className="mt-4 space-y-2.5 border-t border-black/5 pt-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#7a8578]">
+            Como as marcas podem falar com você?
+          </p>
+          <label className="flex items-start gap-2.5 text-sm text-[#0a3625]">
+            <input
+              type="checkbox"
+              name="share_whatsapp"
+              defaultChecked={influencer?.share_whatsapp ?? false}
+              className="mt-0.5 rounded border-[#dde0cb] text-[#0a3625] focus:ring-[#0a3625]"
+            />
+            <span>
+              Autorizo marcas a me chamarem no <strong>WhatsApp</strong>
+            </span>
+          </label>
+          <label className="flex items-start gap-2.5 text-sm text-[#0a3625]">
+            <input
+              type="checkbox"
+              name="share_email"
+              defaultChecked={influencer?.share_email ?? false}
+              className="mt-0.5 rounded border-[#dde0cb] text-[#0a3625] focus:ring-[#0a3625]"
+            />
+            <span>
+              Autorizo marcas a me contatarem por <strong>e-mail</strong>
+            </span>
+          </label>
+          <p className="text-xs text-[#a3ac9c]">
+            Você escolhe: os dois, só um, ou nenhum. As marcas só veem o canal que você autorizar, e você pode
+            mudar isso aqui quando quiser.
+          </p>
         </div>
       </div>
 

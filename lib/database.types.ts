@@ -37,6 +37,8 @@ export interface Influencer {
   profile_image_url: string | null;
   whatsapp: string | null;
   contact_email: string | null;
+  share_whatsapp: boolean;
+  share_email: boolean;
   invite_code: string | null;
   is_active: boolean;
   created_at: string;

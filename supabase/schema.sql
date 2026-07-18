@@ -44,6 +44,9 @@ create table influencers (
   -- contato comercial: visível só para marcas logadas, nunca no perfil público
   whatsapp text,
   contact_email text,
+  -- consentimento explícito: a marca só vê o canal que o influenciador autorizou
+  share_whatsapp boolean not null default false,
+  share_email boolean not null default false,
   -- código pessoal do programa indique e ganhe
   invite_code text unique default substr(md5(random()::text || clock_timestamp()::text), 1, 8),
   is_active boolean not null default true,

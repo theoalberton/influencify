@@ -22,7 +22,7 @@ export function ContactInfluencer({
   brandName: string;
 }) {
   if (!whatsapp && !contactEmail) {
-    return <p className="text-xs text-[#a3ac9c]">Sem contato comercial cadastrado</p>;
+    return <p className="text-xs text-[#a3ac9c]">Não autorizou contato direto ainda</p>;
   }
 
   const message = encodeURIComponent(
