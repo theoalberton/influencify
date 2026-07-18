@@ -19,6 +19,7 @@ const NAV: Record<AccountType, { href: string; label: string; icon: IconName }[]
     { href: "/brand/dashboard", label: "Dashboard", icon: "dashboard" },
     { href: "/brand/profile", label: "Perfil da marca", icon: "brands" },
     { href: "/brand/campaigns", label: "Campanhas", icon: "campaigns" },
+    { href: "/brand/discover", label: "Descobrir influenciadores", icon: "users" },
     { href: "/brand/ambassadors", label: "Embaixadores", icon: "ambassadors" },
     { href: "/brand/coupons", label: "Cupons", icon: "coupons" },
     { href: "/brand/leads", label: "Leads", icon: "leads" },

@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { formatDiscount } from "@/lib/utils";
+import { formatDiscount, formatFollowers } from "@/lib/utils";
 import type { Brand, Campaign, CampaignInfluencer } from "@/lib/database.types";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -30,6 +31,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+/** Normaliza handle salvo com ou sem @ para montar o link da rede. */
+function handleToUrl(base: string, handle: string): string {
+  return `${base}${handle.replace(/^@/, "").trim()}`;
+}
+
+function SocialPill({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur transition hover:bg-white/20"
+    >
+      {label}
+    </a>
+  );
+}
+
 export default async function InfluencerPublicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = await createClient();
@@ -56,36 +75,83 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
     }))
     .filter((o) => o.campaign && o.campaign.status === "active");
 
+  const stats: { value: string; label: string }[] = [
+    { value: String(offers.length), label: offers.length === 1 ? "oferta" : "ofertas" },
+  ];
+  if (influencer.followers_count) {
+    stats.push({ value: formatFollowers(influencer.followers_count), label: "seguidores" });
+  }
+  if (influencer.niche) {
+    stats.push({ value: influencer.niche, label: "nicho" });
+  }
+
   return (
-    <div className="min-h-screen bg-[#f4f6e8] px-4 py-12">
-      <div className="mx-auto max-w-lg">
-        <div className="flex flex-col items-center text-center">
+    <div className="min-h-screen bg-[#f4f6e8]">
+      {/* Capa estilo Instagram: bottle green com brilhos wattle */}
+      <div className="relative overflow-hidden bg-[#0a3625] pb-20 pt-12">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#ccda47]/15 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-[#ccda47]/10 blur-3xl"
+        />
+
+        <div className="relative mx-auto flex max-w-lg flex-col items-center px-4 text-center">
           {influencer.profile_image_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={influencer.profile_image_url}
               alt={influencer.display_name}
-              width={96}
-              height={96}
-              className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow-[0_2px_16px_rgba(0,0,0,0.08)]"
+              width={112}
+              height={112}
+              className="h-28 w-28 rounded-full object-cover ring-4 ring-[#ccda47] shadow-[0_8px_30px_rgba(0,0,0,0.35)]"
             />
           ) : (
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#0a3625] text-2xl font-semibold text-white ring-4 ring-white shadow-[0_2px_16px_rgba(0,0,0,0.08)]">
+            <div className="flex h-28 w-28 items-center justify-center rounded-full bg-[#ccda47] text-3xl font-bold text-[#0a3625] ring-4 ring-[#ccda47] shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
               {influencer.display_name.slice(0, 1).toUpperCase()}
             </div>
           )}
-          <h1 className="mt-4 text-2xl font-semibold tracking-tight text-[#0a3625]">{influencer.display_name}</h1>
-          {influencer.bio && <p className="mt-1 max-w-sm text-sm text-[#4d584d]">{influencer.bio}</p>}
 
-          <div className="mt-3 flex gap-3 text-sm text-[#7a8578]">
-            {influencer.instagram && <span>{influencer.instagram}</span>}
-            {influencer.tiktok && <span>{influencer.tiktok}</span>}
-          </div>
+          <h1 className="mt-4 text-3xl font-bold tracking-tight text-white">{influencer.display_name}</h1>
+          {influencer.bio && <p className="mt-2 max-w-sm text-sm leading-relaxed text-white/75">{influencer.bio}</p>}
+
+          {(influencer.instagram || influencer.tiktok || influencer.youtube) && (
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              {influencer.instagram && (
+                <SocialPill href={handleToUrl("https://instagram.com/", influencer.instagram)} label="Instagram" />
+              )}
+              {influencer.tiktok && (
+                <SocialPill href={handleToUrl("https://tiktok.com/@", influencer.tiktok)} label="TikTok" />
+              )}
+              {influencer.youtube && (
+                <SocialPill href={handleToUrl("https://youtube.com/@", influencer.youtube)} label="YouTube" />
+              )}
+            </div>
+          )}
         </div>
+      </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2">
+      {/* Linha de estatísticas sobreposta, como o header do Instagram */}
+      <div className="mx-auto -mt-10 max-w-lg px-4">
+        <div className="flex divide-x divide-black/5 rounded-2xl bg-white py-4 shadow-[0_8px_30px_rgba(10,54,37,0.12)]">
+          {stats.map((stat) => (
+            <div key={stat.label} className="flex flex-1 flex-col items-center px-2 text-center">
+              <span className="truncate text-lg font-bold tracking-tight text-[#0a3625]">{stat.value}</span>
+              <span className="text-xs text-[#7a8578]">{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Feed de ofertas */}
+      <div className="mx-auto max-w-lg px-4 pb-16 pt-8">
+        <div className="grid gap-5 sm:grid-cols-2">
           {offers.length === 0 ? (
-            <p className="col-span-full text-center text-sm text-[#7a8578]">Nenhuma oferta disponível no momento.</p>
+            <p className="col-span-full py-8 text-center text-sm text-[#7a8578]">
+              Nenhuma oferta disponível no momento. Volte em breve!
+            </p>
           ) : (
             offers.map(({ link, campaign }) => {
               // Campanha de marca mostra a marca; campanha própria mostra o
@@ -131,10 +197,13 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
                         {ownerName?.slice(0, 1).toUpperCase()}
                       </div>
                     )}
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <p className="truncate font-semibold text-[#0a3625]">{campaign.title}</p>
                       <p className="truncate text-xs text-[#7a8578]">{ownerName}</p>
                     </div>
+                    <span className="shrink-0 rounded-full bg-[#ccda47] px-3 py-1.5 text-xs font-bold text-[#0a3625]">
+                      Pegar cupom
+                    </span>
                   </div>
                 </a>
               );
@@ -142,7 +211,12 @@ export default async function InfluencerPublicPage({ params }: { params: Promise
           )}
         </div>
 
-        <p className="mt-12 text-center text-xs text-[#a3ac9c]">Feito com Influencify</p>
+        <p className="mt-12 text-center text-xs text-[#a3ac9c]">
+          Feito com{" "}
+          <Link href="/" className="font-semibold text-[#7a8578] hover:underline">
+            Influencify
+          </Link>
+        </p>
       </div>
     </div>
   );

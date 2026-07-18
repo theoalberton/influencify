@@ -101,7 +101,10 @@ export default async function MyCampaignsPage() {
                   </div>
                 )}
 
-                <div className="mt-4 flex gap-2">
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <LinkButton href={`/influencer/my-campaigns/${campaign.id}/edit`} size="sm" variant="secondary">
+                    Editar
+                  </LinkButton>
                   {(["active", "paused", "ended"] as CampaignStatus[])
                     .filter((s) => s !== campaign.status)
                     .map((status) => (

@@ -72,6 +72,9 @@ export default async function BrandCampaignsPage() {
                   <LinkButton href={`/brand/campaigns/${campaign.id}`} size="sm" variant="primary">
                     Embaixadores
                   </LinkButton>
+                  <LinkButton href={`/brand/campaigns/${campaign.id}/edit`} size="sm" variant="secondary">
+                    Editar
+                  </LinkButton>
                   {(["active", "paused", "ended"] as CampaignStatus[])
                     .filter((s) => s !== campaign.status)
                     .map((status) => (

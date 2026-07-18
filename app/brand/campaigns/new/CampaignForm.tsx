@@ -2,18 +2,11 @@
 
 import { useActionState } from "react";
 import { createCampaign, type CampaignFormState } from "./actions";
-import { Field, Input, Textarea, Select } from "@/components/ui/Input";
+import { CampaignFormFields } from "@/components/campaigns/CampaignFormFields";
+import { Field } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { ThumbnailUpload } from "@/components/ui/ThumbnailUpload";
 
 const initialState: CampaignFormState = {};
-
-const REQUIRED_FIELD_OPTIONS = [
-  { value: "name", label: "Nome" },
-  { value: "email", label: "E-mail" },
-  { value: "phone", label: "Telefone" },
-  { value: "city", label: "Cidade" },
-];
 
 export interface AmbassadorOption {
   id: string;
@@ -26,83 +19,7 @@ export function CampaignForm({ ambassadors }: { ambassadors: AmbassadorOption[] 
 
   return (
     <form action={formAction} className="space-y-5">
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Nome da campanha">
-          <Input name="title" required placeholder="Ex: Cupom de 10% na primeira compra" />
-        </Field>
-        <Field label="Produto/serviço">
-          <Input name="product_name" placeholder="Assinatura anual" />
-        </Field>
-      </div>
-
-      <Field label="Descrição da oferta">
-        <Textarea name="description" rows={3} />
-      </Field>
-
-      <ThumbnailUpload name="image_url" label="Imagem da oferta" hint="Aparece no perfil do embaixador, formato paisagem (16:9)." />
-
-      <div className="grid gap-5 sm:grid-cols-3">
-        <Field label="Tipo de desconto">
-          <Select name="discount_type" required defaultValue="percentage">
-            <option value="percentage">Porcentagem</option>
-            <option value="fixed">Valor fixo</option>
-            <option value="free_shipping">Frete grátis</option>
-            <option value="custom">Voucher personalizado</option>
-          </Select>
-        </Field>
-        <Field label="Valor do desconto">
-          <Input name="discount_value" placeholder="10 ou 50.00" />
-        </Field>
-        <Field label="Código do cupom">
-          <Input name="coupon_code" placeholder="INSIDER10" />
-        </Field>
-      </div>
-
-      <Field label="Link final de compra">
-        <Input name="destination_url" placeholder="https://loja.com/produto" />
-      </Field>
-
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Data de início">
-          <Input type="date" name="start_date" />
-        </Field>
-        <Field label="Data de fim">
-          <Input type="date" name="end_date" />
-        </Field>
-      </div>
-
-      <Field label="Dados exigidos para liberar o cupom">
-        <div className="mt-2 flex flex-wrap gap-4">
-          {REQUIRED_FIELD_OPTIONS.map((opt) => (
-            <label key={opt.value} className="flex items-center gap-2 text-sm text-slate-700">
-              <input
-                type="checkbox"
-                name="required_fields"
-                value={opt.value}
-                defaultChecked={opt.value === "name" || opt.value === "email"}
-                className="rounded border-[#dde0cb] text-[#0a3625] focus:ring-[#0a3625]"
-              />
-              {opt.label}
-            </label>
-          ))}
-        </div>
-      </Field>
-
-      <div className="grid gap-5 sm:grid-cols-3">
-        <Field label="Meta Pixel ID">
-          <Input name="meta_pixel_id" placeholder="Opcional" />
-        </Field>
-        <Field label="TikTok Pixel ID">
-          <Input name="tiktok_pixel_id" placeholder="Opcional" />
-        </Field>
-        <Field label="Google Tag ID">
-          <Input name="google_tag_id" placeholder="Opcional" />
-        </Field>
-      </div>
-
-      <Field label="Observações internas">
-        <Textarea name="internal_notes" rows={2} />
-      </Field>
+      <CampaignFormFields showPixels />
 
       <Field
         label="Convidar embaixadores"

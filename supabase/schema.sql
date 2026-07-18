@@ -94,6 +94,7 @@ create table campaigns (
   tiktok_pixel_id text,
   google_tag_id text,
   internal_notes text,
+  avg_ticket numeric,
   created_at timestamptz not null default now(),
   unique (brand_id, slug),
   constraint campaigns_owner_check check (
@@ -281,6 +282,22 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 grant execute on function my_invite_referrals() to authenticated;
+
+-- Números agregados do mídia kit público (sem PII — só contagens).
+create or replace function public_influencer_stats(profile_slug text)
+returns table (total_clicks bigint, total_leads bigint, converted_leads bigint, active_campaigns bigint)
+language sql
+security definer
+set search_path = public
+as $$
+  select
+    (select count(*) from clicks cl join influencers i on i.id = cl.influencer_id where i.slug = profile_slug),
+    (select count(*) from leads l join influencers i on i.id = l.influencer_id where i.slug = profile_slug),
+    (select count(*) from leads l join influencers i on i.id = l.influencer_id where i.slug = profile_slug and l.status = 'converted'),
+    (select count(*) from campaign_influencers ci join influencers i on i.id = ci.influencer_id where i.slug = profile_slug and ci.status = 'active')
+$$;
+
+grant execute on function public_influencer_stats(text) to anon, authenticated;
 
 -- ----------------------------------------------------------------------------
 -- Triggers: mantém referrals.clicks / referrals.leads_count agregados

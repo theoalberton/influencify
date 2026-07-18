@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentProfile, getMyInfluencer } from "@/lib/auth";
 import { translateError } from "@/lib/errors";
 import { slugify, generateReferralCode } from "@/lib/utils";
-import type { DiscountType } from "@/lib/database.types";
+import { parseCampaignForm } from "@/lib/campaign-form";
 
 export interface OwnCampaignFormState {
   error?: string;
@@ -41,39 +41,19 @@ export async function createOwnCampaign(
     }
   }
 
-  const title = String(formData.get("title") ?? "").trim();
-  const product_name = String(formData.get("product_name") ?? "").trim() || null;
-  const description = String(formData.get("description") ?? "").trim() || null;
-  const image_url = String(formData.get("image_url") ?? "").trim() || null;
-  const discount_type = String(formData.get("discount_type") ?? "") as DiscountType;
-  const discount_value = String(formData.get("discount_value") ?? "").trim() || null;
-  const coupon_code = String(formData.get("coupon_code") ?? "").trim() || null;
-  const destination_url = String(formData.get("destination_url") ?? "").trim() || null;
-  const start_date = String(formData.get("start_date") ?? "").trim() || null;
-  const end_date = String(formData.get("end_date") ?? "").trim() || null;
-  const required_fields = formData.getAll("required_fields").map(String);
+  const values = parseCampaignForm(formData, { withPixels: false });
 
-  if (!title) return { error: "Informe o nome da campanha." };
-  if (!discount_type) return { error: "Escolha o tipo de desconto." };
+  if (!values.title) return { error: "Informe o nome da campanha." };
+  if (!values.discount_type) return { error: "Escolha o tipo de desconto." };
 
-  const slug = slugify(title);
+  const slug = slugify(values.title);
 
   const { data: campaign, error } = await supabase
     .from("campaigns")
     .insert({
       influencer_id: influencer.id,
-      title,
       slug,
-      product_name,
-      description,
-      image_url,
-      discount_type,
-      discount_value,
-      coupon_code,
-      destination_url,
-      start_date,
-      end_date,
-      required_fields: required_fields.length ? required_fields : ["name", "email"],
+      ...values,
     })
     .select("id, slug")
     .single();

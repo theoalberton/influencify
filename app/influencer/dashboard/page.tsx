@@ -6,6 +6,7 @@ import { StatCard } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { PerformanceChart } from "@/components/ui/PerformanceChart";
 import { FunnelRow } from "@/components/ui/FunnelRow";
+import { OnboardingChecklist } from "@/components/ui/OnboardingChecklist";
 import { buildDailySeries } from "@/lib/timeseries";
 
 export default async function InfluencerDashboardPage() {
@@ -30,6 +31,39 @@ export default async function InfluencerDashboardPage() {
   const conversion = clicks > 0 ? ((leads / clicks) * 100).toFixed(1) : "0.0";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
+  // Primeiros passos: some quando tudo estiver concluído.
+  const onboardingSteps = [
+    {
+      label: "Complete o seu perfil",
+      description: "Foto, bio e redes — é o que o público e as marcas veem primeiro.",
+      done: Boolean(influencer.profile_image_url && influencer.bio),
+      href: "/influencer/profile",
+      cta: "Completar perfil",
+    },
+    {
+      label: "Tenha uma oferta ativa",
+      description: "Crie uma campanha sua ou aceite o convite de uma marca.",
+      done: (campaignsCount ?? 0) > 0,
+      href: "/influencer/my-campaigns/new",
+      cta: "Criar campanha",
+    },
+    {
+      label: "Divulgue o seu link",
+      description: "Coloque o link do perfil na bio e nos stories. O primeiro clique confirma este passo.",
+      done: clicks > 0,
+      href: "/influencer/referrals",
+      cta: "Ver meus links",
+    },
+    {
+      label: "Receba o primeiro lead",
+      description: "Quando alguém resgatar um cupom, o contato aparece em Leads.",
+      done: leads > 0,
+      href: "/influencer/leads",
+      cta: "Ver leads",
+    },
+  ];
+  const onboardingDone = onboardingSteps.every((s) => s.done);
+
   // Série dos últimos 30 dias + funil
   const since = new Date();
   since.setDate(since.getDate() - 29);
@@ -52,11 +86,18 @@ export default async function InfluencerDashboardPage() {
       name={profile.name}
       title={`Olá, ${influencer.display_name}`}
       actions={
-        <LinkButton href={`/i/${influencer.slug}`} variant="secondary">
-          Ver meu perfil público
-        </LinkButton>
+        <div className="flex gap-2">
+          <LinkButton href={`/i/${influencer.slug}/midia-kit`} variant="secondary">
+            Meu mídia kit
+          </LinkButton>
+          <LinkButton href={`/i/${influencer.slug}`} variant="secondary">
+            Ver meu perfil público
+          </LinkButton>
+        </div>
       }
     >
+      {!onboardingDone && <OnboardingChecklist steps={onboardingSteps} />}
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Leads gerados" value={leads} />
         <StatCard label="Cliques totais" value={clicks} />
@@ -82,6 +123,10 @@ export default async function InfluencerDashboardPage() {
           ou veja as ofertas das marcas em{" "}
           <a href="/influencer/campaigns" className="font-medium text-[#0a3625] hover:underline">
             Campanhas de marcas
+          </a>
+          . Para negociar com marcas, envie o seu{" "}
+          <a href={`/i/${influencer.slug}/midia-kit`} className="font-medium text-[#0a3625] hover:underline">
+            mídia kit
           </a>
           .
         </p>

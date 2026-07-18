@@ -78,6 +78,7 @@ export interface Campaign {
   tiktok_pixel_id: string | null;
   google_tag_id: string | null;
   internal_notes: string | null;
+  avg_ticket: number | null;
   created_at: string;
 }
 

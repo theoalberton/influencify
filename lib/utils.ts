@@ -43,6 +43,13 @@ export function formatDiscount(type: string, value: string | null) {
   }
 }
 
+/** 1234 → "1,2 mil"; 2500000 → "2,5 mi" — como as redes exibem seguidores. */
+export function formatFollowers(count: number): string {
+  if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1).replace(".", ",").replace(",0", "")} mi`;
+  if (count >= 1_000) return `${(count / 1_000).toFixed(1).replace(".", ",").replace(",0", "")} mil`;
+  return String(count);
+}
+
 export function toCsv(rows: Record<string, unknown>[]): string {
   if (rows.length === 0) return "";
   const headers = Object.keys(rows[0]);
