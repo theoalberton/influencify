@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { loginAction, type LoginState } from "./actions";
 import { AuthLayout } from "@/components/layout/AuthLayout";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 
 const initialState: LoginState = {};
 
@@ -46,7 +47,7 @@ function LoginForm() {
               Esqueceu a senha?
             </Link>
           </div>
-          <input type="password" name="password" required className={inputClass} placeholder="Sua senha" />
+          <PasswordInput name="password" required className={inputClass} placeholder="Sua senha" />
         </div>
 
         {state.error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p>}

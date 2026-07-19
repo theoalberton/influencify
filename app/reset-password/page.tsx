@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { resetPasswordAction, type ResetPasswordState } from "./actions";
 import { AuthLayout } from "@/components/layout/AuthLayout";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 
 const initialState: ResetPasswordState = {};
 
@@ -22,12 +23,12 @@ export default function ResetPasswordPage() {
       <form action={formAction} className="mt-8 space-y-4">
         <div>
           <label className="block text-sm font-medium text-[#0a3625]">Nova senha</label>
-          <input type="password" name="password" required minLength={6} className={inputClass} placeholder="Mínimo 6 caracteres" />
+          <PasswordInput name="password" required minLength={6} className={inputClass} placeholder="Mínimo 6 caracteres" />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-[#0a3625]">Confirmar nova senha</label>
-          <input type="password" name="confirm" required minLength={6} className={inputClass} placeholder="Repita a senha" />
+          <PasswordInput name="confirm" required minLength={6} className={inputClass} placeholder="Repita a senha" />
         </div>
 
         {state.error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p>}

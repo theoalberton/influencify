@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { registerAction, type RegisterState } from "./actions";
 import { AuthLayout } from "@/components/layout/AuthLayout";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 
 const initialState: RegisterState = {};
 
@@ -82,14 +83,7 @@ function RegisterForm() {
 
         <div>
           <label className="block text-sm font-medium text-[#0a3625]">Senha</label>
-          <input
-            type="password"
-            name="password"
-            required
-            minLength={6}
-            className={inputClass}
-            placeholder="Mínimo 6 caracteres"
-          />
+          <PasswordInput name="password" required minLength={6} className={inputClass} placeholder="Mínimo 6 caracteres" />
         </div>
 
         {state.error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p>}
