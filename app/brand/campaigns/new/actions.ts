@@ -7,6 +7,7 @@ import { inviteInfluencerToCampaign } from "@/lib/invites";
 import { translateError } from "@/lib/errors";
 import { slugify } from "@/lib/utils";
 import { parseCampaignForm } from "@/lib/campaign-form";
+import { getCampaignRiskFlags } from "@/lib/moderation";
 
 export interface CampaignFormState {
   error?: string;
@@ -26,12 +27,16 @@ export async function createCampaign(_prev: CampaignFormState, formData: FormDat
   const slug = slugify(values.title);
   const supabase = await createClient();
 
+  // Texto em categoria sensível segura a campanha para revisão do admin.
+  const riskFlags = getCampaignRiskFlags(values.title, values.product_name, values.description);
+
   const { data: campaign, error } = await supabase
     .from("campaigns")
     .insert({
       brand_id: brand.id,
       slug,
       ...values,
+      ...(riskFlags.length ? { status: "under_review" } : {}),
     })
     .select("id, slug")
     .single();

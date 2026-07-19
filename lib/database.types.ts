@@ -2,7 +2,7 @@ export type AccountType = "influencer" | "brand" | "admin";
 export type PlanType = "free" | "influencer" | "brand" | "premium";
 export type PlanStatus = "active" | "trialing" | "past_due" | "canceled";
 export type DiscountType = "percentage" | "fixed" | "free_shipping" | "custom";
-export type CampaignStatus = "active" | "paused" | "ended";
+export type CampaignStatus = "active" | "paused" | "ended" | "under_review";
 export type BrandInfluencerStatus = "invited" | "active" | "paused" | "removed";
 export type LeadStatus = "new" | "sent" | "converted" | "lost";
 

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/Table";
 import { formatDate, formatDiscount } from "@/lib/utils";
+import { CAMPAIGN_STATUS_LABEL } from "@/lib/moderation";
 import { updateCampaignStatus } from "./actions";
 import type { CampaignStatus } from "@/lib/database.types";
 
@@ -32,6 +33,13 @@ export default async function BrandCampaignsPage() {
         </LinkButton>
       }
     >
+      {(campaigns ?? []).some((c) => c.status === "under_review") && (
+        <p className="mb-5 rounded-2xl bg-violet-50 px-5 py-4 text-sm text-violet-800">
+          Campanhas <strong>em análise</strong> contêm termos de categorias que exigem revisão (saúde, bebidas,
+          apostas etc.). Nossa equipe analisa e libera normalmente em até 24h — você não precisa fazer nada.
+        </p>
+      )}
+
       {!campaigns || campaigns.length === 0 ? (
         <EmptyState title="Nenhuma campanha criada ainda" description="Crie sua primeira campanha para começar a captar leads." />
       ) : (
@@ -61,7 +69,7 @@ export default async function BrandCampaignsPage() {
                     <h3 className="truncate font-semibold text-slate-900">{campaign.title}</h3>
                     <p className="truncate text-sm text-slate-500">{campaign.product_name}</p>
                   </div>
-                  <Badge tone={campaign.status}>{campaign.status}</Badge>
+                  <Badge tone={campaign.status}>{CAMPAIGN_STATUS_LABEL[campaign.status] ?? campaign.status}</Badge>
                 </div>
 
                 <p className="mt-2 text-xs text-slate-400">
@@ -75,15 +83,19 @@ export default async function BrandCampaignsPage() {
                   <LinkButton href={`/brand/campaigns/${campaign.id}/edit`} size="sm" variant="secondary">
                     Editar
                   </LinkButton>
-                  {(["active", "paused", "ended"] as CampaignStatus[])
-                    .filter((s) => s !== campaign.status)
-                    .map((status) => (
-                      <form key={status} action={updateCampaignStatus.bind(null, campaign.id, status)}>
-                        <Button type="submit" size="sm" variant="secondary">
-                          {status === "active" ? "Ativar" : status === "paused" ? "Pausar" : "Encerrar"}
-                        </Button>
-                      </form>
-                    ))}
+                  {campaign.status === "under_review" ? (
+                    <span className="self-center text-xs text-[#7a8578]">Aguardando análise da equipe</span>
+                  ) : (
+                    (["active", "paused", "ended"] as CampaignStatus[])
+                      .filter((s) => s !== campaign.status)
+                      .map((status) => (
+                        <form key={status} action={updateCampaignStatus.bind(null, campaign.id, status)}>
+                          <Button type="submit" size="sm" variant="secondary">
+                            {status === "active" ? "Ativar" : status === "paused" ? "Pausar" : "Encerrar"}
+                          </Button>
+                        </form>
+                      ))
+                  )}
                 </div>
               </div>
             </div>

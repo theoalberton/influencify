@@ -175,6 +175,18 @@ export default async function OfferPage({
             />
           </div>
         </div>
+
+        <p className="mt-6 text-center text-xs text-[#a3ac9c]">
+          Algo errado com esta oferta?{" "}
+          <a
+            href={`mailto:theodormartinez@gmail.com?subject=${encodeURIComponent(
+              `Denúncia de oferta — ${typedCampaign.title} (${typedCampaign.id})`
+            )}`}
+            className="font-medium text-[#7a8578] hover:underline"
+          >
+            Denunciar
+          </a>
+        </p>
       </div>
     </div>
   );

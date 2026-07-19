@@ -10,6 +10,16 @@ export async function updateOwnCampaignStatus(campaignId: string, status: Campai
   if (!influencer) return;
 
   const supabase = await createClient();
+
+  // Campanha em análise só é liberada pelo admin — o dono não se autoaprova.
+  const { data: current } = await supabase
+    .from("campaigns")
+    .select("status")
+    .eq("id", campaignId)
+    .eq("influencer_id", influencer.id)
+    .single();
+  if (!current || current.status === "under_review" || status === "under_review") return;
+
   await supabase
     .from("campaigns")
     .update({ status })

@@ -6,6 +6,7 @@ import { getCurrentProfile, getMyInfluencer } from "@/lib/auth";
 import { translateError } from "@/lib/errors";
 import { slugify, generateReferralCode } from "@/lib/utils";
 import { parseCampaignForm } from "@/lib/campaign-form";
+import { getCampaignRiskFlags } from "@/lib/moderation";
 
 export interface OwnCampaignFormState {
   error?: string;
@@ -48,12 +49,16 @@ export async function createOwnCampaign(
 
   const slug = slugify(values.title);
 
+  // Texto em categoria sensível segura a campanha para revisão do admin.
+  const riskFlags = getCampaignRiskFlags(values.title, values.product_name, values.description);
+
   const { data: campaign, error } = await supabase
     .from("campaigns")
     .insert({
       influencer_id: influencer.id,
       slug,
       ...values,
+      ...(riskFlags.length ? { status: "under_review" } : {}),
     })
     .select("id, slug")
     .single();

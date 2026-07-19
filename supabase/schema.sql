@@ -99,7 +99,8 @@ create table campaigns (
   destination_url text,
   start_date date,
   end_date date,
-  status text not null default 'active' check (status in ('active', 'paused', 'ended')),
+  -- under_review: retida pelo filtro de moderação; só o admin libera
+  status text not null default 'active' check (status in ('active', 'paused', 'ended', 'under_review')),
   required_fields jsonb not null default '["name", "email"]'::jsonb,
   meta_pixel_id text,
   tiktok_pixel_id text,
@@ -309,6 +310,23 @@ as $$
 $$;
 
 grant execute on function public_influencer_stats(text) to anon, authenticated;
+
+-- Moderação: dono não libera campanha retida pelo filtro — só admin
+-- (ou processos internos sem sessão, ex.: service role).
+create or replace function guard_campaign_review() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  if old.status = 'under_review' and new.status = 'active'
+     and auth.uid() is not null
+     and coalesce(auth_account_type(), '') <> 'admin' then
+    raise exception 'Campanha em análise só pode ser liberada pela equipe da Influencify.';
+  end if;
+  return new;
+end $$;
+
+drop trigger if exists campaigns_review_guard on campaigns;
+create trigger campaigns_review_guard before update on campaigns
+  for each row execute function guard_campaign_review();
 
 -- ----------------------------------------------------------------------------
 -- Triggers: mantém referrals.clicks / referrals.leads_count agregados

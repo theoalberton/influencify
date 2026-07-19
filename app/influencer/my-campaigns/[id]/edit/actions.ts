@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getMyInfluencer } from "@/lib/auth";
 import { translateError } from "@/lib/errors";
 import { parseCampaignForm } from "@/lib/campaign-form";
+import { getCampaignRiskFlags } from "@/lib/moderation";
 
 export interface EditOwnCampaignState {
   error?: string;
@@ -23,10 +24,13 @@ export async function updateOwnCampaign(
   if (!values.title) return { error: "Informe o nome da campanha." };
   if (!values.discount_type) return { error: "Escolha o tipo de desconto." };
 
+  // Edição que introduz termo sensível volta para revisão — sem brecha pós-aprovação.
+  const riskFlags = getCampaignRiskFlags(values.title, values.product_name, values.description);
+
   const supabase = await createClient();
   const { error } = await supabase
     .from("campaigns")
-    .update(values)
+    .update({ ...values, ...(riskFlags.length ? { status: "under_review" } : {}) })
     .eq("id", campaignId)
     .eq("influencer_id", influencer.id);
 

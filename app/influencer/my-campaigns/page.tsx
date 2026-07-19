@@ -8,6 +8,7 @@ import { Button, LinkButton } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/Table";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { formatDiscount } from "@/lib/utils";
+import { CAMPAIGN_STATUS_LABEL } from "@/lib/moderation";
 import { updateOwnCampaignStatus } from "./actions";
 import type { CampaignStatus } from "@/lib/database.types";
 
@@ -60,6 +61,13 @@ export default async function MyCampaignsPage() {
         </p>
       )}
 
+      {(campaigns ?? []).some((c) => c.status === "under_review") && (
+        <p className="mb-5 rounded-2xl bg-violet-50 px-5 py-4 text-sm text-violet-800">
+          Campanhas <strong>em análise</strong> contêm termos de categorias que exigem revisão (saúde, bebidas,
+          apostas etc.). Nossa equipe analisa e libera normalmente em até 24h — você não precisa fazer nada.
+        </p>
+      )}
+
       {!campaigns || campaigns.length === 0 ? (
         <EmptyState
           title="Você ainda não criou nenhuma campanha própria"
@@ -89,7 +97,7 @@ export default async function MyCampaignsPage() {
                     <h3 className="truncate font-semibold text-[#0a3625]">{campaign.title}</h3>
                     <p className="truncate text-sm text-[#7a8578]">{campaign.product_name}</p>
                   </div>
-                  <Badge tone={campaign.status}>{campaign.status}</Badge>
+                  <Badge tone={campaign.status}>{CAMPAIGN_STATUS_LABEL[campaign.status] ?? campaign.status}</Badge>
                 </div>
 
                 {linkByCampaign.get(campaign.id) && (
@@ -105,15 +113,19 @@ export default async function MyCampaignsPage() {
                   <LinkButton href={`/influencer/my-campaigns/${campaign.id}/edit`} size="sm" variant="secondary">
                     Editar
                   </LinkButton>
-                  {(["active", "paused", "ended"] as CampaignStatus[])
-                    .filter((s) => s !== campaign.status)
-                    .map((status) => (
-                      <form key={status} action={updateOwnCampaignStatus.bind(null, campaign.id, status)}>
-                        <Button type="submit" size="sm" variant="secondary">
-                          {status === "active" ? "Ativar" : status === "paused" ? "Pausar" : "Encerrar"}
-                        </Button>
-                      </form>
-                    ))}
+                  {campaign.status === "under_review" ? (
+                    <span className="self-center text-xs text-[#7a8578]">Aguardando análise da equipe</span>
+                  ) : (
+                    (["active", "paused", "ended"] as CampaignStatus[])
+                      .filter((s) => s !== campaign.status)
+                      .map((status) => (
+                        <form key={status} action={updateOwnCampaignStatus.bind(null, campaign.id, status)}>
+                          <Button type="submit" size="sm" variant="secondary">
+                            {status === "active" ? "Ativar" : status === "paused" ? "Pausar" : "Encerrar"}
+                          </Button>
+                        </form>
+                      ))
+                  )}
                 </div>
               </div>
             </div>
