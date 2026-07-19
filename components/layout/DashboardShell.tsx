@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { AccountType } from "@/lib/database.types";
 import { logoutAction } from "@/lib/actions/auth";
 import { NavLink } from "./NavLink";
+import { MobileNav } from "./MobileNav";
 import { icons, type IconName } from "./icons";
 
 const NAV: Record<AccountType, { href: string; label: string; icon: IconName }[]> = {
@@ -91,8 +92,11 @@ export function DashboardShell({
         </aside>
 
         <div className="flex-1 lg:pl-64">
-          <header className="sticky top-0 z-10 flex items-center justify-between border-b border-black/5 bg-white/80 px-6 py-4 backdrop-blur-xl">
-            <h1 className="text-xl font-semibold tracking-tight text-[#0a3625]">{title}</h1>
+          <header className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-black/5 bg-white/80 px-4 py-4 backdrop-blur-xl sm:px-6">
+            <div className="flex min-w-0 items-center gap-2">
+              <MobileNav items={NAV[role]} name={name} roleLabel={ROLE_LABEL[role]} />
+              <h1 className="truncate text-xl font-semibold tracking-tight text-[#0a3625]">{title}</h1>
+            </div>
             {actions}
           </header>
           <main className="p-6">{children}</main>

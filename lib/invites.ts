@@ -1,5 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { generateReferralCode } from "@/lib/utils";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { sendEmail, campaignInviteEmailHtml } from "@/lib/email";
 
 /**
  * Cria o convite de campanha para um influenciador: linha em
@@ -33,6 +35,50 @@ export async function inviteInfluencerToCampaign(
     influencer_id: args.influencerId,
     campaign_id: args.campaignId,
   });
+
+  // Aviso por e-mail: sem ele o convite só é visto se o influenciador logar.
+  // Falha de e-mail nunca falha o convite.
+  try {
+    const [{ data: campaign }, { data: influencer }] = await Promise.all([
+      supabase.from("campaigns").select("title, brands(company_name)").eq("id", args.campaignId).single(),
+      supabase
+        .from("influencers")
+        .select("user_id, display_name, contact_email")
+        .eq("id", args.influencerId)
+        .single(),
+    ]);
+    if (!campaign || !influencer) return {};
+
+    // E-mail de login exige service role (perfil é privado); cai para o
+    // contato comercial quando a chave não está configurada.
+    let to = influencer.contact_email as string | null;
+    const admin = createAdminClient();
+    if (admin) {
+      const { data: profile } = await admin
+        .from("profiles")
+        .select("email")
+        .eq("user_id", influencer.user_id)
+        .single();
+      to = profile?.email ?? to;
+    }
+
+    if (to) {
+      const brandName =
+        (campaign as unknown as { brands: { company_name: string } | null }).brands?.company_name ?? "Uma marca";
+      await sendEmail({
+        to,
+        subject: `${brandName} convidou você para uma campanha`,
+        html: campaignInviteEmailHtml({
+          influencerName: influencer.display_name,
+          brandName,
+          campaignTitle: campaign.title,
+          dashboardUrl: `${siteUrl}/influencer/campaigns`,
+        }),
+      });
+    }
+  } catch {
+    // silencioso por design
+  }
 
   return {};
 }

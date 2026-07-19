@@ -491,8 +491,14 @@ create policy "referrals: brand or influencer or admin insert" on referrals for 
 create policy "leads: public insert" on leads for insert with check (true);
 create policy "leads: read scoped or admin" on leads for select
   using (brand_id = auth_brand_id() or influencer_id = auth_influencer_id() or auth_account_type() = 'admin');
-create policy "leads: brand or admin update status" on leads for update
-  using (brand_id = auth_brand_id() or auth_account_type() = 'admin');
+-- Marca gerencia os leads das campanhas dela; influenciador só os das
+-- campanhas próprias (sem marca).
+create policy "leads: owner updates status" on leads for update
+  using (
+    brand_id = auth_brand_id()
+    or (brand_id is null and influencer_id = auth_influencer_id())
+    or auth_account_type() = 'admin'
+  );
 
 -- clicks -----------------------------------------------------------------
 create policy "clicks: public insert" on clicks for insert with check (true);

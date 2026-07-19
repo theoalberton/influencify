@@ -51,6 +51,20 @@ export function formatDiscount(type: string, value: string | null) {
 export const INFLUENCER_PUBLIC_COLUMNS =
   "id, slug, display_name, bio, instagram, tiktok, youtube, followers_count, niche, city, country, profile_image_url, invite_code, is_active, created_at";
 
+/** "(11) 99999-9999" → link wa.me com mensagem pronta (DDI 55 quando faltar). */
+export function waLink(phone: string, message: string): string {
+  const digits = phone.replace(/\D/g, "");
+  const full = digits.length <= 11 ? `55${digits}` : digits;
+  return `https://wa.me/${full}?text=${encodeURIComponent(message)}`;
+}
+
+export const LEAD_STATUS_LABEL: Record<string, string> = {
+  new: "novo",
+  sent: "contatado",
+  converted: "convertido",
+  lost: "perdido",
+};
+
 /** 1234 → "1,2 mil"; 2500000 → "2,5 mi" — como as redes exibem seguidores. */
 export function formatFollowers(count: number): string {
   if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1).replace(".", ",").replace(",0", "")} mi`;

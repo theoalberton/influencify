@@ -75,6 +75,68 @@ export function couponEmailHtml({
   </body>`;
 }
 
+export function campaignInviteEmailHtml({
+  influencerName,
+  brandName,
+  campaignTitle,
+  dashboardUrl,
+}: {
+  influencerName: string;
+  brandName: string;
+  campaignTitle: string;
+  dashboardUrl: string;
+}): string {
+  return `
+  <body style="${baseStyles}">
+    <div style="${cardStyles}">
+      <p style="font-size:14px;color:#7a8578;margin:0 0 4px;">Influencify</p>
+      <h1 style="font-size:22px;color:#0a3625;margin:0 0 16px;">Você recebeu um convite, ${influencerName}!</h1>
+      <p style="font-size:15px;color:#4d584d;line-height:1.6;margin:0 0 24px;">
+        A marca <strong>${brandName}</strong> convidou você para divulgar a campanha
+        <strong>${campaignTitle}</strong>. Aceite no seu painel para receber o link rastreável
+        e a oferta entrar no seu perfil público.
+      </p>
+      <div style="text-align:center;">
+        <a href="${dashboardUrl}" style="display:inline-block;background:#ccda47;color:#0a3625;text-decoration:none;font-size:15px;font-weight:700;padding:13px 32px;border-radius:999px;">Ver convite</a>
+      </div>
+      <p style="font-size:12px;color:#a3ac9c;margin:32px 0 0;text-align:center;">
+        Notificação automática de convite de campanha do Influencify.
+      </p>
+    </div>
+  </body>`;
+}
+
+export function inviteAcceptedEmailHtml({
+  brandName,
+  influencerName,
+  campaignTitle,
+  dashboardUrl,
+}: {
+  brandName: string;
+  influencerName: string;
+  campaignTitle: string;
+  dashboardUrl: string;
+}): string {
+  return `
+  <body style="${baseStyles}">
+    <div style="${cardStyles}">
+      <p style="font-size:14px;color:#7a8578;margin:0 0 4px;">Influencify</p>
+      <h1 style="font-size:22px;color:#0a3625;margin:0 0 16px;">🎉 Convite aceito, ${brandName}!</h1>
+      <p style="font-size:15px;color:#4d584d;line-height:1.6;margin:0 0 24px;">
+        <strong>${influencerName}</strong> aceitou divulgar a campanha
+        <strong>${campaignTitle}</strong>. A oferta já está no perfil público — os primeiros
+        cliques e leads aparecem no seu dashboard.
+      </p>
+      <div style="text-align:center;">
+        <a href="${dashboardUrl}" style="display:inline-block;background:#0a3625;color:#ffffff;text-decoration:none;font-size:15px;font-weight:500;padding:13px 32px;border-radius:999px;">Ver dashboard</a>
+      </div>
+      <p style="font-size:12px;color:#a3ac9c;margin:32px 0 0;text-align:center;">
+        Notificação automática do Influencify.
+      </p>
+    </div>
+  </body>`;
+}
+
 export function newLeadEmailHtml({
   ownerName,
   leadName,
