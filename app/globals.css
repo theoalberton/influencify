@@ -17,6 +17,13 @@ body {
   font-family: var(--font-sans-app), system-ui, -apple-system, sans-serif;
 }
 
+/* Trava o deslize lateral no celular: a página só rola na vertical.
+   `clip` (e não `hidden`) para não quebrar os headers sticky. */
+html,
+body {
+  overflow-x: clip;
+}
+
 /* Títulos usam a display jovem da marca em todas as telas */
 h1,
 h2,

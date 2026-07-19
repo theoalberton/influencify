@@ -7,6 +7,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { PerformanceChart } from "@/components/ui/PerformanceChart";
 import { FunnelRow } from "@/components/ui/FunnelRow";
 import { OnboardingChecklist } from "@/components/ui/OnboardingChecklist";
+import { CopyButton } from "@/components/ui/CopyButton";
 import { buildDailySeries } from "@/lib/timeseries";
 
 export default async function InfluencerDashboardPage() {
@@ -112,9 +113,12 @@ export default async function InfluencerDashboardPage() {
 
       <div className="mt-4 rounded-2xl bg-white p-6 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
         <h2 className="text-sm font-semibold text-[#0a3625]">Seu link principal</h2>
-        <p className="mt-2 break-all rounded-lg bg-[#f4f6e8] px-3 py-2 font-mono text-sm text-[#4d584d]">
-          {siteUrl}/i/{influencer.slug}
-        </p>
+        <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
+          <p className="min-w-0 flex-1 break-all rounded-lg bg-[#f4f6e8] px-3 py-2 font-mono text-sm text-[#4d584d]">
+            {siteUrl}/i/{influencer.slug}
+          </p>
+          <CopyButton value={`${siteUrl}/i/${influencer.slug}`} />
+        </div>
         <p className="mt-3 text-sm text-[#4d584d]">
           Divulgue um produto seu em{" "}
           <a href="/influencer/my-campaigns" className="font-medium text-[#0a3625] hover:underline">
