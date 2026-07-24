@@ -46,7 +46,7 @@ export async function createCampaign(_prev: CampaignFormState, formData: FormDat
     return { error: translateError(error.message) };
   }
 
-  // Convida somente os embaixadores selecionados — a campanha não aparece
+  // Convida somente os influenciadores selecionados — a campanha não aparece
   // automaticamente para os demais.
   if (invitedIds.length) {
     const { data: influencers } = await supabase

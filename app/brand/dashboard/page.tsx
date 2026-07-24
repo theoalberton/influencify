@@ -8,6 +8,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { PerformanceChart } from "@/components/ui/PerformanceChart";
 import { FunnelRow } from "@/components/ui/FunnelRow";
 import { OnboardingChecklist } from "@/components/ui/OnboardingChecklist";
+import { NotificationsCard, leadMilestone, type NotificationItem } from "@/components/ui/NotificationsCard";
 import { buildDailySeries } from "@/lib/timeseries";
 
 export default async function BrandDashboardPage() {
@@ -63,6 +64,21 @@ export default async function BrandDashboardPage() {
     }
   }
 
+  // Notificações: marcos de leads para celebrar o progresso.
+  const notifications: NotificationItem[] = [];
+  const milestone = leadMilestone(leads);
+  if (milestone.reached) {
+    notifications.push({
+      emoji: "🎉",
+      text: (
+        <>
+          Sua marca já captou <strong>{milestone.reached}+ leads</strong>!
+          {milestone.next ? ` Próxima meta: ${milestone.next}.` : " Resultado de gente grande."}
+        </>
+      ),
+    });
+  }
+
   // Primeiros passos: some quando tudo estiver concluído.
   const onboardingSteps = [
     {
@@ -80,8 +96,8 @@ export default async function BrandDashboardPage() {
       cta: "Criar campanha",
     },
     {
-      label: "Vincule um embaixador",
-      description: "Encontre influenciadores do seu nicho e convide para divulgar.",
+      label: "Convide um influenciador",
+      description: "Encontre criadores do seu nicho e convide para a sua rede.",
       done: (ambassadorsCount ?? 0) > 0,
       href: "/brand/discover",
       cta: "Descobrir influenciadores",
@@ -127,11 +143,13 @@ export default async function BrandDashboardPage() {
         </LinkButton>
       }
     >
+      <NotificationsCard items={notifications} />
+
       {!onboardingDone && <OnboardingChecklist steps={onboardingSteps} />}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Campanhas ativas" value={activeCampaignsCount ?? 0} hint={`${campaignsCount ?? 0} no total`} />
-        <StatCard label="Embaixadores ativos" value={ambassadorsCount ?? 0} />
+        <StatCard label="Influenciadores ativos" value={ambassadorsCount ?? 0} />
         <StatCard label="Leads captados" value={leads} />
         <StatCard label="Taxa de conversão" value={`${conversion}%`} hint="cliques → leads" />
       </div>

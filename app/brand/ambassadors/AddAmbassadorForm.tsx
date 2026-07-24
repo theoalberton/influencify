@@ -17,7 +17,7 @@ export function AddAmbassadorForm() {
         <Input name="slug" placeholder="Cole o link ou o slug do influenciador" required />
       </div>
       <Button type="submit" disabled={pending}>
-        {pending ? "Adicionando..." : "Adicionar embaixador"}
+        {pending ? "Convidando..." : "Convidar influenciador"}
       </Button>
       {state.error && <p className="w-full rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}
     </form>

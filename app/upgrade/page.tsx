@@ -13,7 +13,7 @@ const FREE_FEATURES: Record<"influencer" | "brand", string[]> = {
     "Contato completo dos 10 primeiros leads",
   ],
   brand: [
-    "Campanhas, cupons e embaixadores",
+    "Campanhas, cupons e influenciadores",
     "Links rastreáveis por influenciador",
     "Contato completo dos 10 primeiros leads",
   ],

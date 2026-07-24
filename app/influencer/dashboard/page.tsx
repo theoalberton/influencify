@@ -7,6 +7,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { PerformanceChart } from "@/components/ui/PerformanceChart";
 import { FunnelRow } from "@/components/ui/FunnelRow";
 import { OnboardingChecklist } from "@/components/ui/OnboardingChecklist";
+import { NotificationsCard, leadMilestone, type NotificationItem } from "@/components/ui/NotificationsCard";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { buildDailySeries } from "@/lib/timeseries";
 
@@ -17,7 +18,13 @@ export default async function InfluencerDashboardPage() {
 
   const supabase = await createClient();
 
-  const [{ count: leadsCount }, { count: clicksCount }, { count: campaignsCount }] = await Promise.all([
+  const [
+    { count: leadsCount },
+    { count: clicksCount },
+    { count: campaignsCount },
+    { count: pendingCampaignInvites },
+    { count: pendingPartnershipInvites },
+  ] = await Promise.all([
     supabase.from("leads").select("id", { count: "exact", head: true }).eq("influencer_id", influencer.id),
     supabase.from("clicks").select("id", { count: "exact", head: true }).eq("influencer_id", influencer.id),
     supabase
@@ -25,12 +32,63 @@ export default async function InfluencerDashboardPage() {
       .select("id", { count: "exact", head: true })
       .eq("influencer_id", influencer.id)
       .eq("status", "active"),
+    supabase
+      .from("campaign_influencers")
+      .select("id", { count: "exact", head: true })
+      .eq("influencer_id", influencer.id)
+      .eq("status", "invited"),
+    supabase
+      .from("brand_influencers")
+      .select("id", { count: "exact", head: true })
+      .eq("influencer_id", influencer.id)
+      .eq("status", "invited"),
   ]);
 
   const leads = leadsCount ?? 0;
   const clicks = clicksCount ?? 0;
   const conversion = clicks > 0 ? ((leads / clicks) * 100).toFixed(1) : "0.0";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+  // Notificações: convites pendentes + marcos de leads
+  const notifications: NotificationItem[] = [];
+  if ((pendingPartnershipInvites ?? 0) > 0) {
+    notifications.push({
+      emoji: "🤝",
+      text: (
+        <>
+          <strong>{pendingPartnershipInvites}</strong>{" "}
+          {pendingPartnershipInvites === 1 ? "marca quer" : "marcas querem"} trabalhar com você!
+        </>
+      ),
+      href: "/influencer/campaigns",
+      cta: "Responder",
+    });
+  }
+  if ((pendingCampaignInvites ?? 0) > 0) {
+    notifications.push({
+      emoji: "📣",
+      text: (
+        <>
+          Você tem <strong>{pendingCampaignInvites}</strong>{" "}
+          {pendingCampaignInvites === 1 ? "convite de campanha esperando" : "convites de campanha esperando"} resposta.
+        </>
+      ),
+      href: "/influencer/campaigns",
+      cta: "Ver convites",
+    });
+  }
+  const milestone = leadMilestone(leads);
+  if (milestone.reached) {
+    notifications.push({
+      emoji: "🎉",
+      text: (
+        <>
+          Você já gerou <strong>{milestone.reached}+ leads</strong>!
+          {milestone.next ? ` Próxima meta: ${milestone.next}.` : " Você é lenda."}
+        </>
+      ),
+    });
+  }
 
   // Primeiros passos: some quando tudo estiver concluído.
   const onboardingSteps = [
@@ -97,6 +155,8 @@ export default async function InfluencerDashboardPage() {
         </div>
       }
     >
+      <NotificationsCard items={notifications} />
+
       {!onboardingDone && <OnboardingChecklist steps={onboardingSteps} />}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -47,8 +47,8 @@ export default async function DiscoverPage({
   return (
     <DashboardShell role="brand" name={profile.name} title="Descobrir influenciadores">
       <p className="max-w-2xl text-sm text-[#4d584d]">
-        Encontre criadores por nome, nicho ou cidade e vincule como embaixadores da sua marca. Depois é só
-        convidá-los para as campanhas certas.
+        Encontre criadores por nome, nicho ou cidade e convide para a sua rede. Quando o influenciador
+        aceitar, você pode chamá-lo para as campanhas certas.
       </p>
 
       <form className="mt-5 flex max-w-xl gap-2" action="/brand/discover">
@@ -111,13 +111,15 @@ export default async function DiscoverPage({
 
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                   {linkStatus === "active" ? (
-                    <Badge tone="converted">embaixador ✓</Badge>
+                    <Badge tone="converted">na sua rede ✓</Badge>
+                  ) : linkStatus === "invited" ? (
+                    <Badge tone="invited">convite enviado</Badge>
                   ) : linkStatus ? (
-                    <Badge tone={linkStatus}>{linkStatus === "paused" ? "pausado" : "removido"}</Badge>
+                    <Badge tone={linkStatus}>{linkStatus === "paused" ? "pausado" : "recusou"}</Badge>
                   ) : (
                     <form action={linkInfluencer.bind(null, inf.id)}>
                       <Button type="submit" size="sm" variant="primary">
-                        Vincular como embaixador
+                        Convidar influenciador
                       </Button>
                     </form>
                   )}

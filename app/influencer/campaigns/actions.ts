@@ -49,6 +49,38 @@ export async function acceptInvite(campaignInfluencerId: string): Promise<void> 
   revalidatePath("/influencer/campaigns");
 }
 
+/** Aceita a parceria com a marca (vínculo brand_influencers). */
+export async function acceptPartnership(brandInfluencerId: string): Promise<void> {
+  const influencer = await getMyInfluencer();
+  if (!influencer) return;
+
+  const supabase = await createClient();
+  await supabase
+    .from("brand_influencers")
+    .update({ status: "active" })
+    .eq("id", brandInfluencerId)
+    .eq("influencer_id", influencer.id)
+    .eq("status", "invited");
+
+  revalidatePath("/influencer/campaigns");
+}
+
+/** Recusa a parceria com a marca. */
+export async function declinePartnership(brandInfluencerId: string): Promise<void> {
+  const influencer = await getMyInfluencer();
+  if (!influencer) return;
+
+  const supabase = await createClient();
+  await supabase
+    .from("brand_influencers")
+    .update({ status: "removed" })
+    .eq("id", brandInfluencerId)
+    .eq("influencer_id", influencer.id)
+    .eq("status", "invited");
+
+  revalidatePath("/influencer/campaigns");
+}
+
 export async function declineInvite(campaignInfluencerId: string): Promise<void> {
   const influencer = await getMyInfluencer();
   if (!influencer) return;

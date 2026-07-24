@@ -55,22 +55,22 @@ export default async function CampaignAmbassadorsPage({ params }: { params: Prom
   );
 
   return (
-    <DashboardShell role="brand" name={profile.name} title={`Embaixadores · ${campaign.title}`}>
+    <DashboardShell role="brand" name={profile.name} title={`Influenciadores · ${campaign.title}`}>
       <Link href="/brand/campaigns" className="text-sm font-medium text-[#0a3625] hover:underline">
         ‹ Voltar às campanhas
       </Link>
 
       <Card className="mt-4 max-w-3xl">
         <p className="text-sm text-[#4d584d]">
-          Escolha quais dos seus embaixadores podem divulgar <strong>esta</strong> campanha. Cada influenciador
+          Escolha quais dos seus influenciadores podem divulgar <strong>esta</strong> campanha. Cada influenciador
           recebe o convite no painel dele e a oferta só entra no perfil público depois que ele aceitar.
         </p>
 
         {ambassadors.length === 0 ? (
           <p className="mt-5 rounded-xl bg-[#f4f6e8] px-4 py-3 text-sm text-[#4d584d]">
-            Você ainda não tem embaixadores ativos. Vincule influenciadores em{" "}
+            Você ainda não tem influenciadores na sua rede. Convide criadores em{" "}
             <Link href="/brand/ambassadors" className="font-medium text-[#0a3625] hover:underline">
-              Embaixadores
+              Meus influenciadores
             </Link>
             .
           </p>

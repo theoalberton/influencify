@@ -62,7 +62,7 @@ const FAQ = [
   },
   {
     q: "Quem paga: a marca ou o influenciador?",
-    a: "Os dois têm plano próprio, cada um com o seu preço. A marca assina para desbloquear os leads dos seus embaixadores; o influenciador assina para desbloquear os leads que ele gerou e criar campanhas próprias ilimitadas. O consumidor final nunca paga nada.",
+    a: "Os dois têm plano próprio, cada um com o seu preço. A marca assina para desbloquear os leads dos seus influenciadores; o influenciador assina para desbloquear os leads que ele gerou e criar campanhas próprias ilimitadas. O consumidor final nunca paga nada.",
   },
   {
     q: "Os leads captados são meus ou da plataforma?",
@@ -116,7 +116,7 @@ function ProductShot() {
         <div className="hidden w-40 shrink-0 border-r border-black/5 p-3 sm:block">
           <p className="px-2 text-sm font-bold text-[#0a3625]">Influencify</p>
           <div className="mt-4 space-y-1.5">
-            {["Dashboard", "Campanhas", "Embaixadores", "Leads"].map((item, i) => (
+            {["Dashboard", "Campanhas", "Influenciadores", "Leads"].map((item, i) => (
               <p
                 key={item}
                 className={`rounded-lg px-2 py-1.5 text-[11px] font-medium ${

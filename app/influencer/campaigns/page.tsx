@@ -7,12 +7,14 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/Table";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { formatDiscount } from "@/lib/utils";
-import { acceptInvite, declineInvite } from "./actions";
-import type { Brand, Campaign, CampaignInfluencer } from "@/lib/database.types";
+import { acceptInvite, declineInvite, acceptPartnership, declinePartnership } from "./actions";
+import type { Brand, BrandInfluencer, Campaign, CampaignInfluencer } from "@/lib/database.types";
 
 type InviteRow = CampaignInfluencer & {
   campaigns: (Campaign & { brands: Brand | null }) | null;
 };
+
+type PartnershipRow = BrandInfluencer & { brands: Brand | null };
 
 export default async function InfluencerCampaignsPage() {
   const profile = await requireRole("influencer");
@@ -22,12 +24,22 @@ export default async function InfluencerCampaignsPage() {
   const supabase = await createClient();
 
   // A campanha de marca só aparece aqui se a marca convidou este influenciador.
-  const { data: rows } = await supabase
-    .from("campaign_influencers")
-    .select("*, campaigns(*, brands(*))")
-    .eq("influencer_id", influencer.id)
-    .in("status", ["invited", "active"])
-    .order("created_at", { ascending: false });
+  const [{ data: rows }, { data: partnershipRows }] = await Promise.all([
+    supabase
+      .from("campaign_influencers")
+      .select("*, campaigns(*, brands(*))")
+      .eq("influencer_id", influencer.id)
+      .in("status", ["invited", "active"])
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("brand_influencers")
+      .select("*, brands(*)")
+      .eq("influencer_id", influencer.id)
+      .eq("status", "invited")
+      .order("created_at", { ascending: false }),
+  ]);
+
+  const partnershipInvites = ((partnershipRows ?? []) as PartnershipRow[]).filter((p) => p.brands);
 
   const invites = ((rows ?? []) as InviteRow[]).filter(
     (r) => r.campaigns && r.campaigns.brand_id !== null && r.campaigns.status === "active"
@@ -38,6 +50,53 @@ export default async function InfluencerCampaignsPage() {
 
   return (
     <DashboardShell role="influencer" name={profile.name} title="Campanhas de marcas">
+      {/* Convites de parceria: a marca quer este influenciador na rede dela */}
+      {partnershipInvites.length > 0 && (
+        <section className="mb-8">
+          <h2 className="mb-3 text-sm font-semibold text-[#0a3625]">
+            Marcas que querem trabalhar com você <Badge tone="invited">{partnershipInvites.length}</Badge>
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {partnershipInvites.map((p) => {
+              const brand = p.brands!;
+              return (
+                <div key={p.id} className="rounded-2xl bg-white p-5 shadow-[0_2px_16px_rgba(0,0,0,0.06)] ring-2 ring-[#ccda47]">
+                  <div className="flex items-center gap-3">
+                    {brand.logo_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={brand.logo_url} alt={brand.company_name} className="h-12 w-12 shrink-0 rounded-full object-cover ring-1 ring-black/5" />
+                    ) : (
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#0a3625] text-lg font-bold text-[#ccda47]">
+                        {brand.company_name.slice(0, 1).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-[#0a3625]">{brand.company_name}</p>
+                      <p className="text-xs text-[#7a8578]">{brand.segment ?? "quer você na rede dela"}</p>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed text-[#4d584d]">
+                    Aceitando, essa marca pode convidar você para divulgar campanhas com link rastreável.
+                  </p>
+                  <div className="mt-4 flex gap-2">
+                    <form action={acceptPartnership.bind(null, p.id)} className="flex-1">
+                      <Button type="submit" size="sm" className="w-full">
+                        Aceitar parceria
+                      </Button>
+                    </form>
+                    <form action={declinePartnership.bind(null, p.id)}>
+                      <Button type="submit" size="sm" variant="secondary">
+                        Recusar
+                      </Button>
+                    </form>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {invites.length === 0 ? (
         <EmptyState
           title="Nenhum convite de campanha ainda"

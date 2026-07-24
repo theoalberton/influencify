@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { translateError } from "@/lib/errors";
+import { isValidBrazilPhone } from "@/lib/utils";
 import type { AccountType } from "@/lib/database.types";
 
 export interface RegisterState {
@@ -18,6 +19,12 @@ export async function registerAction(_prev: RegisterState, formData: FormData): 
 
   if (!name || !email || !password) {
     return { error: "Preencha nome, e-mail e senha." };
+  }
+  if (!phone) {
+    return { error: "Informe o seu telefone com DDD." };
+  }
+  if (!isValidBrazilPhone(phone)) {
+    return { error: "Telefone inválido. Use o formato (11) 91234-5678, com DDD." };
   }
   if (password.length < 6) {
     return { error: "A senha precisa ter pelo menos 6 caracteres." };

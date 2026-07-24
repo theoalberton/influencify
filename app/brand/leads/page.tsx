@@ -115,7 +115,7 @@ export default async function BrandLeadsPage({
         <EmptyState
           title={filtering ? "Nenhum lead com esses filtros" : "Nenhum lead captado ainda"}
           description={
-            filtering ? "Tente outra combinação ou limpe os filtros." : "Vincule embaixadores e crie campanhas para começar."
+            filtering ? "Tente outra combinação ou limpe os filtros." : "Convide influenciadores e crie campanhas para começar."
           }
         />
       ) : (

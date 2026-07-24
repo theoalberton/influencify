@@ -94,8 +94,8 @@ export function LeadForm({
       )}
 
       {requiredFields.includes("phone") && (
-        <Field label="WhatsApp/Telefone">
-          <Input name="phone" required placeholder="(11) 99999-9999" />
+        <Field label="WhatsApp/Telefone (com DDD)">
+          <Input name="phone" type="tel" inputMode="tel" required minLength={10} placeholder="(11) 91234-5678" />
         </Field>
       )}
 

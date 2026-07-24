@@ -76,8 +76,16 @@ function RegisterForm() {
             <input type="email" name="email" required className={inputClass} placeholder="voce@email.com" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#0a3625]">Telefone</label>
-            <input name="phone" className={inputClass} placeholder="(11) 99999-9999" />
+            <label className="block text-sm font-medium text-[#0a3625]">Telefone (com DDD)</label>
+            <input
+              name="phone"
+              type="tel"
+              inputMode="tel"
+              required
+              minLength={10}
+              className={inputClass}
+              placeholder="(11) 91234-5678"
+            />
           </div>
         </div>
 

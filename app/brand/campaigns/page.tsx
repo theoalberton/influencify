@@ -78,7 +78,7 @@ export default async function BrandCampaignsPage() {
 
                 <div className="mt-4 flex flex-wrap gap-2">
                   <LinkButton href={`/brand/campaigns/${campaign.id}`} size="sm" variant="primary">
-                    Embaixadores
+                    Influenciadores
                   </LinkButton>
                   <LinkButton href={`/brand/campaigns/${campaign.id}/edit`} size="sm" variant="secondary">
                     Editar

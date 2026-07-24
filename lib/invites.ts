@@ -1,7 +1,55 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { generateReferralCode } from "@/lib/utils";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendEmail, campaignInviteEmailHtml } from "@/lib/email";
+import { sendEmail, campaignInviteEmailHtml, partnershipInviteEmailHtml } from "@/lib/email";
+
+/** Melhor e-mail disponível do influenciador: login (via service role) ou comercial. */
+async function influencerEmail(
+  supabase: SupabaseClient,
+  influencerId: string
+): Promise<{ to: string | null; displayName: string } | null> {
+  const { data: influencer } = await supabase
+    .from("influencers")
+    .select("user_id, display_name, contact_email")
+    .eq("id", influencerId)
+    .single();
+  if (!influencer) return null;
+
+  let to = influencer.contact_email as string | null;
+  const admin = createAdminClient();
+  if (admin) {
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("email")
+      .eq("user_id", influencer.user_id)
+      .single();
+    to = profile?.email ?? to;
+  }
+  return { to, displayName: influencer.display_name };
+}
+
+/** Avisa o influenciador que uma marca o convidou para a rede dela. */
+export async function notifyPartnershipInvite(
+  supabase: SupabaseClient,
+  args: { influencerId: string; brandName: string }
+): Promise<void> {
+  try {
+    const target = await influencerEmail(supabase, args.influencerId);
+    if (!target?.to) return;
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    await sendEmail({
+      to: target.to,
+      subject: `${args.brandName} quer você na rede de influenciadores dela`,
+      html: partnershipInviteEmailHtml({
+        influencerName: target.displayName,
+        brandName: args.brandName,
+        dashboardUrl: `${siteUrl}/influencer/campaigns`,
+      }),
+    });
+  } catch {
+    // e-mail nunca bloqueia o convite
+  }
+}
 
 /**
  * Cria o convite de campanha para um influenciador: linha em
@@ -39,37 +87,21 @@ export async function inviteInfluencerToCampaign(
   // Aviso por e-mail: sem ele o convite só é visto se o influenciador logar.
   // Falha de e-mail nunca falha o convite.
   try {
-    const [{ data: campaign }, { data: influencer }] = await Promise.all([
-      supabase.from("campaigns").select("title, brands(company_name)").eq("id", args.campaignId).single(),
-      supabase
-        .from("influencers")
-        .select("user_id, display_name, contact_email")
-        .eq("id", args.influencerId)
-        .single(),
-    ]);
-    if (!campaign || !influencer) return {};
+    const { data: campaign } = await supabase
+      .from("campaigns")
+      .select("title, brands(company_name)")
+      .eq("id", args.campaignId)
+      .single();
+    const target = await influencerEmail(supabase, args.influencerId);
 
-    // E-mail de login exige service role (perfil é privado); cai para o
-    // contato comercial quando a chave não está configurada.
-    let to = influencer.contact_email as string | null;
-    const admin = createAdminClient();
-    if (admin) {
-      const { data: profile } = await admin
-        .from("profiles")
-        .select("email")
-        .eq("user_id", influencer.user_id)
-        .single();
-      to = profile?.email ?? to;
-    }
-
-    if (to) {
+    if (campaign && target?.to) {
       const brandName =
         (campaign as unknown as { brands: { company_name: string } | null }).brands?.company_name ?? "Uma marca";
       await sendEmail({
-        to,
+        to: target.to,
         subject: `${brandName} convidou você para uma campanha`,
         html: campaignInviteEmailHtml({
-          influencerName: influencer.display_name,
+          influencerName: target.displayName,
           brandName,
           campaignTitle: campaign.title,
           dashboardUrl: `${siteUrl}/influencer/campaigns`,

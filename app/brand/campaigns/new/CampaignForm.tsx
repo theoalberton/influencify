@@ -22,14 +22,14 @@ export function CampaignForm({ ambassadors }: { ambassadors: AmbassadorOption[] 
       <CampaignFormFields showPixels />
 
       <Field
-        label="Convidar embaixadores"
+        label="Convidar influenciadores"
         hint="Só os influenciadores convidados podem divulgar esta campanha — escolha os que combinam com o produto. Você também pode convidar depois."
       >
         {ambassadors.length === 0 ? (
           <p className="mt-2 rounded-xl bg-[#f4f6e8] px-4 py-3 text-sm text-[#4d584d]">
-            Você ainda não tem embaixadores ativos. Vincule influenciadores em{" "}
+            Você ainda não tem influenciadores na sua rede. Convide criadores em{" "}
             <a href="/brand/ambassadors" className="font-medium text-[#0a3625] hover:underline">
-              Embaixadores
+              Meus influenciadores
             </a>
             .
           </p>

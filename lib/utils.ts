@@ -51,6 +51,20 @@ export function formatDiscount(type: string, value: string | null) {
 export const INFLUENCER_PUBLIC_COLUMNS =
   "id, slug, display_name, bio, instagram, tiktok, youtube, followers_count, niche, city, country, profile_image_url, invite_code, is_active, created_at";
 
+/**
+ * Telefone BR válido: DDD (11-99) + 8 dígitos (fixo) ou 9 dígitos começando
+ * com 9 (celular). Aceita máscara, rejeita dígitos todos iguais.
+ */
+export function isValidBrazilPhone(phone: string): boolean {
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length !== 10 && digits.length !== 11) return false;
+  const ddd = Number(digits.slice(0, 2));
+  if (ddd < 11 || ddd > 99) return false;
+  if (digits.length === 11 && digits[2] !== "9") return false;
+  if (/^(\d)\1+$/.test(digits)) return false;
+  return true;
+}
+
 /** "(11) 99999-9999" → link wa.me com mensagem pronta (DDI 55 quando faltar). */
 export function waLink(phone: string, message: string): string {
   const digits = phone.replace(/\D/g, "");

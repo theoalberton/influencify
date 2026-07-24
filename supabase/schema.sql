@@ -449,6 +449,9 @@ create policy "campaigns: influencer deletes own" on campaigns for delete
 -- brand_influencers --------------------------------------------------------
 create policy "brand_influencers: read own side or admin" on brand_influencers for select
   using (brand_id = auth_brand_id() or influencer_id = auth_influencer_id() or auth_account_type() = 'admin');
+-- Influenciador aceita/recusa o convite de parceria da marca
+create policy "brand_influencers: influencer responds" on brand_influencers for update
+  using (influencer_id = auth_influencer_id());
 create policy "brand_influencers: brand inserts" on brand_influencers for insert
   with check (brand_id = auth_brand_id());
 create policy "brand_influencers: brand updates or admin" on brand_influencers for update

@@ -26,11 +26,12 @@ export default async function BrandAmbassadorsPage() {
   const rows = (ambassadors ?? []) as (BrandInfluencer & { influencers: Influencer })[];
 
   return (
-    <DashboardShell role="brand" name={profile.name} title="Embaixadores">
+    <DashboardShell role="brand" name={profile.name} title="Meus influenciadores">
       <Card className="mb-6">
-        <h2 className="text-sm font-semibold text-slate-900">Vincular novo influenciador</h2>
+        <h2 className="text-sm font-semibold text-slate-900">Convidar influenciador</h2>
         <p className="mt-1 text-sm text-slate-500">
-          Peça para o influenciador o link público do perfil dele e cole abaixo.
+          Peça para o influenciador o link público do perfil dele e cole abaixo. Ele recebe o convite e decide
+          se aceita fazer parte da sua rede.
         </p>
         <div className="mt-4">
           <AddAmbassadorForm />
@@ -38,7 +39,10 @@ export default async function BrandAmbassadorsPage() {
       </Card>
 
       {rows.length === 0 ? (
-        <EmptyState title="Nenhum embaixador vinculado ainda" />
+        <EmptyState
+          title="Nenhum influenciador na sua rede ainda"
+          description="Convide criadores em Descobrir influenciadores ou pelo link do perfil deles."
+        />
       ) : (
         <Table>
           <Thead columns={["Influenciador", "Nicho", "Seguidores", "Status", "Contato", "Ações"]} />
@@ -51,7 +55,15 @@ export default async function BrandAmbassadorsPage() {
                   <Td>{inf?.niche ?? "—"}</Td>
                   <Td>{inf?.followers_count ?? "—"}</Td>
                   <Td>
-                    <Badge tone={row.status}>{row.status}</Badge>
+                    <Badge tone={row.status}>
+                      {row.status === "invited"
+                        ? "convite enviado"
+                        : row.status === "active"
+                          ? "ativo"
+                          : row.status === "paused"
+                            ? "pausado"
+                            : "recusou/removido"}
+                    </Badge>
                   </Td>
                   <Td>
                     {inf ? (

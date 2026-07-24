@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getMyBrand } from "@/lib/auth";
+import { notifyPartnershipInvite } from "@/lib/invites";
 import type { BrandInfluencerStatus } from "@/lib/database.types";
 
 export interface AmbassadorFormState {
@@ -25,16 +26,19 @@ export async function addAmbassador(_prev: AmbassadorFormState, formData: FormDa
 
   if (!influencer) return { error: "Nenhum influenciador encontrado com esse link." };
 
+  // Convite, não vínculo: o influenciador escolhe se aceita a parceria.
   const { error } = await supabase.from("brand_influencers").insert({
     brand_id: brand.id,
     influencer_id: influencer.id,
-    status: "active",
+    status: "invited",
   });
 
   if (error) {
-    if (error.code === "23505") return { error: "Esse influenciador já está vinculado à sua marca." };
+    if (error.code === "23505") return { error: "Esse influenciador já foi convidado ou já está na sua rede." };
     return { error: error.message };
   }
+
+  await notifyPartnershipInvite(supabase, { influencerId: influencer.id, brandName: brand.company_name });
 
   revalidatePath("/brand/ambassadors");
   return {};

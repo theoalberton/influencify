@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail, couponEmailHtml, newLeadEmailHtml } from "@/lib/email";
 import { translateError } from "@/lib/errors";
+import { isValidBrazilPhone } from "@/lib/utils";
 
 export interface LeadFormState {
   error?: string;
@@ -46,6 +47,10 @@ export async function submitLead(_prev: LeadFormState, formData: FormData): Prom
   if (!name) return { error: "Informe seu nome." };
   if (!consent) return { error: "Você precisa aceitar os termos para receber o cupom." };
   if (!campaign_id) return { error: "Oferta inválida." };
+  // Telefone falso destrói o valor do lead para quem paga pela plataforma.
+  if (phone && !isValidBrazilPhone(phone)) {
+    return { error: "Telefone inválido. Use o formato (11) 91234-5678, com DDD." };
+  }
 
   const supabase = await createClient();
 

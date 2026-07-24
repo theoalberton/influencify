@@ -19,7 +19,7 @@ const REQUIRED_FIELD_OPTIONS = [
 export function CampaignFormFields({
   campaign,
   showPixels = false,
-  imageHint = "Aparece no perfil do embaixador, formato paisagem (16:9).",
+  imageHint = "Aparece no perfil do influenciador, formato paisagem (16:9).",
 }: {
   campaign?: Campaign;
   showPixels?: boolean;

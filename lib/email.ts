@@ -106,6 +106,34 @@ export function campaignInviteEmailHtml({
   </body>`;
 }
 
+export function partnershipInviteEmailHtml({
+  influencerName,
+  brandName,
+  dashboardUrl,
+}: {
+  influencerName: string;
+  brandName: string;
+  dashboardUrl: string;
+}): string {
+  return `
+  <body style="${baseStyles}">
+    <div style="${cardStyles}">
+      <p style="font-size:14px;color:#7a8578;margin:0 0 4px;">Influencify</p>
+      <h1 style="font-size:22px;color:#0a3625;margin:0 0 16px;">${influencerName}, uma marca quer você!</h1>
+      <p style="font-size:15px;color:#4d584d;line-height:1.6;margin:0 0 24px;">
+        A marca <strong>${brandName}</strong> convidou você para fazer parte da rede de influenciadores dela
+        na Influencify. Aceitando, ela pode te chamar para divulgar campanhas com link rastreável.
+      </p>
+      <div style="text-align:center;">
+        <a href="${dashboardUrl}" style="display:inline-block;background:#ccda47;color:#0a3625;text-decoration:none;font-size:15px;font-weight:700;padding:13px 32px;border-radius:999px;">Responder convite</a>
+      </div>
+      <p style="font-size:12px;color:#a3ac9c;margin:32px 0 0;text-align:center;">
+        Notificação automática de convite de parceria do Influencify.
+      </p>
+    </div>
+  </body>`;
+}
+
 export function inviteAcceptedEmailHtml({
   brandName,
   influencerName,
