@@ -43,3 +43,7 @@ next-env.d.ts
 
 # claude code local settings
 .claude/settings.local.json
+
+# Anotações locais com chaves — nunca versionar
+API RESEND.txt
+*.secret.txt

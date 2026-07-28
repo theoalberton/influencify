@@ -10,7 +10,10 @@ interface SendEmailArgs {
 
 export async function sendEmail({ to, subject, html }: SendEmailArgs): Promise<boolean> {
   const key = process.env.RESEND_API_KEY;
-  if (!key) return false;
+  if (!key) {
+    console.warn("[email] RESEND_API_KEY ausente — envio ignorado:", subject);
+    return false;
+  }
 
   const from = process.env.EMAIL_FROM ?? "Influencify <onboarding@resend.dev>";
 
@@ -23,8 +26,17 @@ export async function sendEmail({ to, subject, html }: SendEmailArgs): Promise<b
       },
       body: JSON.stringify({ from, to, subject, html }),
     });
-    return res.ok;
-  } catch {
+
+    // Falha de envio nunca quebra o fluxo, mas precisa ser visível nos logs:
+    // sem domínio verificado a Resend recusa qualquer destinatário externo.
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "");
+      console.error(`[email] falha ${res.status} ao enviar "${subject}" para ${to}: ${detail.slice(0, 300)}`);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error(`[email] erro de rede ao enviar "${subject}" para ${to}:`, err);
     return false;
   }
 }
