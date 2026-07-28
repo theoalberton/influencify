@@ -13,7 +13,7 @@ export function EditCampaignForm({ campaign }: { campaign: Campaign }) {
 
   return (
     <form action={formAction} className="space-y-5">
-      <CampaignFormFields campaign={campaign} showPixels />
+      <CampaignFormFields campaign={campaign} showPixels showOpenCampaign />
 
       {state.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}
 

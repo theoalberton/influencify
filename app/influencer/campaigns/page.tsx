@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/Table";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { formatDiscount } from "@/lib/utils";
+import { rewardSummary, earnedAmount } from "@/lib/rewards";
 import { acceptInvite, declineInvite, acceptPartnership, declinePartnership } from "./actions";
 import type { Brand, BrandInfluencer, Campaign, CampaignInfluencer } from "@/lib/database.types";
 
@@ -40,6 +41,18 @@ export default async function InfluencerCampaignsPage() {
   ]);
 
   const partnershipInvites = ((partnershipRows ?? []) as PartnershipRow[]).filter((p) => p.brands);
+
+  // Leads por campanha: base do "quanto já rendeu" nas campanhas por performance
+  const { data: myLeads } = await supabase
+    .from("leads")
+    .select("campaign_id")
+    .eq("influencer_id", influencer.id);
+  const leadsByCampaign = new Map<string, number>();
+  for (const lead of myLeads ?? []) {
+    if (lead.campaign_id) {
+      leadsByCampaign.set(lead.campaign_id, (leadsByCampaign.get(lead.campaign_id) ?? 0) + 1);
+    }
+  }
 
   const invites = ((rows ?? []) as InviteRow[]).filter(
     (r) => r.campaigns && r.campaigns.brand_id !== null && r.campaigns.status === "active"
@@ -157,11 +170,43 @@ export default async function InfluencerCampaignsPage() {
                         </p>
                         <h3 className="mt-1 truncate font-semibold text-[#0a3625]">{campaign.title}</h3>
 
+                        {/* Campanha por performance: mostra o que já rendeu */}
+                        {campaign.is_open && (
+                          <div className="mt-3 flex flex-wrap items-center gap-2">
+                            {rewardSummary(campaign) && (
+                              <span className="rounded-full bg-[#ccda47] px-2.5 py-1 text-xs font-bold text-[#0a3625]">
+                                {rewardSummary(campaign)}
+                              </span>
+                            )}
+                            <span className="text-xs text-[#4d584d]">
+                              <strong className="text-[#0a3625]">{leadsByCampaign.get(campaign.id) ?? 0}</strong> leads
+                              {campaign.reward_type === "per_lead" && (
+                                <>
+                                  {" · "}
+                                  <strong className="text-[#0a3625]">
+                                    R${" "}
+                                    {earnedAmount(campaign, leadsByCampaign.get(campaign.id) ?? 0)
+                                      .toFixed(2)
+                                      .replace(".", ",")}
+                                  </strong>{" "}
+                                  a receber
+                                </>
+                              )}
+                            </span>
+                          </div>
+                        )}
+
                         <div className="mt-3 space-y-2">
                           <p className="break-all rounded-lg bg-[#f4f6e8] px-3 py-2 font-mono text-xs text-[#4d584d]">
                             {invite.public_url}
                           </p>
                           <CopyButton value={invite.public_url ?? ""} />
+                          {invite.coupon_code && (
+                            <p className="rounded-lg bg-[#eef3d6] px-3 py-2 text-xs text-[#4d584d]">
+                              Seu cupom exclusivo:{" "}
+                              <strong className="font-mono text-[#0a3625]">{invite.coupon_code}</strong>
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>

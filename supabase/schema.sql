@@ -107,6 +107,13 @@ create table campaigns (
   google_tag_id text,
   internal_notes text,
   avg_ticket numeric,
+  -- campanha por performance: aberta a candidaturas de influenciadores, com
+  -- recompensa por lead, por venda (cupom exclusivo) ou em produto
+  is_open boolean not null default false,
+  reward_type text check (reward_type is null or reward_type in ('per_lead', 'per_sale', 'product')),
+  reward_value numeric,
+  reward_goal integer,
+  reward_description text,
   created_at timestamptz not null default now(),
   unique (brand_id, slug),
   constraint campaigns_owner_check check (
@@ -146,7 +153,11 @@ create table campaign_influencers (
   influencer_id uuid not null references influencers (id) on delete cascade,
   referral_code text not null unique,
   public_url text,
-  status text not null default 'active' check (status in ('invited', 'active', 'paused', 'removed')),
+  -- cupom exclusivo do influenciador nesta campanha: permite à marca atribuir
+  -- vendas pelo próprio checkout, sem integração técnica
+  coupon_code text,
+  -- applied = candidatura em campanha aberta, aguardando aprovação da marca
+  status text not null default 'active' check (status in ('invited', 'applied', 'active', 'paused', 'removed')),
   created_at timestamptz not null default now(),
   unique (campaign_id, influencer_id)
 );
@@ -471,6 +482,17 @@ create policy "campaign_influencers: owner inserts" on campaign_influencers for 
       and exists (select 1 from campaigns c where c.id = campaign_id and c.influencer_id = auth_influencer_id())
     )
     or exists (select 1 from campaigns c where c.id = campaign_id and c.brand_id = auth_brand_id())
+  );
+-- Candidatura em campanha aberta: o influenciador cria a própria linha como
+-- 'applied'; só a marca promove para 'active'.
+create policy "campaign_influencers: influencer applies to open campaign" on campaign_influencers for insert
+  with check (
+    influencer_id = auth_influencer_id()
+    and status = 'applied'
+    and exists (
+      select 1 from campaigns c
+      where c.id = campaign_id and c.is_open = true and c.status = 'active' and c.brand_id is not null
+    )
   );
 create policy "campaign_influencers: influencer updates own" on campaign_influencers for update
   using (influencer_id = auth_influencer_id());

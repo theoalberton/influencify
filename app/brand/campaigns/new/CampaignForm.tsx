@@ -19,7 +19,7 @@ export function CampaignForm({ ambassadors }: { ambassadors: AmbassadorOption[] 
 
   return (
     <form action={formAction} className="space-y-5">
-      <CampaignFormFields showPixels />
+      <CampaignFormFields showPixels showOpenCampaign />
 
       <Field
         label="Convidar influenciadores"

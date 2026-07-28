@@ -3,6 +3,8 @@ export type PlanType = "free" | "influencer" | "brand" | "premium";
 export type PlanStatus = "active" | "trialing" | "past_due" | "canceled";
 export type DiscountType = "percentage" | "fixed" | "free_shipping" | "custom";
 export type CampaignStatus = "active" | "paused" | "ended" | "under_review";
+/** Como o influenciador é recompensado numa campanha aberta (performance). */
+export type RewardType = "per_lead" | "per_sale" | "product";
 export type BrandInfluencerStatus = "invited" | "active" | "paused" | "removed";
 export type LeadStatus = "new" | "sent" | "converted" | "lost";
 
@@ -83,6 +85,11 @@ export interface Campaign {
   google_tag_id: string | null;
   internal_notes: string | null;
   avg_ticket: number | null;
+  is_open: boolean;
+  reward_type: RewardType | null;
+  reward_value: number | null;
+  reward_goal: number | null;
+  reward_description: string | null;
   created_at: string;
 }
 
@@ -102,7 +109,8 @@ export interface CampaignInfluencer {
   influencer_id: string;
   referral_code: string;
   public_url: string | null;
-  status: "invited" | "active" | "paused" | "removed";
+  coupon_code: string | null;
+  status: "invited" | "applied" | "active" | "paused" | "removed";
   created_at: string;
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Field, Input, Textarea, Select } from "@/components/ui/Input";
 import { ThumbnailUpload } from "@/components/ui/ThumbnailUpload";
 import type { Campaign } from "@/lib/database.types";
@@ -19,13 +20,17 @@ const REQUIRED_FIELD_OPTIONS = [
 export function CampaignFormFields({
   campaign,
   showPixels = false,
+  showOpenCampaign = false,
   imageHint = "Aparece no perfil do influenciador, formato paisagem (16:9).",
 }: {
   campaign?: Campaign;
   showPixels?: boolean;
+  showOpenCampaign?: boolean;
   imageHint?: string;
 }) {
   const requiredDefaults = campaign?.required_fields ?? ["name", "email"];
+  const [isOpen, setIsOpen] = useState(campaign?.is_open ?? false);
+  const [rewardType, setRewardType] = useState(campaign?.reward_type ?? "per_lead");
 
   return (
     <>
@@ -102,6 +107,102 @@ export function CampaignFormFields({
           ))}
         </div>
       </Field>
+
+      {showOpenCampaign && (
+        <div className="rounded-2xl bg-[#f4f6e8] p-5">
+          <label className="flex items-start gap-2.5">
+            <input
+              type="checkbox"
+              name="is_open"
+              checked={isOpen}
+              onChange={(e) => setIsOpen(e.target.checked)}
+              className="mt-0.5 rounded border-[#dde0cb] text-[#0a3625] focus:ring-[#0a3625]"
+            />
+            <span className="text-sm">
+              <strong className="text-[#0a3625]">Abrir para candidaturas</strong>
+              <span className="mt-1 block text-xs leading-relaxed text-[#7a8578]">
+                Qualquer influenciador da Influencify pode se candidatar a divulgar esta campanha — você aprova
+                quem quiser. Em vez de cachê fixo, ele ganha por resultado. Ideal para trabalhar com muitos
+                micro-influenciadores.
+              </span>
+            </span>
+          </label>
+
+          {isOpen && (
+            <div className="mt-5 space-y-5 border-t border-black/5 pt-5">
+              <Field label="Como o influenciador é recompensado?">
+                <Select
+                  name="reward_type"
+                  value={rewardType}
+                  onChange={(e) => setRewardType(e.target.value as typeof rewardType)}
+                >
+                  <option value="per_lead">Valor fixo por lead captado</option>
+                  <option value="per_sale">Comissão por venda (cupom exclusivo)</option>
+                  <option value="product">Produto / permuta por meta de leads</option>
+                </Select>
+              </Field>
+
+              {rewardType === "per_lead" && (
+                <Field label="Valor por lead (R$)" hint="Pago pelo número de leads que o influenciador captar.">
+                  <Input
+                    name="reward_value"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    defaultValue={campaign?.reward_value ?? ""}
+                    placeholder="Ex: 5.00"
+                    className="max-w-xs"
+                  />
+                </Field>
+              )}
+
+              {rewardType === "per_sale" && (
+                <Field
+                  label="Comissão por venda (%)"
+                  hint="Cada influenciador recebe um cupom exclusivo — você identifica as vendas dele direto no seu checkout."
+                >
+                  <Input
+                    name="reward_value"
+                    type="number"
+                    step="1"
+                    min="0"
+                    max="100"
+                    defaultValue={campaign?.reward_value ?? ""}
+                    placeholder="Ex: 15"
+                    className="max-w-xs"
+                  />
+                </Field>
+              )}
+
+              {rewardType === "product" && (
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <Field label="O que o influenciador ganha">
+                    <Input
+                      name="reward_description"
+                      defaultValue={campaign?.reward_description ?? ""}
+                      placeholder="Ex: Kit com 3 produtos"
+                    />
+                  </Field>
+                  <Field label="A cada quantos leads?">
+                    <Input
+                      name="reward_goal"
+                      type="number"
+                      min="1"
+                      defaultValue={campaign?.reward_goal ?? ""}
+                      placeholder="Ex: 10"
+                    />
+                  </Field>
+                </div>
+              )}
+
+              <p className="rounded-xl bg-white px-4 py-3 text-xs leading-relaxed text-[#4d584d]">
+                A Influencify mede e comprova os resultados de cada influenciador. <strong>O pagamento é feito
+                diretamente por você</strong> (Pix, produto etc.) — combine as condições no contato comercial.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
       {showPixels && (
         <>
