@@ -343,7 +343,7 @@ create trigger campaigns_review_guard before update on campaigns
 -- Triggers: mantém referrals.clicks / referrals.leads_count agregados
 -- ----------------------------------------------------------------------------
 create or replace function bump_referral_clicks() returns trigger
-language plpgsql security definer as $$
+language plpgsql security definer set search_path = public as $$
 begin
   update referrals set clicks = clicks + 1 where referral_code = new.referral_code;
   return new;
@@ -355,7 +355,7 @@ create trigger clicks_bump_referral
   for each row execute function bump_referral_clicks();
 
 create or replace function bump_referral_leads() returns trigger
-language plpgsql security definer as $$
+language plpgsql security definer set search_path = public as $$
 begin
   if new.referral_code is not null then
     update referrals set leads_count = leads_count + 1 where referral_code = new.referral_code;
@@ -371,7 +371,7 @@ create trigger leads_bump_referral
 -- Permite ao visitante (anon) marcar que clicou para ir à loja, sem liberar
 -- update geral da linha de lead (que fica restrito a marca/admin via RLS).
 create or replace function mark_lead_clicked_store(p_lead_id uuid) returns void
-language plpgsql security definer as $$
+language plpgsql security definer set search_path = public as $$
 begin
   update leads set clicked_store = true where id = p_lead_id;
 end;
@@ -396,19 +396,19 @@ alter table plans enable row level security;
 
 -- helper: papel do usuário logado
 create or replace function auth_account_type() returns text
-language sql stable security definer as $$
+language sql stable security definer set search_path = public as $$
   select account_type from profiles where user_id = auth.uid();
 $$;
 
 -- helper: id da linha influencers do usuário logado
 create or replace function auth_influencer_id() returns uuid
-language sql stable security definer as $$
+language sql stable security definer set search_path = public as $$
   select id from influencers where user_id = auth.uid();
 $$;
 
 -- helper: id da linha brands do usuário logado
 create or replace function auth_brand_id() returns uuid
-language sql stable security definer as $$
+language sql stable security definer set search_path = public as $$
   select id from brands where user_id = auth.uid();
 $$;
 
