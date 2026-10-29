@@ -172,6 +172,8 @@ export default async function OfferPage({
               source="profile"
               campaignUtm={campaignUtm}
               metaPixelId={typedCampaign.meta_pixel_id}
+              brandName={typedCampaign.brands?.company_name ?? null}
+              influencerName={influencer.display_name}
             />
           </div>
         </div>

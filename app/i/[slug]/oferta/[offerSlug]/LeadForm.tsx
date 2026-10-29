@@ -23,6 +23,8 @@ export function LeadForm({
   source,
   campaignUtm,
   metaPixelId,
+  brandName,
+  influencerName,
 }: {
   campaignId: string;
   brandId: string;
@@ -32,6 +34,9 @@ export function LeadForm({
   source: string;
   campaignUtm: string;
   metaPixelId?: string | null;
+  /** Null em campanha própria do influenciador (sem marca). */
+  brandName: string | null;
+  influencerName: string;
 }) {
   const [state, formAction, pending] = useActionState(submitLead, initialState);
 
@@ -107,8 +112,16 @@ export function LeadForm({
 
       <label className="flex items-start gap-2 text-xs text-slate-500">
         <input type="checkbox" name="consent" required className="mt-0.5 rounded border-[#dde0cb] text-[#0a3625] focus:ring-[#0a3625]" />
+        {/* LGPD: o consentimento nomeia todos que recebem o contato (marca e influenciador veem o lead). */}
         <span>
-          Concordo em compartilhar meus dados com esta marca para receber o cupom, conforme a{" "}
+          Concordo em compartilhar meus dados com{" "}
+          <strong className="font-medium text-[#4d584d]">{brandName ?? influencerName}</strong>
+          {brandName && (
+            <>
+              {" "}e com <strong className="font-medium text-[#4d584d]">{influencerName}</strong>
+            </>
+          )}{" "}
+          para receber o cupom e ser contatado(a) com ofertas relacionadas a esta campanha, conforme a{" "}
           <Link href="/privacidade" target="_blank" className="text-[#0a3625] hover:underline">
             Política de Privacidade
           </Link>
